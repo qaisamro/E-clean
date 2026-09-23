@@ -39,16 +39,473 @@
     </script>
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>
+    <style>
+      #web-fallback {
+        display: none;
+        min-height: 100vh;
+        box-sizing: border-box;
+        padding: 18px 14px 92px;
+        background: #f5f8f9;
+        color: #153842;
+        font-family: Arial, "Segoe UI", sans-serif;
+      }
+      #web-fallback .fallback-shell {
+        width: min(430px, 100%);
+        margin: 0 auto;
+      }
+      #web-fallback .fallback-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 5px 4px 16px;
+      }
+      #web-fallback .fallback-avatar {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 14px;
+        color: #fff;
+        background: linear-gradient(135deg, #156172, #1b758a);
+        font-size: 24px;
+      }
+      #web-fallback .fallback-header small {
+        display: block;
+        width: max-content;
+        margin-bottom: 4px;
+        padding: 3px 8px;
+        border: 1px solid rgba(27, 117, 138, .25);
+        border-radius: 999px;
+        color: #156172;
+        background: #eaf6f8;
+        font-size: 10px;
+      }
+      #web-fallback .fallback-header strong {
+        display: block;
+        color: #153842;
+        font-size: 18px;
+      }
+      #web-fallback .fallback-hero {
+        position: relative;
+        min-height: 190px;
+        overflow: hidden;
+        margin: 0 0 22px;
+        padding: 22px;
+        border-radius: 26px;
+        color: #fff;
+        background: linear-gradient(135deg, #1b758a, #156172 55%, #0a4a54);
+        box-shadow: 0 12px 24px rgba(21, 97, 114, .22);
+      }
+      #web-fallback .fallback-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.36));
+        pointer-events: none;
+      }
+      #web-fallback .fallback-hero.has-image {
+        background-size: cover;
+        background-position: center;
+      }
+      #web-fallback .fallback-hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 78%;
+      }
+      #web-fallback .fallback-hero-content small {
+        color: #d5f3ee;
+        font-size: 11px;
+      }
+      #web-fallback .fallback-hero-content h1 {
+        margin: 18px 0 7px;
+        font-size: 25px;
+        line-height: 1.2;
+      }
+      #web-fallback .fallback-hero-content p {
+        margin: 0;
+        color: rgba(255,255,255,.78);
+        font-size: 11px;
+        line-height: 1.5;
+      }
+      #web-fallback .fallback-hero-icon {
+        position: absolute;
+        z-index: 1;
+        left: 20px;
+        bottom: 22px;
+        display: grid;
+        place-items: center;
+        width: 72px;
+        height: 72px;
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 50%;
+        color: #fff;
+        background: rgba(255,255,255,.14);
+        font-size: 38px;
+      }
+      #web-fallback .fallback-section {
+        margin: 0 0 20px;
+      }
+      #web-fallback .fallback-section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin: 0 2px 10px;
+      }
+      #web-fallback h2 {
+        margin: 0;
+        font-size: 16px;
+      }
+      #web-fallback .fallback-section-header span {
+        color: #156172;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      #web-fallback .fallback-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        overflow: auto;
+      }
+      #web-fallback .fallback-card {
+        min-width: 0;
+        padding: 14px;
+        border: 1px solid #dcebed;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 4px 14px rgba(21, 56, 66, .05);
+      }
+      #web-fallback .fallback-card strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #156172;
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #web-fallback .fallback-card span {
+        color: #6d858b;
+        font-size: 10px;
+      }
+      #web-fallback .fallback-status {
+        display: none;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #e8f6f7;
+        color: #156172;
+        font-size: 11px;
+      }
+      #web-fallback .fallback-empty {
+        color: #71878c;
+        font-size: 11px;
+      }
+      #web-fallback .fallback-offer-row {
+        display: flex;
+        gap: 10px;
+        overflow: auto;
+        padding-bottom: 2px;
+      }
+      #web-fallback .fallback-offer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 240px;
+        padding: 10px;
+        border: 1px solid #dcebed;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #fff, #eaf6f8);
+      }
+      #web-fallback .fallback-offer-image {
+        display: grid;
+        place-items: center;
+        width: 50px;
+        height: 50px;
+        flex: 0 0 50px;
+        overflow: hidden;
+        border-radius: 12px;
+        color: #156172;
+        background: #dff1f3;
+        font-size: 20px;
+      }
+      #web-fallback .fallback-offer-image img,
+      #web-fallback .fallback-vendor img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #web-fallback .fallback-delivery {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 20px;
+        padding: 15px;
+        border-radius: 22px;
+        color: #fff;
+        background: linear-gradient(135deg, #0a4a54, #1b758a);
+        box-shadow: 0 10px 20px rgba(21, 97, 114, .16);
+      }
+      #web-fallback .fallback-delivery-icon {
+        font-size: 28px;
+      }
+      #web-fallback .fallback-delivery strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+      #web-fallback .fallback-delivery span {
+        color: rgba(255,255,255,.75);
+        font-size: 10px;
+      }
+      #web-fallback .fallback-vendors {
+        display: grid;
+        gap: 10px;
+      }
+      #web-fallback .fallback-vendor {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid #dcebed;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(21, 56, 66, .05);
+      }
+      #web-fallback .fallback-vendor-image {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #eaf6f8;
+      }
+      #web-fallback .fallback-bottom-nav {
+        position: fixed;
+        z-index: 3;
+        right: 50%;
+        bottom: 12px;
+        display: flex;
+        justify-content: space-around;
+        width: min(402px, calc(100% - 28px));
+        transform: translateX(50%);
+        padding: 10px 12px;
+        border: 1px solid #dcebed;
+        border-radius: 20px;
+        background: rgba(255,255,255,.94);
+        box-shadow: 0 8px 24px rgba(21,56,66,.13);
+        color: #799197;
+        font-size: 10px;
+      }
+      #web-fallback .fallback-bottom-nav strong {
+        color: #156172;
+      }
+    </style>
   </head>
   <body>
+    <main id="web-fallback" dir="rtl" aria-live="polite">
+      <div class="fallback-shell">
+        <header class="fallback-header">
+          <div class="fallback-avatar">✦</div>
+          <div>
+            <small>أهلاً بك معنا</small>
+            <strong>مرحباً بك</strong>
+          </div>
+        </header>
+        <div id="fallback-hero" class="fallback-hero">
+          <div class="fallback-hero-content">
+            <small>عروض المتاجر</small>
+            <h1>اطلب خدماتك بسهولة</h1>
+            <p>خدمات تنظيف موثوقة من متاجر قريبة منك</p>
+          </div>
+          <div class="fallback-hero-icon">⌁</div>
+        </div>
+        <div id="fallback-status" class="fallback-status">جاري تحميل البيانات...</div>
+        <section class="fallback-section">
+          <div class="fallback-section-header">
+            <h2>الخدمات الرئيسية</h2><span>عرض الكل</span>
+          </div>
+          <div id="fallback-services" class="fallback-grid"></div>
+        </section>
+        <section id="fallback-offers-section" class="fallback-section" hidden>
+          <div class="fallback-section-header">
+            <h2>أفضل العروض</h2><span>عرض الكل</span>
+          </div>
+          <div id="fallback-offers" class="fallback-offer-row"></div>
+        </section>
+        <div class="fallback-delivery">
+          <div class="fallback-delivery-icon">⌁</div>
+          <div><strong>توصيل مجاني</strong><span>لأول 100 عميل داخل حدود مدينة دورا والمناطق المجاورة</span></div>
+        </div>
+        <section class="fallback-section">
+          <div class="fallback-section-header">
+            <h2>المتاجر المتاحة</h2><span id="fallback-vendor-count"></span>
+          </div>
+          <div id="fallback-vendors" class="fallback-vendors"></div>
+        </section>
+        <nav class="fallback-bottom-nav" aria-label="التنقل الرئيسي">
+          <span>الرئيسية</span><span>الطلبات</span><span>الإشعارات</span><strong>المتاجر</strong>
+        </nav>
+      </div>
+    </main>
     <script>
-      window.addEventListener("load", function (ev) {
-        // Download main.dart.js
+      const apiBase = "https://elitecleanps.com/api";
+
+      function supportsWebGL() {
+        const canvas = document.createElement("canvas");
+        return Boolean(
+          canvas.getContext("webgl2") || canvas.getContext("webgl")
+        );
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function resolveImage(value) {
+        if (!value) return "";
+        if (/^https?:\/\//.test(value)) return value;
+        return new URL(value, apiBase + "/").toString();
+      }
+
+      function renderCards(targetId, items, emptyText) {
+        const target = document.getElementById(targetId);
+        if (!items.length) {
+          target.innerHTML = `<div class="fallback-empty">${emptyText}</div>`;
+          return;
+        }
+        target.innerHTML = items
+          .map(
+            (item) => `
+              <article class="fallback-card">
+                <strong>${escapeHtml(item.name || item.title)}</strong>
+                <span>${escapeHtml(item.description || item.address || "")}</span>
+              </article>
+            `
+          )
+          .join("");
+      }
+
+      function renderVendors(items) {
+        const target = document.getElementById("fallback-vendors");
+        document.getElementById("fallback-vendor-count").textContent =
+          items.length ? `${items.length}+` : "";
+        if (!items.length) {
+          target.innerHTML = `<div class="fallback-empty">لا توجد متاجر متاحة حالياً</div>`;
+          return;
+        }
+        target.innerHTML = items
+          .map((item) => {
+            const image = resolveImage(item.logoPath || item.logo_path || item.image_path || "");
+            return `
+              <article class="fallback-vendor">
+                <div class="fallback-vendor-image">${image ? `<img src="${image}" alt="">` : "✦"}</div>
+                <div><strong>${escapeHtml(item.name || "متجر")}</strong><span>${escapeHtml(item.address || "متجر مشارك")}</span></div>
+              </article>`;
+          })
+          .join("");
+      }
+
+      function renderOffers(items) {
+        const section = document.getElementById("fallback-offers-section");
+        const target = document.getElementById("fallback-offers");
+        if (!items.length) {
+          section.hidden = true;
+          return;
+        }
+        section.hidden = false;
+        target.innerHTML = items.map((item) => {
+          const image = resolveImage(item.image_path || "");
+          return `
+            <article class="fallback-offer">
+              <div class="fallback-offer-image">${image ? `<img src="${image}" alt="">` : "◇"}</div>
+              <div><strong>${escapeHtml(item.title || "عرض خاص")}</strong><span>${escapeHtml(item.description || "متجر مشارك")}</span></div>
+            </article>`;
+        }).join("");
+      }
+
+      function renderHero(item) {
+        if (!item) return;
+        const hero = document.getElementById("fallback-hero");
+        const image = resolveImage(item.image_path || "");
+        if (image) {
+          hero.classList.add("has-image");
+          hero.style.backgroundImage = `linear-gradient(135deg, rgba(21,97,114,.86), rgba(10,74,84,.78)), url("${image}")`;
+        }
+        const title = item.title || "اطلب خدماتك بسهولة";
+        const description = item.description || "خدمات تنظيف موثوقة من متاجر قريبة منك";
+        hero.querySelector("h1").textContent = title;
+        hero.querySelector("p").textContent = description;
+        hero.querySelector("small").textContent = title;
+      }
+
+      async function getJson(path) {
+        try {
+          const response = await fetch(`${apiBase}/${path}`);
+          return response.ok ? await response.json() : null;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      async function showWebFallback() {
+        const fallback = document.getElementById("web-fallback");
+        fallback.style.display = "block";
+        try {
+          const [servicesJson, vendorsJson, bannersJson, promotionsJson] = await Promise.all([
+            getJson("services"),
+            getJson("vendors"),
+            getJson("banners"),
+            getJson("promotions"),
+          ]);
+          if (!servicesJson || !vendorsJson) {
+            throw new Error("API request failed");
+          }
+          const services = servicesJson?.data?.services || [];
+          const vendors = vendorsJson?.data?.vendors?.data || [];
+          const banners = bannersJson?.data?.banners || [];
+          const promotions = promotionsJson?.data?.promotions || [];
+          renderCards("fallback-services", services, "لا توجد خدمات متاحة حالياً");
+          renderVendors(vendors);
+          renderHero(banners[0] || promotions[0]);
+          renderOffers(banners.length ? promotions : promotions.slice(1));
+          document.getElementById("fallback-status").textContent =
+            "تم تحميل البيانات من الخادم.";
+        } catch (error) {
+          document.getElementById("fallback-status").textContent =
+            "تعذر تحميل البيانات. يرجى المحاولة مرة أخرى.";
+          document.getElementById("fallback-services").innerHTML = "";
+          document.getElementById("fallback-vendors").innerHTML = "";
+          console.error("Customer data fallback failed", error);
+        }
+      }
+
+      async function startFlutter() {
+        if ("serviceWorker" in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          if (registrations.length > 0) {
+            await Promise.all(
+              registrations.map((registration) => registration.unregister())
+            );
+            if (navigator.serviceWorker.controller) {
+              window.location.reload();
+              return;
+            }
+          }
+        }
+
+        if (!supportsWebGL()) {
+          await showWebFallback();
+          return;
+        }
+
         _flutter.loader
           .loadEntrypoint({
-            serviceWorker: {
-              serviceWorkerVersion: serviceWorkerVersion,
-            },
+            entrypointUrl: "main-fixed.dart.js",
           })
           .then(function (engineInitializer) {
             return engineInitializer.initializeEngine();
@@ -56,7 +513,9 @@
           .then(function (appRunner) {
             return appRunner.runApp();
           });
-      });
+      }
+
+      window.addEventListener("load", startFlutter);
     </script>
   </body>
 </html>

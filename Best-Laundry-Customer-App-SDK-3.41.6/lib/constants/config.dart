@@ -6,9 +6,12 @@ class AppConfig {
     defaultValue: 'https://elitecleanps.com/api',
   );
 
-  //Stripe Keys For App - Replace With Yours
-  static const String secretKey = 'sk_test_dummy';
-  static const String publicKey = 'pk_test_dummy';
+  // Never commit payment credentials. Provide the public key at build time.
+  static const String secretKey = '';
+  static const String publicKey = String.fromEnvironment(
+    'STRIPE_PUBLIC_KEY',
+    defaultValue: '',
+  );
 
   //One Signal
   static const String oneSignalAppID =

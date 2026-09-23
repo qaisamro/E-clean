@@ -22,8 +22,26 @@ class GuestRepo implements IGuestRepo {
   final Dio _dio = getDio();
   @override
   Future<PromotionsModel> getPromotions() async {
-    final Response reponse = await _dio.get('promotions');
-    return PromotionsModel.fromMap(reponse.data as Map<String, dynamic>);
+    try {
+      final Response response = await _dio.get('banners');
+      final payload = Map<String, dynamic>.from(
+        response.data as Map<String, dynamic>,
+      );
+      final data = Map<String, dynamic>.from(
+        (payload['data'] as Map?) ?? const <String, dynamic>{},
+      );
+      data['promotions'] = data['banners'] ?? <dynamic>[];
+      payload['data'] = data;
+      return PromotionsModel.fromMap(payload);
+    } on DioException catch (error) {
+      if (error.response?.statusCode != 404) rethrow;
+
+      // Older deployments expose the main banner through promotions.
+      final Response response = await _dio.get('promotions');
+      return PromotionsModel.fromMap(
+        response.data as Map<String, dynamic>,
+      );
+    }
   }
 
   @override
@@ -34,8 +52,18 @@ class GuestRepo implements IGuestRepo {
 
   @override
   Future<OffersModel> getOffers() async {
-    final Response reponse = await _dio.get('offers');
-    return OffersModel.fromMap(reponse.data as Map<String, dynamic>);
+    try {
+      final Response response = await _dio.get('offers');
+      return OffersModel.fromMap(response.data as Map<String, dynamic>);
+    } on DioException catch (error) {
+      if (error.response?.statusCode != 404) rethrow;
+
+      // Older deployments expose store offers through the promotions endpoint.
+      final Response promotionsResponse = await _dio.get('promotions');
+      return OffersModel.fromMap(
+        promotionsResponse.data as Map<String, dynamic>,
+      );
+    }
   }
 
   @override

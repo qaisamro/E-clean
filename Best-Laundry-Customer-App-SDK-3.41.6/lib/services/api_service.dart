@@ -7,7 +7,11 @@ Dio getDio() {
   final Dio dio = Dio();
 
   //Basic Configuration
-  dio.options.baseUrl = AppConfig.baseUrl;
+  // Dio joins a relative path directly to baseUrl. Keep the trailing slash so
+  // `/api` + `services` becomes `/api/services`, not `/apiservices`.
+  dio.options.baseUrl = AppConfig.baseUrl.endsWith('/')
+      ? AppConfig.baseUrl
+      : '${AppConfig.baseUrl}/';
   dio.options.connectTimeout = const Duration(milliseconds: 30000);
   dio.options.receiveTimeout = const Duration(milliseconds: 60000);
   // _dio.options.headers = {'Content-Type': 'application/json'};
