@@ -10,4 +10,9 @@ google-services.json
 GoogleService-Info.plist
 firebase_credentials.json
 firebase_app_id_file.json
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/*.log
+storage/app/images/
 
