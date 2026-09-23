@@ -1,0 +1,13 @@
+﻿node_modules/
+vendor/
+.env
+*.key
+build/
+*.apk
+.dart_tool/
+.idea/
+google-services.json
+GoogleService-Info.plist
+firebase_credentials.json
+firebase_app_id_file.json
+
