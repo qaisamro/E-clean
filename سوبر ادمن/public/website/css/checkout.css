@@ -1,0 +1,141 @@
+.rs-delivery-address-box {
+    transition: .3s linear;
+}
+
+.rs-delivery-address-box i {
+    transition: .3s linear;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+/* .rs-delivery-address-box.active {
+    border: 1.50px solid var(--color-mint-400);
+    background: var(--color-mint-50);
+}
+
+.rs-delivery-address-box.active i {
+    border: 1.50px solid var(--color-mint-400);
+} */
+
+input[name="address"]:checked+label.rs-delivery-address-box {
+    background: #f0fdf4;
+    border-color: var(--color-mint-400);
+}
+
+
+input[name="address"]:checked+label.rs-delivery-address-box i {
+    border: 1.50px solid var(--color-mint-400);
+}
+
+
+input[name="address"]:checked+label.rs-delivery-address-box i::before {
+    position: absolute;
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: var(--color-mint-600);
+    border-radius: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767px) {
+    input[name="address"]:checked+label.rs-delivery-address-box i::before {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+/* .rs-delivery-address-box.active i::before {
+    position: absolute;
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: var(--color-mint-600);
+    border-radius: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+} */
+
+.rs-order-items-box-2::after {
+    display: none;
+}
+
+.rs-order-items-box-2 {
+    margin-bottom: 24px !important;
+}
+
+.promo-input::placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--color-neutral-400);
+}
+
+.promo-input:focus {
+    outline: none;
+}
+
+.promo-input:focus::placeholder {
+    color: transparent;
+    transform: translateY(-5px);
+}
+
+.promo-input:focus {
+    border: 1px solid var(--color-neutral-400);
+}
+
+@media (max-width: 1200px) {
+    .rs-payment-logo button {
+        height: 70px;
+        width: 120px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .rs-payment-logo button img {
+        width: 80px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .rs-payment-logo button {
+        height: 64px;
+        width: 100px;
+    }
+}
+
+@media (max-width: 992px) {
+    .rs-payment-logo button img {
+        width: 60px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .rs-payment-logo button {
+        height: 48px;
+        width: 80px;
+    }
+}
+
+@media (max-width: 767px) {
+    .rs-payment-logo button img {
+        width: 50px;
+        height: 25px;
+    }
+}
+
+@media (max-width: 380px) {
+    .checkout-card {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 340px) {
+    .promo-code {
+        flex-wrap: wrap;
+    }
+}

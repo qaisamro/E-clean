@@ -1,0 +1,21 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/images/cash.png": "/images/cash.png",
+    "/images/cash1.png": "/images/cash1.png",
+    "/images/cash2.png": "/images/cash2.png",
+    "/images/dummy/dummy-placeholder.png": "/images/dummy/dummy-placeholder.png",
+    "/images/dummy/dummy-user.png": "/images/dummy/dummy-user.png",
+    "/images/icons/delivered.svg": "/images/icons/delivered.svg",
+    "/images/icons/earning.svg": "/images/icons/earning.svg",
+    "/images/icons/items.svg": "/images/icons/items.svg",
+    "/images/icons/order.svg": "/images/icons/order.svg",
+    "/images/icons/Orders.svg": "/images/icons/Orders.svg",
+    "/images/icons/Pending.svg": "/images/icons/Pending.svg",
+    "/images/icons/progress.svg": "/images/icons/progress.svg",
+    "/images/icons/services.svg": "/images/icons/services.svg",
+    "/images/icons/user.svg": "/images/icons/user.svg",
+    "/images/icons/users.svg": "/images/icons/users.svg",
+    "/images/loader/GoldStar-Loader.gif": "/images/loader/GoldStar-Loader.gif",
+    "/images/loader/loader.gif": "/images/loader/loader.gif"
+}
