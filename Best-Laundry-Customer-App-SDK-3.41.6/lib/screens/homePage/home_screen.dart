@@ -1,4 +1,3 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,19 +30,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> requestNotificationPermission() async {
+    if (kIsWeb) return;
+
     final PermissionStatus status = await Permission.notification.status;
     if (status == PermissionStatus.granted) {
       if (kDebugMode) {
         print('Notification permission is granted');
       }
     } else if (status == PermissionStatus.denied) {
-      await Permission.notification.request().then((status) {
-        if (status.isDenied) {
-          AppSettings.openAppSettings(type: AppSettingsType.notification);
-        }
-      });
-    } else if (status == PermissionStatus.permanentlyDenied) {
-      AppSettings.openAppSettings(type: AppSettingsType.notification);
+      await Permission.notification.request();
     }
   }
 

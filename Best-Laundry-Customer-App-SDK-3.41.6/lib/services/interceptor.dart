@@ -25,6 +25,7 @@ class ElTanvirInterceptors extends Interceptor {
 
     //Else this Block Because these box opens when app opens
     authBox = Hive.box(AppHSC.authBox);
+    userBox = Hive.box(AppHSC.userBox);
 
     if (authBox!.get(AppHSC.authToken) != null &&
         authBox!.get(AppHSC.authToken) != '') {
@@ -53,8 +54,8 @@ class ElTanvirInterceptors extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      authBox!.clear();
-      userBox!.clear();
+      authBox?.clear();
+      userBox?.clear();
 
       ContextLess.nav.pushNamed(Routes.loginScreen);
     }

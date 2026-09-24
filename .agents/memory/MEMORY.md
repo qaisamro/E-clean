@@ -1,0 +1,4 @@
+- [Imported Laravel setup](laravel-import-setup.md) — verify route completeness and isolate local database configuration from Replit environment URLs.
+- [Flutter web preview cache](flutter-web-preview-cache.md) — stale service workers can keep executing an older Flutter entrypoint after a rebuild.
+- [Admin preview authentication](admin-preview-auth.md) — use relative auth paths because forwarded preview hosts can break Laravel sessions and CSRF.
+- [GitHub super admin route](github-super-admin-route.md) — the super-admin screen is `/admins` inside the Laravel app, not a separate folder.
