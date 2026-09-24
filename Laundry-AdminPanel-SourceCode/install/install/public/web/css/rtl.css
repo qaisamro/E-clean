@@ -1,0 +1,326 @@
+/* RTL overrides for the admin panel when Arabic locale is active.
+   Mirrors the English (LTR) layout exactly: 250px sidebar + identical content area. */
+html[dir="rtl"] body,
+html[dir="rtl"] .navbar,
+html[dir="rtl"] .card,
+html[dir="rtl"] .btn,
+html[dir="rtl"] .form-control,
+html[dir="rtl"] .table,
+html[dir="rtl"] .main-header,
+html[dir="rtl"] .main-content {
+    font-family: 'Tajawal', 'Open Sans', sans-serif;
+}
+
+/* Sidebar: pinned to the right (mirror of fixed-left) */
+html[dir="rtl"] .navbar-vertical.navbar-expand-xs.fixed-left,
+html[dir="rtl"] .navbar-vertical.navbar-expand-sm.fixed-left,
+html[dir="rtl"] .navbar-vertical.navbar-expand-md.fixed-left,
+html[dir="rtl"] .navbar-vertical.navbar-expand-lg.fixed-left,
+html[dir="rtl"] .navbar-vertical.navbar-expand-xl.fixed-left {
+    right: 0;
+    left: auto;
+    border-width: 0 0 0 1px;
+    border-right: 0;
+    border-left: 1px solid #e9ecef;
+}
+
+/* Content: shift from the right by the same 250px the sidebar occupies in LTR */
+html[dir="rtl"] .navbar-vertical.navbar-expand-xs.fixed-left + .main-content,
+html[dir="rtl"] .navbar-vertical.navbar-expand-sm.fixed-left + .main-content,
+html[dir="rtl"] .navbar-vertical.navbar-expand-md.fixed-left + .main-content,
+html[dir="rtl"] .navbar-vertical.navbar-expand-lg.fixed-left + .main-content,
+html[dir="rtl"] .navbar-vertical.navbar-expand-xl.fixed-left + .main-content {
+    margin-left: 0 !important;
+    margin-right: 250px !important;
+}
+
+/* Top bar inside content mirrors its LTR position */
+html[dir="rtl"] .main-content .navbar-top {
+    left: auto;
+    right: 0;
+}
+
+/* Sidebar active indicator sits on the inner edge */
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav-link.active:before {
+    left: auto;
+    right: 0;
+    border-left: 0;
+    border-right: 2px solid #5e72e4;
+}
+
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav-link i {
+    margin-right: 0;
+    margin-left: 0.75rem;
+}
+
+/* Top-level items start flush from the right edge of the sidebar */
+html[dir="rtl"] .navbar-vertical .navbar-nav > .nav-item > .nav-link,
+html[dir="rtl"] .navbar-vertical .navbar-nav > .nav-link {
+    padding-right: 0;
+    padding-left: 1.5rem;
+}
+
+/* Submenu collapse chevron: push to the far left (mirror of LTR far right)
+   and point left so spacing/name layout matches the English sidebar */
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav-link[data-toggle='collapse']:after {
+    margin-left: 0;
+    margin-right: auto;
+    content: '\f104';
+}
+
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav-link[data-toggle='collapse'][aria-expanded='true']:after {
+    transform: rotate(90deg);
+}
+
+/* Submenu items indent from the right in RTL */
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav .nav-link {
+    padding-left: 1.5rem;
+    padding-right: 3.25rem;
+}
+
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav .nav .nav-link {
+    padding-left: 1.5rem;
+    padding-right: 4.5rem;
+}
+
+html[dir="rtl"] .navbar-vertical.navbar-expand-md .navbar-nav .nav .nav-link,
+html[dir="rtl"] .navbar-vertical.navbar-expand-lg .navbar-nav .nav .nav-link,
+html[dir="rtl"] .navbar-vertical.navbar-expand-xl .navbar-nav .nav .nav-link {
+    margin-left: 0;
+    margin-right: 2rem;
+    border-left: 0;
+    border-right: 1px solid #ddd;
+}
+
+html[dir="rtl"] .text-left {
+    text-align: right !important;
+}
+
+html[dir="rtl"] .text-right {
+    text-align: left !important;
+}
+
+html[dir="rtl"] .float-left {
+    float: right !important;
+}
+
+html[dir="rtl"] .float-right {
+    float: left !important;
+}
+
+html[dir="rtl"] .ml-auto {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+html[dir="rtl"] .mr-auto {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+}
+
+/* Mirror spacing utilities: icons/buttons keep even gaps on both sides */
+html[dir="rtl"] .ml-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+html[dir="rtl"] .ml-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+html[dir="rtl"] .ml-3 { margin-left: 0 !important; margin-right: 1rem !important; }
+html[dir="rtl"] .ml-4 { margin-left: 0 !important; margin-right: 1.5rem !important; }
+html[dir="rtl"] .ml-5 { margin-left: 0 !important; margin-right: 3rem !important; }
+
+html[dir="rtl"] .mr-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+html[dir="rtl"] .mr-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+html[dir="rtl"] .mr-3 { margin-right: 0 !important; margin-left: 1rem !important; }
+html[dir="rtl"] .mr-4 { margin-right: 0 !important; margin-left: 1.5rem !important; }
+html[dir="rtl"] .mr-5 { margin-right: 0 !important; margin-left: 3rem !important; }
+
+html[dir="rtl"] .pl-1 { padding-left: 0 !important; padding-right: 0.25rem !important; }
+html[dir="rtl"] .pl-2 { padding-left: 0 !important; padding-right: 0.5rem !important; }
+html[dir="rtl"] .pl-3 { padding-left: 0 !important; padding-right: 1rem !important; }
+html[dir="rtl"] .pl-4 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+html[dir="rtl"] .pl-5 { padding-left: 0 !important; padding-right: 3rem !important; }
+
+html[dir="rtl"] .pr-1 { padding-right: 0 !important; padding-left: 0.25rem !important; }
+html[dir="rtl"] .pr-2 { padding-right: 0 !important; padding-left: 0.5rem !important; }
+html[dir="rtl"] .pr-3 { padding-right: 0 !important; padding-left: 1rem !important; }
+html[dir="rtl"] .pr-4 { padding-right: 0 !important; padding-left: 1.5rem !important; }
+html[dir="rtl"] .pr-5 { padding-right: 0 !important; padding-left: 3rem !important; }
+
+/* Keep button text centered so labels don't look lopsided in RTL */
+html[dir="rtl"] .btn.text-left,
+html[dir="rtl"] .btn.text-right {
+    text-align: center !important;
+}
+
+/* Logical margin helpers (Bootstrap5 style) used with icons */
+html[dir="rtl"] .me-1 { margin-left: 0.25rem !important; }
+html[dir="rtl"] .me-2 { margin-left: 0.5rem !important; }
+html[dir="rtl"] .me-3 { margin-left: 1rem !important; }
+html[dir="rtl"] .ms-1 { margin-right: 0.25rem !important; }
+html[dir="rtl"] .ms-2 { margin-right: 0.5rem !important; }
+html[dir="rtl"] .ms-3 { margin-right: 1rem !important; }
+
+/* Back arrows point right in RTL */
+html[dir="rtl"] .btn .fa-arrow-left:before {
+    content: "\f061";
+}
+
+html[dir="rtl"] .btn .fa-arrow-right:before {
+    content: "\f060";
+}
+
+html[dir="rtl"] .dropdown-menu {
+    text-align: right;
+}
+
+html[dir="rtl"] .card-header .header-title,
+html[dir="rtl"] .card-title {
+    text-align: right;
+}
+
+html[dir="rtl"] table th,
+html[dir="rtl"] table td {
+    text-align: right;
+}
+
+html[dir="rtl"] .pagination {
+    direction: ltr;
+}
+
+html[dir="rtl"] .modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+
+/* The UA stylesheet applies padding-inline-start:40px to lists; in RTL that
+   becomes physical padding-right, but Bootstrap only zeroes the physical
+   padding-left, so the sidebar lists keep a stray 40px right padding and
+   every menu item renders 40px too narrow / offset. Zero it in RTL. */
+html[dir="rtl"] .navbar-vertical .navbar-nav,
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav {
+    padding-right: 0;
+    padding-inline-start: 0;
+}
+
+/* Submenu links are flex items whose default min-width:auto lets their
+   content push them wider than the 250px sidebar, overflowing/clipping the
+   buttons. Allow them to shrink to the sidebar width instead. */
+html[dir="rtl"] .navbar-vertical .navbar-nav .nav .nav-link {
+    min-width: 0;
+}
+
+/* In RTL, move the fixed footer_bottom (language selector + profile) to the right */
+html[dir="rtl"] .footer_bottom {
+    left: auto;
+    right: 5px;
+}
+
+/* In RTL, move mobile language toggle to the left */
+html[dir="rtl"] .mobile-lang-toggle {
+    right: auto;
+    left: 12px;
+}
+html[dir="rtl"] #mobileLangDropdown {
+    right: auto;
+    left: 12px;
+}
+
+/* Force every text node to render right-to-left inside the admin panel */
+html[dir="rtl"] body,
+html[dir="rtl"] .main-content,
+html[dir="rtl"] .card,
+html[dir="rtl"] .card-header,
+html[dir="rtl"] .card-body,
+html[dir="rtl"] .card-footer,
+html[dir="rtl"] .card-title,
+html[dir="rtl"] .card-header .header-title,
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3,
+html[dir="rtl"] h4, html[dir="rtl"] h5, html[dir="rtl"] h6,
+html[dir="rtl"] p, html[dir="rtl"] label, html[dir="rtl"] span,
+html[dir="rtl"] div, html[dir="rtl"] li, html[dir="rtl"] td, html[dir="rtl"] th {
+    text-align: right !important;
+    direction: rtl;
+}
+
+/* Keep centered elements exactly centered */
+html[dir="rtl"] .card-title.text-center,
+html[dir="rtl"] .text-center,
+html[dir="rtl"] .text-center h3,
+html[dir="rtl"] .text-center p {
+    text-align: center !important;
+}
+
+/* Inputs, selects, textareas: text flush to the right */
+html[dir="rtl"] .form-control,
+html[dir="rtl"] input[type="text"],
+html[dir="rtl"] input[type="number"],
+html[dir="rtl"] input[type="date"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="password"],
+html[dir="rtl"] select,
+html[dir="rtl"] textarea {
+    text-align: right !important;
+    direction: rtl;
+}
+
+/* Order totals / detail rows align right */
+html[dir="rtl"] .detail,
+html[dir="rtl"] .detail span,
+html[dir="rtl"] .font-weight-500 {
+    text-align: right !important;
+}
+
+/* POS payment boxes: center their icons regardless of direction */
+html[dir="rtl"] .client_payment_box,
+html[dir="rtl"] .client_payment_box label {
+    text-align: center !important;
+}
+
+/* RTL - إصلاح القائمة الفرعية لإدارة المنتجات - مواصفات: flex + align-items + gap + padding-right */
+html[dir="rtl"] .navbar-vertical .nav .nav-link.sub-menu,
+html[dir="rtl"] .navbar-vertical .navbar-nav > .nav-link.sub-menu{
+  display:flex!important;
+  flex-direction:row-reverse!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  text-align:right!important;
+  direction:rtl;
+  padding-right:50px!important; /* Indentation 50px عن العنوان الرئيسي */
+  padding-left:1rem!important;
+  min-height:45px!important;
+  height:45px!important;
+  gap:12px!important; /* مسافة ثابتة 12px */
+  line-height:1;
+  border-radius:8px;
+}
+html[dir="rtl"] .nav-link.sub-menu i{
+  width:20px!important;
+  min-width:20px!important;
+  height:20px!important;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  font-size:13px!important;
+  margin:0!important;
+  flex-shrink:0;
+}
+html[dir="rtl"] .nav-link.sub-menu .nav-link-text{
+  flex:1;
+  text-align:right;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+/* خط تمييز للحاوية */
+html[dir="rtl"] .navbar-vertical .collapse .nav{
+  border-right:none;
+  margin-right:0;
+  padding-right:0;
+  width:100%;
+}
+
+/* توحيد قياس الأزرار الفرعية مع الأصلية */
+html[dir="rtl"] .navbar-vertical .nav .nav-link.sub-menu,
+html[dir="rtl"] .navbar-vertical .navbar-nav > .nav-link.sub-menu{
+  margin-right:0!important;
+  margin-left:0!important;
+  border-right:none!important;
+  width:100%!important;
+}

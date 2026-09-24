@@ -1,0 +1,41 @@
+/* RTL overrides for the website frontend when Arabic locale is active */
+html[dir="rtl"] body {
+    font-family: 'Tajawal', 'Inter', 'Poppins', sans-serif;
+}
+
+html[dir="rtl"] .text-left {
+    text-align: right !important;
+}
+
+html[dir="rtl"] .text-right {
+    text-align: left !important;
+}
+
+html[dir="rtl"] .menu_link,
+html[dir="rtl"] .btn_solid,
+html[dir="rtl"] .btn_outline {
+    letter-spacing: 0;
+}
+
+html[dir="rtl"] .navbar .btn_solid img {
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .absolute {
+    /* keep directional utilities working naturally with dir=rtl */
+}
+
+html[dir="rtl"] .flex-row,
+html[dir="rtl"] .flex {
+    /* flex layouts mirror automatically under dir=rtl */
+}
+
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+    text-align: right;
+}
+
+html[dir="rtl"] .rs-sigin-area {
+    text-align: right;
+}
