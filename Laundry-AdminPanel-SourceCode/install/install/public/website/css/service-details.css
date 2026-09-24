@@ -1,0 +1,28 @@
+.rs-service-details-top-link a.active {
+    color: var(--color-mint-600);
+}
+
+.rs-service-details-tab div {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 48px;
+    color: var(--color-neutral-700);
+    width: 33.33%;
+    text-align: center;
+    height: 48px;
+    cursor: pointer;
+}
+
+.rs-service-details-tab div.active {
+    border-radius: 12px 12px 0 0;
+    background: var(--color-mint-50);
+    color: var(--color-mint-600);
+}
+
+.rs-description-list li {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 180%;
+    color: var(--color-neutral-700);
+    list-style: inside;
+}
