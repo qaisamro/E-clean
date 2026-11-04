@@ -1,0 +1,9 @@
+rt_time":"638879266","type":1},"time":"638879269","type":600},
+{"phase":2,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":145},
+{"phase":1,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":237},
+{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200 HTTP/1.1\r\n"},"phase":0,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":238},
+{"params":{"byte_count":735},"phase":0,"source":{"id":2453,"start_time":"638879118","type":10},"time":"638879269","type":82},
+{"phase":2,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":237},
+{"phase":1,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":242},
+{"phase":1,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879269","type":438},
+{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch

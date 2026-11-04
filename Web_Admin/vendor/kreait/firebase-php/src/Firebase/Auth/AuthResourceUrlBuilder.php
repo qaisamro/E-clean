@@ -1,0 +1,8 @@
+e":15},"time":"638846978","type":168},
+{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":593},
+{"params":{"preflight_required":false},"phase":0,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":594},
+{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":2},
+{"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":138},
+{"phase":2,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":138},
+{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846987","type":611},
+{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://render

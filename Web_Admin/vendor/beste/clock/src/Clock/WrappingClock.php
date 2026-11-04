@@ -1,0 +1,10 @@
+2\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/info HTTP/1.1\r\n"},"phase":0,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260051","type":238},
+{"params":{"byte_count":610},"phase":0,"source":{"id":3327,"start_time":"640260049","type":10},"time":"640260051","type":82},
+{"phase":2,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260051","type":237},
+{"phase":1,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260051","type":242},
+{"phase":1,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260051","type":438},
+{"params":{"byte_count":394},"phase":0,"source":{"id":3327,"start_time":"640260049","type":10},"time":"640260053","type":84},
+{"phase":2,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260053","type":438},
+{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 163","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 22:24:27 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260053","type":243},
+{"phase":2,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260053","type":242},
+{"phase":1,"source":{"id":3320,"s

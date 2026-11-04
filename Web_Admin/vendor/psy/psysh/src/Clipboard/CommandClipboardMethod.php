@@ -1,0 +1,9 @@
+194},
+{"phase":1,"source":{"id":2488,"start_time":"638879228","type":1},"time":"638879231","type":145},
+{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":2488,"start_time":"638879228","type":1},"time":"638879231","type":600},
+{"phase":2,"source":{"id":2488,"start_time":"638879228","type":1},"time":"638879231","type":145},
+{"phase":1,"source":{"id":2488,"start_time":"638879228","type":1},"time":"638879231","type":237},
+{"params":{"bytes_copied":427},"phase":2,"source":{"id":2483,"start_time":"638879225","type":15},"time":"638879231","type":171},
+{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=OrderTracking.jsx&type=file&limit=200 HTTP/1.1\r\n"},"phase":0,"source":{"id":2488,"start_time":"638879228","type":1},"time":"638879231","type":238},
+{"params":{"byte_count":730},"phase":0,"source":{"id":2457,"start_time":"638879120","type":10},"time":"638879231","type":82},
+{"phase":2,"source":{"id":2488,"start_time":"638879228","type":1

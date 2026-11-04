@@ -1,0 +1,9 @@
+pi/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":194},
+{"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846988","type":180},
+{"params":{"source_dependency":{"id":2402,"type":32}},"phase":0,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846988","type":195},
+{"params":{"source_dependency":{"id":2400,"type":1}},"phase":0,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":195},
+{"phase":1,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":33},
+{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":35},
+{"phase":2,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":33},
+{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":2402,"start_time":"638846988","type":32},"time":"638846988","type":196},
+{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":2402,"type":32},"type":"main","using_quic":false},"phase":

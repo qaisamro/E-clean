@@ -1,0 +1,10 @@
+ccess-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:59:12 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":2249,"start_time":"638745268","type":1},"time":"638745298","type":243},
+{"phase":2,"source":{"id":2249,"start_time":"638745268","type":1},"time":"638745298","type":242},
+{"phase":1,"source":{"id":2249,"start_time":"638745268","type":1},"time":"638745298","type":160},
+{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":2253,"start_time":"638745295","type":15},"time":"638745298","type":171},
+{"params":{"bytes_copied":288},"phase":2,"source":{"id":2253,"start_time":"638745295","type":15},"time":"638745298","type":171},
+{"phase":2,"source":{"id":2249,"start_time":"638745268","type":1},"time":"638745298","type":160},
+{"phase":1,"source":{"id":2249,"start_time":"638745268","type":1},"time":"638745298","type":162},
+{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":2253,"start_time":"638745295","type":15},"time":"638745298","type":171},
+{"params":{"bytes_copied":0},"phase":2,"source":{"id":2253,"start_time":"638745295","type":15},"time":"638745298","type":171},
+{"

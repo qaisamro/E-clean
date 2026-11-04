@@ -1,0 +1,13 @@
+e&limit=200"},"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":134},
+{"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":616},
+{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":616},
+{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":604},
+{"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":137},
+{"phase":2,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879235","type":137},
+{"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879236","type":153},
+{"phase":2,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879236","type":153},
+{"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879236","type":154},
+{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=Scanner.jsx&type=file&limit=200"},"phase":1,"source":{"id":2499,"start_time":"638879236","type":15},"time":"638879236","type":168},
+{"params":{"result":"opened"},"phase":2,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879236","type":154},
+{"phase":1,"source":{"id":2498,"start_time":"638879235","type":1},"time":"638879236","type":157},
+{"phase":2,"source":{"id":2498,"start_time":"638

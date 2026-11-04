@@ -1,0 +1,1 @@
+export default async function run(page, ui) {\n  await page.waitForTimeout(1000);\n  const snap = await ui.snapshot();\n  const refs = snap.match(/@(e\\d+)/g) || [];\n  const texts = snap.split('\\n');\n  return { refs, texts: texts.slice(0, 5) };\n}

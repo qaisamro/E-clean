@@ -1,0 +1,8 @@
+e":160},
+{"phase":1,"source":{"id":2509,"start_time":"638879246","type":1},"time":"638879266","type":162},
+{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":2513,"start_time":"638879247","type":15},"time":"638879266","type":171},
+{"params":{"bytes_copied":0},"phase":2,"source":{"id":2513,"start_time":"638879247","type":15},"time":"638879266","type":171},
+{"phase":2,"source":{"id":2509,"start_time":"638879246","type":1},"time":"638879266","type":162},
+{"phase":1,"source":{"id":2509,"start_time":"638879246","type":1},"time":"638879266","type":139},
+{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200 HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200"},"phase":1,"source":{"id":2538,"start_time":"638879266","type":1},"time":"638879266","type":593},
+{"params":{"preflight_re

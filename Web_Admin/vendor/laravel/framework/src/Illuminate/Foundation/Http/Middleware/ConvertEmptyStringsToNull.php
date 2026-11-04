@@ -1,0 +1,7 @@
+,"start_time":"638618977","type":1},"time":"638618987","type":237},
+{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/info HTTP/1.1\r\n"},"phase":0,"source":{"id":2067,"start_time":"638618977","type":1},"time":"638618987","type":238},
+{"params":{"byte_count":610},"phase":0,"source":{"id":2074,"start_time":"638618985","type":10},"time":"638618988","type":82},
+{"phase":2,"source":{"id":2067,"start_time":"638618977","type":1},"time":"638618988","type":237},
+{"phase":1,"source":{"id":2067,"start_time":"638618977","type":1},"time":"638618988","type":242},
+{"phase":1,"source":{"id":2067,"start_time":"638618977","type":1},"time":"638618988","type":438},
+{"params":{"byte_coun

@@ -1,0 +1,12 @@
+e":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=backend&type=file&limit=200"},"phase":1,"source":{"id":2436,"start_time":"638879080","type":1},"time":"638879080","type":134},
+{"phase":1,"source":{"id":2436,"start_time":"638879080","type":1},"time":"638879080","type":616},
+{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":2436,"start_time":"638879080","type":1},"time":"638879080","type":616},
+{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":2436,"start_time":"638879080","type":1},"time":"638879080","type":604},
+{"phase":1,"source":{"id":2436,"start_time":"638879080","type":1},"time":"638879080","type":137},
+{"phase":2,"source":{"id":2434,"start_time":"638879079","type":1},"time":"638879080","type":159},
+{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":2437,"start_time":"638879080","type":32},"time":"638879080","type":194},
+{"phase":1,"source":{"id":2434,"start_time":"638879079","type":1},"time":"638879080","type":180},
+{"params":{"source_dependency":{"id":2437,"type":32}},"phase":0,"source":{"id":2434,"start_time":"638879079","type":1},"time":"638879080","type":195},
+{"params":{"source_dependency":{"id":2434,"type":1}},"phase":0,"source":{"id":2437,"start_time":"638879080","type":32},"time":"638879080","type":195},
+{"phase":1,"source":{"id":2437,"start_time":"638879080","type":32},"time":"638879080","type":33},
+{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":2437,"start_t

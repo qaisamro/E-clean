@@ -1,0 +1,1 @@
+export default async function run(page, ui) { const r = await page.goto("https://elitecleanps.com/orders/5/print-invoice", {waitUntil:"domcontentloaded"}); await page.waitForTimeout(3000); return { url: page.url(), status: r ? r.status() : null, ct: r ? r.headers()["content-type"] : null, title: await page.title() }; }

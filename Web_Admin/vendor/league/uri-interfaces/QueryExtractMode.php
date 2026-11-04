@@ -1,0 +1,11 @@
+640260047","type":15},"time":"640260047","type":170},
+{"phase":2,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260047","type":159},
+{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":194},
+{"phase":1,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260047","type":180},
+{"params":{"source_dependency":{"id":3322,"type":32}},"phase":0,"source":{"id":3320,"start_time":"640260044","type":1},"time":"640260047","type":195},
+{"params":{"source_dependency":{"id":3320,"type":1}},"phase":0,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":195},
+{"phase":1,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":33},
+{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":35},
+{"phase":2,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":33},
+{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":3322,"start_time":"640260047","type":32},"time":"640260047","type":196},
+{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":3322,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":3323,"start_time":"640260047","type":17},"time":"64026004
