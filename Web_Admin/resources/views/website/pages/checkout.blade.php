@@ -36,7 +36,7 @@
                     <p id="no-address-message" class="text-red-500 mb-2 {{ !$addresses->isEmpty() ? 'hidden' : '' }}">{{ __('Please add a delivery address first.') }}</p>
 
                     <div id="address-list">
-                        @foreach ($addresses->take(3) as $address)
+                        @foreach ($addresses as $address)
                             @php
                                 $fullAddress = implode(
                                     ', ',
@@ -141,7 +141,7 @@
                                     <img src="{{ asset($service->thumbnailPath ?? 'website/assets/images/default.png') }}"
                                         class="w-10 h-10 rounded">
                                     <div>
-                                        <h4 class="font-semibold">{{ $service->name }}</h4>
+                                        <h4 class="font-semibold">{{ $service->name_bn ?? $service->name }}</h4>
                                         <span class="text-sm text-gray-500">{{ $serviceProducts->count() }} {{ __('items') }}</span>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
                                         <img src="{{ asset($product->thumbnailPath ?? 'website/assets/images/default.png') }}"
                                             class="w-12 h-12 rounded object-cover">
                                         <div>
-                                            <p class="text-sm font-medium">{{ $product->name }}</p>
+                                            <p class="text-sm font-medium">{{ $product->name_bn ?? $product->name }}</p>
                                             <p class="text-xs text-gray-500">{{ __('Qty') }}: {{ $quantity }}</p>
                                             <p class="text-xs text-[#028090]">{{ currencyPosition(number_format($price, 2)) }} {{ __('each') }}</p>
                                         </div>
@@ -192,7 +192,7 @@
                         <div class="flex items-center gap-2">
                             <img src="{{ asset($service->thumbnailPath ?? 'website/assets/images/default.png') }}"
                                 class="w-8 h-8 rounded">
-                            <p class="text-sm text-gray-500">{{ $service->name }}</p>
+                            <p class="text-sm text-gray-500">{{ $service->name_bn ?? $service->name }}</p>
                         </div>
                         <span class="font-semibold text-[#028090] whitespace-nowrap">{{ currencyPosition(number_format($storeTotal, 2)) }}</span>
                     </div>
@@ -286,21 +286,21 @@
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Block</label>
-                        <input type="text" name="block" class="w-full border p-3 rounded-[12px]" placeholder="Block">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Block') }}</label>
+                        <input type="text" name="block" class="w-full border p-3 rounded-[12px]" placeholder="{{ __('Block') }}">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Area *</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Area') }} *</label>
                         <input type="text" name="area" id="area" class="w-full border p-3 rounded-[12px]"
-                            placeholder="Area" required>
+                            placeholder="{{ __('Area') }}" required>
                         @error('area')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Address Line</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Address Line') }}</label>
                         <input type="text" name="address_line" class="w-full border p-3 rounded-[12px]"
-                            placeholder="Address Line">
+                            placeholder="{{ __('Address Line') }}">
                         @error('address_line')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
@@ -354,7 +354,7 @@
                         addressList.classList.remove('hidden');
 
                         let html = '';
-                        data.addresses.slice(0, 3).forEach((address, index) => {
+                        data.addresses.forEach((address, index) => {
                             const fullAddress = [
                                 address.house_no,
                                 address.flat_no,

@@ -48,16 +48,16 @@ class OfferRepository extends Repository
         return $offers->get();
     }
 
-    public function getActive()
+    public function getActive($cityId = null)
     {
-        return $this->model()::query()
+        $query = $this->model()::query()
             ->with(['vendor', 'thumbnail', 'product'])
             ->whereHas('vendor', function ($vendor) {
                 $vendor->where('is_active', true);
             })
             ->isActive()
-            ->latest('id')
-            ->get();
+            ->latest('id');
+        return \App\Support\CatalogCityFilter::apply($query, $cityId)->get();
     }
 
     /**
@@ -90,6 +90,12 @@ class OfferRepository extends Repository
             $thumbnailId = $thumbnail->id;
         }
 
+        $vendorId = $this->currentVendorId() ?? $request->vendor_id;
+        if ($request->filled('product_id')) {
+            $product = Product::find($request->product_id);
+            abort_unless($product && (!$vendorId || (int) $product->vendor_id === (int) $vendorId), 404);
+        }
+
         return $this->model()::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -99,7 +105,7 @@ class OfferRepository extends Repository
             // New offers are visible in the app immediately; the vendor can
             // deactivate them later from the offers list toggle.
             'is_active' => $request->active ?? 1,
-            'vendor_id' => $this->currentVendorId() ?? $request->vendor_id,
+            'vendor_id' => $vendorId,
             'product_id' => $request->product_id,
         ]);
     }
@@ -123,6 +129,11 @@ class OfferRepository extends Repository
                 Storage::delete($oldThumbnail->src);
             }
             $oldThumbnail?->delete();
+        }
+
+        if ($request->filled('product_id')) {
+            $product = Product::find($request->product_id);
+            abort_unless($product && (int) $product->vendor_id === (int) $offer->vendor_id, 404);
         }
 
         $offer->update([

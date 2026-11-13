@@ -9,8 +9,8 @@ class ScopeVendor
 {
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin')) {
-            $vendorId = auth()->user()->vendor?->id;
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $vendorId = \App\Support\VendorAccount::idFor(auth()->user());
             if (!$vendorId) {
                 abort(403, 'حساب التاجر غير مرتبط بمتجر');
             }

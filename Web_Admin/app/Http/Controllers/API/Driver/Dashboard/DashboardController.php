@@ -5,11 +5,10 @@ namespace App\Http\Controllers\API\Driver\Dashboard;
 use App\Events\OrderMailEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
-use App\Models\NotificationManage;
 use App\Models\Order;
 use App\Repositories\DriverRepository;
 use App\Repositories\OrderRepository;
-use App\Services\NotificationServices;
+use App\Services\OrderStatusNotificationService;
 use Illuminate\Http\Response;
 
 class DashboardController extends Controller
@@ -50,7 +49,7 @@ class DashboardController extends Controller
         $order = (new OrderRepository())->findById($id);
 
         // Drivers may only view orders assigned to them (their own store)
-        if (!$this->driverOwnsOrder($order?->id)) {
+        if (!$this->driverOwnsOrder($order?->id, true)) {
             abort(404);
         }
 
@@ -62,7 +61,7 @@ class DashboardController extends Controller
     public function statusUpdate(Order $order)
     {
         // Drivers may only update orders assigned to them (their own store)
-        if (!$this->driverOwnsOrder($order->id)) {
+        if (!$this->driverOwnsOrder($order->id, false)) {
             return $this->json('هذا الطلب غير معيّن لك', [], Response::HTTP_FORBIDDEN);
         }
         $status = config('enums.order_status.' . request('status'));
@@ -72,22 +71,7 @@ class DashboardController extends Controller
         }
         $order = (new OrderRepository())->StatusUpdateByRequest($order, $status);
 
-        $manageMap = [
-            'pending' => 'new_order',
-            'order_confirmed' => 'order_confirmed',
-            'picked_order' => 'order_picked',
-            'processing' => 'order_processing',
-            'cancelled' => 'order_cancelled',
-            'delivered' => 'order_delivered',
-        ];
-        $notificationStatus = NotificationManage::where('name', $manageMap[request('status')] ?? request('status'))->first();
-
-        if ($order->customer->devices->count() && $notificationStatus?->is_active) {
-            $message = $notificationStatus->message;
-            $keys = $order->customer->devices->pluck('key')->toArray();
-            $title = $notificationStatus->title;
-            (new NotificationServices())->sendNotification($message, $keys, $title);
-        }
+        app(OrderStatusNotificationService::class)->notify($order, (string) request('status'));
 
         if ($order->customer->user->email) {
             OrderMailEvent::dispatch($order);
@@ -144,7 +128,12 @@ class DashboardController extends Controller
 
     public function history()
     {
-        $orders =  auth()->user()->driver->orderHistories;
+        $driver = auth()->user()?->driver;
+        if (!$driver || !$driver->vendor_id) {
+            $orders = collect();
+        } else {
+            $orders = $driver->orderHistories;
+        }
         return $this->json('Order histories list', [
             'total' => count($orders),
             'orders' => OrderResource::collection($orders)
@@ -155,15 +144,17 @@ class DashboardController extends Controller
      * Whether the authenticated driver is assigned to the given order
      * (directly or via history) — i.e. it belongs to their own store.
      */
-    protected function driverOwnsOrder($orderId): bool
+    protected function driverOwnsOrder($orderId, bool $allowHistory = false): bool
     {
         $driver = auth()->user()?->driver;
-        if (!$driver || !$orderId) {
+        if (!$driver || !$driver->vendor_id || !$driver->is_approve
+            || !auth()->user()->is_active || !$orderId) {
             return false;
         }
         if ($driver->orders()->where('orders.id', $orderId)->exists()) {
             return true;
         }
-        return $driver->orderHistories()->where('orders.id', $orderId)->exists();
+        return $allowHistory
+            && $driver->orderHistories()->where('orders.id', $orderId)->exists();
     }
 }

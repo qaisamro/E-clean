@@ -19,12 +19,8 @@
                             <img width="50%" src="{{ $product->thumbnailPath }}" alt="">
                         </div>
                         <x-form type="Update" method="true" route="product.update" updateId="{{ $product->id }}">
-                            <label class="mb-1">{{ __('Product').' '.__('Name').' '.__('English')}}</label>
-                            <x-input name="name" type='text' placeholder="{{ __('Product').' '.__('Name').' '.__('English')}}"
-                                value="{{ old('name') ?? $product->name }}"/>
-
-                            <label class="mb-1">{{ __('Product').' '.__('Name').' '.__('Arabic')}}</label>
-                            <x-input name="name_bn" type="text" placeholder="{{ __('Product').' '.__('Name').' '.__('Arabic')}}" value="{{ old('name_bn') ?? $product->name_bn }}"/>
+                            <label class="mb-1">{{ __('Product').' '.__('Name') }}</label>
+                            <x-input name="name_bn" type="text" placeholder="{{ __('Product').' '.__('Name') }}" value="{{ old('name_bn') ?? $product->name_bn }}" required="true"/>
 
                             <label class="mb-1">{{ __('Product').' '.__('Price') }}</label>
                             <input name="price" type='text' class="form-control" placeholder="{{ __('Product').' '.__('Price') }}"
@@ -52,17 +48,7 @@
                                 @foreach ($services as $service)
                                     <option value="{{ $service->id }}"
                                         {{ $product->service_id == $service->id ? 'selected' : '' }}>
-                                        {{ session()->get('local') == 'ar' ? $service->name_bn ?? $service->name : $service->name }}
-                                    </option>
-                                @endforeach
-                            </x-select>
-
-                            <label class="mb-1">{{ __('Select').' '.__('Variant') }}</label>
-                            <x-select name="variant_id">
-                                @foreach ($variants as $variant)
-                                    <option {{ $product->variant_id == $variant->id ? 'selected' : '' }}
-                                        value="{{ $variant->id }}">
-                                        {{ session()->get('local') == 'ar' ? $variant->name_bn ?? $variant->name : $variant->name }}
+                                        {{ $service->name_bn ?? $service->name }}
                                     </option>
                                 @endforeach
                             </x-select>
@@ -101,26 +87,6 @@
 
         $('#name').keyup(function() {
             $('#slug').val($(this).val().toLowerCase().split(',').join('').replace(/\s/g, "-"));
-        });
-
-        $('select[name="service_id"]').on('change', function() {
-            var serviceId = $(this).val();
-            if (serviceId) {
-                $.ajax({
-                    url: `/services/${serviceId}/variants`,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        $('select[name="variant_id"]').empty();
-                        var local = '{{ session()->get('local') }}';
-                        $.each(data, function(key, value) {
-                               $('select[name="variant_id"]').append('<option value="'+value.id+'">'+ (local == 'ar' ? (value.name_bn ?value.name_bn : value.name) : value.name) +'</option>');
-                        });
-                    }
-                });
-            } else {
-                $('select[name="variant_id"]').empty();
-            }
         });
     </script>
 @endpush

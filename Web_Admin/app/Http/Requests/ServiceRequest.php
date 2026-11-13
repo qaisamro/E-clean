@@ -24,16 +24,13 @@ class ServiceRequest extends FormRequest
     public function rules()
     {
         $imgRule = \request()->isMethod('post') ? 'required' : 'nullable';
-        $variantRule =  \request()->isMethod('post') ? 'required' : 'nullable';
 
         return [
-            'variant_ids' => $variantRule . '|array',
-            'variant_ids.*' => 'exists:variants,id',
-            'name' => 'required|string|max:256',
+            'name' => 'nullable|string|max:256',
             'description' => 'nullable',
-            'name_bn' => 'nullable|string|max:256',
+            'name_bn' => 'required|string|max:256',
             'description_bn' => 'nullable',
-            'image' => [$imgRule, 'image', 'mimes:jpg,jpeg,png,gif,svg'],
+            'image' => [$imgRule, 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
         ];
         return [];
     }

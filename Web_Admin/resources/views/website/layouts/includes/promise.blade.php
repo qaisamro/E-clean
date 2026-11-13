@@ -1,4 +1,4 @@
-ï»¿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     use Illuminate\Support\Facades\Storage;
 
@@ -29,8 +29,8 @@
                     class="font-playfair italic" style="color:#028090;">{{ __('Perfection') }}</span>
             </p>
             <p class="text-base lg:text-xl text-left" style="color:#5B6B7A;">
-                {{ __('Weâ€™re dedicated to quality, hygiene, And') }} <br class="hidden md:block">
-                {{ __('On-time delivery â€” always.') }}
+                {{ __('We’re dedicated to quality, hygiene, And') }} <br class="hidden md:block">
+                {{ __('On-time delivery — always.') }}
             </p>
             <div class="flex flex-col md:flex-row justify-start items-center gap-4 mt-4 md:mt-10">
                 <button class="btn_solid" style="background:linear-gradient(135deg,#028090,#00A896);color:#fff;border-radius:14px;border:none;box-shadow:0 6px 14px rgba(11,30,46,.12);">

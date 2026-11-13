@@ -39,19 +39,29 @@
                         <div class="card border shadow-sm mb-4">
                             <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                                 <div class="d-flex flex-wrap align-items-center">
-                                    <h5 class="m-0">#{{ $order->order_code }}</h5>
+                                    <h5 class="m-0">{{ $order->order_code }}</h5>
                                     <span class="badge badge-info mr-2">
                                         {{ $order->pivot->status == 'pick-up' ? 'استلام' : 'تسليم' }}
                                     </span>
                                 </div>
-                                <div style="position: relative; z-index: 1060;">
+                                <div class="d-flex align-items-center flex-wrap" style="position: relative; z-index: 1060; gap:8px;">
+                                    <a href="{{ route('order.show', $order->id) }}" class="btn btn-info"
+                                       style="border-radius:30px; font-weight:600; min-width:150px; padding:8px 16px;"
+                                       title="عرض تفاصيل الطلب دون تعديل" aria-label="عرض تفاصيل الطلب">
+                                        <i class="fas fa-eye"></i> عرض
+                                    </a>
                                     <div class="dropdown">
                                         <button class="btn btn-info dropdown-toggle" style="min-width:165px; border-radius:30px; font-weight:600;"
                                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             {{ __($order->order_status) }}
                                         </button>
                                         <div class="dropdown-menu" style="min-width:210px; border-radius:14px; border:1px solid rgba(13,27,62,.08); box-shadow:0 12px 32px rgba(15,23,42,.18); padding:6px; max-height:340px; overflow:auto;">
+                                            @php
+                                                // Drivers may only use these three statuses:
+                                                $driverAllowedStatuses = ['picked_order', 'on_the_way', 'delivered'];
+                                            @endphp
                                             @foreach (config('enums.order_status') as $key => $order_status)
+                                                @continue(!in_array($key, $driverAllowedStatuses, true))
                                                 <button class="dropdown-item driver-status-change {{ $order->order_status == $order_status ? 'active' : '' }}"
                                                     style="border-radius:10px; font-weight:600; font-size:13px;"
                                                     data-order="{{ $order->id }}" data-status="{{ $key }}" type="button">
@@ -74,7 +84,7 @@
                                                 <table class="table table-bordered table-striped mb-0">
                                                     <tr>
                                                         <th class="py-2">{{ __('Order') . ' ' . __('Id') }}</th>
-                                                        <td class="py-2">#{{ $order->order_code }}</td>
+                                                        <td class="py-2">{{ $order->order_code }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="py-2">تاريخ الطلب</th>
@@ -142,7 +152,19 @@
                                                     </tr>
                                                     <tr>
                                                         <th class="py-2">العنوان</th>
-                                                        <td class="py-2">{{ $addr ?: 'لا يوجد عنوان' }}</td>
+                                                        <td class="py-2">
+                                                            <span>{{ $addr ?: 'لا يوجد عنوان' }}</span>
+                                                            @php
+                                                                $mapUrl = \App\Support\MapLink::addressUrl($order->address);
+                                                            @endphp
+                                                            @if ($mapUrl)
+                                                                <a href="{{ $mapUrl }}" target="_blank" rel="noopener"
+                                                                    class="btn btn-sm d-inline-flex align-items-center gap-1 ms-2"
+                                                                    style="background:#028090 !important; color:#fff !important; border:1px solid #028090; border-radius:16px; font-weight:700; padding:4px 14px;">
+                                                                    <i class="fas fa-map-marker-alt"></i> الموقع
+                                                                </a>
+                                                            @endif
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th class="py-2">تعليمات إضافية</th>
@@ -161,7 +183,7 @@
 
                     <hr>
 
-                    <h5 class="text-secondary mb-3">سجل الطلبات المكتملة</h5>
+                    <h5 class="mb-3 font-weight-bold" style="color:#000;">سجل الطلبات المكتملة</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped verticle-middle table-responsive-sm">
                             <thead>
@@ -170,6 +192,7 @@
                                     <th class="px-2">تاريخ الطلب</th>
                                     <th class="px-2">حالة الطلب</th>
                                     <th class="px-2 text-center">النوع</th>
+                                    <th class="px-2 text-center">إجراء</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -179,17 +202,33 @@
                                     <td class="px-2">{{ $order->created_at->format('M d, Y') }}</td>
                                     <td class="px-2">{{ __($order->order_status) }}</td>
                                     <td class="px-2 text-center text-capitalize">{{ $order->pivot->status == 'pick-up' ? 'استلام' : 'تسليم' }}</td>
+                                    <td class="px-2 text-center">
+                                        <div class="d-flex align-items-center justify-content-center gap-2">
+                                            @php
+                                                $mapUrl = \App\Support\MapLink::addressUrl($order->address);
+                                            @endphp
+                                            @if ($mapUrl)
+                                                <a href="{{ $mapUrl }}" target="_blank" rel="noopener"
+                                                    class="btn btn-sm"
+                                                    style="background:#028090 !important; color:#fff !important; border:1px solid #028090; border-radius:20px; font-weight:700; padding:4px 14px;">
+                                                    <i class="fas fa-map-marker-alt"></i> الموقع
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('order.show', $order->id) }}" class="btn btn-info btn-sm" style="border-radius:20px; font-weight:600; padding:4px 14px;" title="عرض تفاصيل الطلب دون تعديل" aria-label="عرض تفاصيل الطلب">
+                                                <i class="fas fa-eye"></i> عرض
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted">لا يوجد سجل بعد</td>
+                                    <td colspan="5" class="text-center text-muted">لا يوجد سجل بعد</td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
 
-                    <a class="btn btn-light" href="{{ route('pos.index') }}"> العودة إلى نقطة البيع </a>
                 </div>
             </div>
         </div>

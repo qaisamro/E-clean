@@ -1,4 +1,4 @@
-﻿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     $headerSetting = $webSettings->firstWhere('key', 'header');
     $header = $headerSetting ? $headerSetting->value : null;

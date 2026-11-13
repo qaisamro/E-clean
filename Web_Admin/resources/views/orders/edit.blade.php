@@ -209,7 +209,9 @@
                     'name' => $p->name,
                     'image_path' => $p->thumbnailPath,
                     'quantity' => $p->pivot->quantity,
-                    'current_price' => (float) ($p->pivot->price ?: ($p->discount_price ?: $p->price)),
+                    'current_price' => (float) (((float) $p->pivot->price) > 0
+                        ? $p->pivot->price
+                        : ($p->discount_price ?: $p->price)),
                 ];
             })->values();
         @endphp
@@ -281,60 +283,15 @@
             $('.service-card').removeClass('active');
             $('#service-' + serviceId).addClass('active');
             currentServiceId = serviceId;
-            fetchVariants(serviceId);
+            fetchProducts();
         }
 
-        function fetchVariants(serviceId) {
-            var variantId = null;
-            $('#varients').empty();
-            $.ajax({
-                url: "{{ route('pos.fetch.variants') }}",
-                type: 'GET',
-                data: {
-                    service_id: serviceId
-                },
-                success: function(response) {
-                    $('#varients').empty();
-
-                    response.data.variants.forEach(function(variant, index) {
-                        var variantButton = $('<button>')
-                            .addClass('btn border')
-                            .text(variant.name)
-                            .attr('onclick', 'selectVariant(' + variant.id + ')')
-                            .attr('id', 'variant-' + variant.id)
-                            .attr('type', 'button');
-
-                        if (index === 0) {
-                            variantButton.addClass('btn-primary');
-                            variantId = variant.id;
-                        }
-
-                        $('#varients').append(variantButton);
-                    });
-
-                    if (variantId) {
-                        fetchProducts(variantId);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching variants:', error);
-                }
-            });
-        }
-
-        function selectVariant(variantId) {
-            $('#varients .btn').removeClass('btn-primary');
-            $('#variant-' + variantId).addClass('btn-primary');
-            fetchProducts(variantId);
-        }
-
-        function fetchProducts(varintId) {
+        function fetchProducts() {
             $.ajax({
                 url: "{{ route('pos.fetch.products') }}",
                 type: 'GET',
                 data: {
-                    service_id: currentServiceId,
-                    variant_id: varintId
+                    service_id: currentServiceId
                 },
                 success: function(response) {
                     $('#products').empty();
@@ -520,9 +477,16 @@
                     }, 1200);
                 },
                 error: (error) => {
+                    var msg = (error && error.responseJSON && error.responseJSON.message)
+                        ? error.responseJSON.message
+                        : ((error && error.status === 403)
+                            ? 'غير مصرح — يحتاج الحساب صلاحية تعديل الفاتورة من مالك المتجر'
+                            : (error && error.status === 419
+                                ? 'انتهت الجلسة — حدّث الصفحة وحاول مجددًا'
+                                : 'فشل حفظ الطلب'));
                     Toast.fire({
                         icon: 'error',
-                        title: error.responseJSON.message,
+                        title: msg,
                     });
                 },
             });

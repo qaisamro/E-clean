@@ -27,8 +27,9 @@ class CreateVendorsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
         });
 
-        // Create default vendor for existing data
-        $defaultVendorId = \DB::table('vendors')->insertGetId([
+        // Create the main vendor record, but do not assign pre-existing rows
+        // to it: a null vendor_id is unresolved ownership, not proof of store.
+        \DB::table('vendors')->insert([
             'name' => 'Elite Main',
             'slug' => 'elite-main',
             'address' => 'HEBRON - DURA',
@@ -46,8 +47,6 @@ class CreateVendorsTable extends Migration
                     $table->unsignedBigInteger('vendor_id')->nullable()->after('id');
                     $table->foreign('vendor_id')->references('id')->on('vendors')->nullOnDelete();
                 });
-                // Assign existing rows to default vendor
-                \DB::table($tbl)->whereNull('vendor_id')->update(['vendor_id' => $defaultVendorId]);
             }
         }
     }

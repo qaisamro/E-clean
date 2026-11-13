@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\Customers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Models\DeviceKey;
-use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -18,12 +16,6 @@ class CustomerController extends Controller
         return $this->json('customer details', [
             'customer' => (new CustomerResource($customer))
         ]);
-    }
-
-    public function toggleStatus(User $user)
-    {
-        (new UserRepository())->toggleStatus($user);
-        return $this->json('Deactive Successfully');
     }
 
     /**

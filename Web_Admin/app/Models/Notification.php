@@ -30,6 +30,19 @@ class Notification extends Model
     }
 
     /**
+     * Store that sent this notification, when it is a store broadcast.
+     */
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
+    public function vendorNotificationLog()
+    {
+        return $this->belongsTo(VendorNotificationLog::class, 'vendor_notification_log_id');
+    }
+
+    /**
      * Mark notification as read
      */
     public function markAsRead()

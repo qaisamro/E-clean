@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Customer;
 
+
+use App\Livewire\Concerns\RequiresPermission;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class CustomerDebtList extends Component
 {
+    use RequiresPermission;
+
     use WithPagination;
 
     public string $search = '';
@@ -57,6 +60,7 @@ class CustomerDebtList extends Component
 
     public function submitPayment()
     {
+        $this->requirePermission('customers.manage');
         $this->validate([
             'paymentAmount' => 'required|numeric|min:1',
             'paymentMethod' => 'required|in:cash,visa',
@@ -77,23 +81,15 @@ class CustomerDebtList extends Component
                     ->lockForUpdate()
                     ->get();
 
+                $available = round((float) $orders->sum('remaining_money'), 2);
+                if ((float) $remaining > $available + 0.0001) {
+                    throw new \RuntimeException('مبلغ الدفعة أكبر من الرصيد المستحق.');
+                }
+
                 foreach ($orders as $order) {
                     if ($remaining <= 0) break;
 
                     $deduct = min($remaining, $order->remaining_money);
-                    $newPaid = $order->paid_money + $deduct;
-                    $newRemaining = $order->remaining_money - $deduct;
-
-                    $newStatus = $newRemaining <= 0
-                        ? PaymentStatus::PAID
-                        : PaymentStatus::PARTIALLY_PAID;
-
-                    $order->update([
-                        'paid_money' => $newPaid,
-                        'remaining_money' => $newRemaining,
-                        'payment_status' => $newStatus,
-                    ]);
-
                     // Record the partial payment
                     Payment::create([
                         'order_id' => $order->id,
@@ -102,6 +98,8 @@ class CustomerDebtList extends Component
                         'created_by' => auth()->id(),
                         'notes' => $this->paymentNotes ?: 'تحصيل دين',
                     ]);
+
+                    app(\App\Services\OrderFinancials::class)->reconcile($order);
 
                     $remaining -= $deduct;
                 }

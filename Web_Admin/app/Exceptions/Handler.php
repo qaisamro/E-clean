@@ -28,6 +28,28 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * AJAX / JSON requests get clean JSON failures — the sub-vendor screens
+     * (and drivers) never receive a bare HTML error page that would crash
+     * the JS error handlers and swallow the failure silently.
+     */
+    public function render($request, Throwable $exception)
+    {
+        if (($request->ajax() || $request->wantsJson()) && $exception instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
+            return response()->json([
+                'message' => 'غير مصرح — هذه العملية تحتاج صلاحية من مالك المتجر أو الإدارة.',
+            ], 403);
+        }
+
+        if (($request->ajax() || $request->wantsJson()) && $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            return response()->json([
+                'message' => 'المورد غير موجود أو خارج النطاق المسموح لك.',
+            ], 404);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    /**
      * Register the exception handling callbacks for the application.
      *
      * @return void

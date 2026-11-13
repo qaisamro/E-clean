@@ -29,6 +29,12 @@ class NotificationsController extends Controller
 
     public function update(Notification $notification)
     {
+        $customer = auth()->user()->customer;
+        abort_unless($customer, 403);
+
+        $notification = $customer->notifications()
+            ->findOrFail($notification->id);
+
         $notification = (new NotificationRepository())->readUpdateByRequest($notification);
         return $this->json('Notification read successfully',[
             'notification' => (new NotificationResource($notification))
@@ -37,6 +43,12 @@ class NotificationsController extends Controller
 
     public function delete(Notification $notification)
     {
+        $customer = auth()->user()->customer;
+        abort_unless($customer, 403);
+
+        $notification = $customer->notifications()
+            ->findOrFail($notification->id);
+
         $notification = (new NotificationRepository())->deleteByRequest($notification);
         return $this->json('Notification deleted successfully');
     }

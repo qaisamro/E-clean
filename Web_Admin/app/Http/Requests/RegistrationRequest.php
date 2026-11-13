@@ -29,7 +29,7 @@ class RegistrationRequest extends FormRequest
             'mobile' => 'nullable|numeric|unique:users',
             'email' => 'nullable|email|unique:users|email',
             'password' => 'required|min:6|confirmed',
-            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png',
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
 
         if (!$this->email && !$this->mobile) {

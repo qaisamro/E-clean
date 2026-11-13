@@ -12,6 +12,7 @@ use App\Models\NotificationManage;
 use App\Models\StripeKey;
 use App\Models\WebSetting;
 use App\Repositories\OrderRepository;
+use App\Support\StoreOrderAccess;
 
 class PaymentController extends Controller
 {
@@ -61,6 +62,8 @@ class PaymentController extends Controller
     public function updatePayment($id)
     {
         $order = (new OrderRepository())->findById($id);
+        abort_unless($order, 404);
+        StoreOrderAccess::assertCanMutate($order);
         $order->update([
             'payment_status' => config('enums.payment_status.paid'),
         ]);

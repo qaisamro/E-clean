@@ -1,4 +1,4 @@
-﻿@extends('website.layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
     <div style="background-color:#FAF7F2;" class="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -14,11 +14,11 @@
         <!-- Success Message -->
         <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ __('Order Placed Successfully!') }}</h1>
         <p class="text-gray-600 mb-8">
-            Thank you for your order. Your order has been placed successfully.
+            {{ __('Thank you for your order. Your order has been placed successfully.') }}
             @if ($order->payment_type === 'cod')
-                Payment will be collected on delivery.
+                {{ __('Payment will be collected on delivery.') }}
             @else
-                Your payment has been processed successfully.
+                {{ __('Your payment has been processed successfully.') }}
             @endif
         </p>
 
@@ -39,18 +39,18 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">{{ __('Payment Method') }}</span>
-                    <span class="font-semibold uppercase">{{ $order->payment_type }}</span>
+                    <span class="font-semibold">{{ $order->payment_type === 'cod' ? __('Cash on Delivery') : __($order->payment_type) }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">{{ __('Payment Status') }}</span>
                     <span
                         class="font-semibold {{ $order->payment_status === 'paid' ? 'text-[#028090]' : 'text-yellow-600' }}">
-                        {{ ucfirst($order->payment_status) }}
+                        {{ __(\Illuminate\Support\Str::ucfirst($order->payment_status)) }}
                     </span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-gray-600">{{ __('Order Status') }}</span>
-                    <span class="font-semibold text-[#028090]">{{ ucfirst($order->order_status) }}</span>
+                    <span class="font-semibold text-[#028090]">{{ __(\Illuminate\Support\Str::ucfirst($order->order_status)) }}</span>
                 </div>
                 <div class="flex justify-between pt-3 border-t">
                     <span class="text-gray-800 font-semibold">{{ __('Total Amount') }}</span>
@@ -63,7 +63,7 @@
         @if ($order->products && $order->products->count() > 0)
             <div class="bg-white rounded-[20px] shadow-lg p-6 text-left mb-8">
                 <div class="border-b pb-4 mb-4">
-                    <h2 class="text-lg font-semibold text-gray-800">Order Items</h2>
+                    <h2 class="text-lg font-semibold text-gray-800">{{ __('Order Items') }}</h2>
                 </div>
 
                 <div class="space-y-4">
@@ -77,9 +77,9 @@
                                 <img src="{{ asset($product->thumbnailPath ?? 'website/assets/images/default.png') }}"
                                     class="w-12 h-12 rounded object-cover">
                                 <div>
-                                    <p class="font-medium">{{ $product->name }}</p>
-                                    <p class="text-sm text-gray-500">Qty: {{ $quantity }}</p>
-                                    <p class="text-xs text-[#028090]">{{ currencyPosition($price, 2) }} each</p>
+                                    <p class="font-medium">{{ $product->name_bn ?? $product->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ __('Qty') }}: {{ $quantity }}</p>
+                                    <p class="text-xs text-[#028090]">{{ currencyPosition($price, 2) }} {{ __('each') }}</p>
                                 </div>
                             </div>
                             <span class="font-semibold">{{ currencyPosition($price * $quantity, 2) }}</span>
@@ -93,7 +93,7 @@
         @if ($order->address)
             <div class="bg-white rounded-[20px] shadow-lg p-6 text-left mb-8">
                 <div class="border-b pb-4 mb-4">
-                    <h2 class="text-lg font-semibold text-gray-800">Delivery Address</h2>
+                    <h2 class="text-lg font-semibold text-gray-800">{{ __('Delivery Address') }}</h2>
                 </div>
 
                 <div class="space-y-2">
@@ -119,9 +119,9 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{{ route('order.details', $order->id) }}"
                 class="px-6 py-3 bg-[linear-gradient(135deg,#028090,#00A896)] text-white rounded-[12px] font-semibold hover:bg-[#156172] transition">
-                View {{ __('Order Details') }}
+                {{ __('View Details') }}
             </a>
-            <a href="{{ route('web.cart') }}"
+            <a href="{{ route('web.services') }}"
                 class="px-6 py-3 border border-[#E2E8F0] text-gray-700 rounded-[12px] font-semibold hover:bg-gray-50 transition">
                 {{ __('Continue Shopping') }}
             </a>

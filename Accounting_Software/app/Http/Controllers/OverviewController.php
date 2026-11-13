@@ -100,11 +100,13 @@ class OverviewController extends Controller
             $services_chart = app()->chartjs
                 ->name('pieChartTest')
                 ->type('pie')
-                ->size(['width' => 500, 'height' => 500])
+                ->size(['width' => 210, 'height' => 210])
                 ->labels(array_keys($serviceCounts))
                 ->datasets([
                     [
-                        'backgroundColor' => $this->generateRandomColor(count($serviceCounts)),
+                        'backgroundColor' => ['#0f766e', '#14b8a6', '#2dd4bf', '#5eead4', '#99f6e4', '#ccfbf1', '#0d9488', '#115e59'],
+                        'borderWidth' => 2,
+                        'borderColor' => '#ffffff',
                         'data' => array_values($serviceCounts)
                     ]
                 ]);
@@ -143,14 +145,5 @@ class OverviewController extends Controller
         }
 
         return view('overview', $data);
-    }
-
-    private function generateRandomColor($count)
-    {
-        $colors = [];
-        for ($i = 0; $i < $count; $i++) {
-            $colors[] = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
-        }
-        return $colors;
     }
 }

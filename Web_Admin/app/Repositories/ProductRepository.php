@@ -53,7 +53,7 @@ class ProductRepository extends Repository
         return $this->getProductsByRequest($serviceId, $variantId, null, $searchKey);
     }
 
-    public function getProductsByRequest($serviceId = null, $variantId = null, $vendorId = null, $searchKey = null)
+    public function getProductsByRequest($serviceId = null, $variantId = null, $vendorId = null, $searchKey = null, $cityId = null)
     {
         $products = $this->model()::query()->whereNull('product_id')->with('vendor', 'thumbnail');
 
@@ -76,6 +76,7 @@ class ProductRepository extends Repository
             });
         }
 
+        \App\Support\CatalogCityFilter::apply($products, $cityId ?? null);
         return $products->orderBy('order', 'asc')->isActive()->get();
     }
 
@@ -87,18 +88,39 @@ class ProductRepository extends Repository
             'this image for product thumbnail',
             'image'
         );
+        $service = \App\Models\Service::query()->global()->isActive()->find($request->service_id);
+        $vendorId = $this->currentVendorId();
+        if (!$vendorId) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'service_id' => 'يجب إضافة المنتج من حساب متجر صالح.',
+            ]);
+        }
+        if (!$service) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'service_id' => 'الخدمة المختارة غير متاحة.',
+            ]);
+        }
+        $variantId = $request->variant_id
+            ?: $service->variants()->value('variants.id')
+            ?: \App\Models\Variant::query()->orderBy('id')->value('id');
+        if (!$variantId) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'service_id' => 'لا يمكن إضافة المنتج قبل إعداد متغير داخلي واحد على الأقل.',
+            ]);
+        }
+
         return Product::create([
-            'name' => $request->name,
+            'name' => $request->name_bn,
             'name_bn' => $request->name_bn,
             'slug' => $request->slug,
             'thumbnail_id' => $thumbnail->id,
             'service_id' => $request->service_id,
-            'variant_id' => $request->variant_id,
+            'variant_id' => $variantId,
             'discount_price' => $request->discount_price,
             'price' =>  $request->price,
             'description' => $request->description,
             'is_active' => $request->has('active') ? $request->active : 1,
-            'vendor_id' => $this->currentVendorId(),
+            'vendor_id' => $vendorId,
         ]);
     }
 
@@ -123,18 +145,36 @@ class ProductRepository extends Repository
                 $product->update(['thumbnail_id' => $thumbnail->id]);
             }
         }
+        $service = \App\Models\Service::query()->global()->isActive()->find($request->service_id);
+        if (!$service) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'service_id' => 'الخدمة المختارة غير متاحة.',
+            ]);
+        }
+        $vendorId = $product->vendor_id ?: $this->currentVendorId();
+        if (!$vendorId) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'service_id' => 'يجب أن يبقى المنتج مرتبطًا بمتجر صالح.',
+            ]);
+        }
+        $variantId = $request->variant_id
+            ?: $product->variant_id
+            ?: $service->variants()->value('variants.id')
+            ?: \App\Models\Variant::query()->orderBy('id')->value('id');
+
         $product->update([
-            'name' => $request->name,
+            'name' => $request->name_bn,
             'name_bn' => $request->name_bn,
             'slug' => $request->slug,
             'service_id' => $request->service_id,
-            'variant_id' => $request->variant_id,
+            'variant_id' => $variantId,
             'discount_price' => $request->discount_price,
             'price' =>  $request->price,
             'description' => $request->description,
             'is_active' => $request->has('active')
                 ? $request->active
                 : (int) (bool) $product->is_active,
+            'vendor_id' => $vendorId,
         ]);
         return $product;
     }
@@ -187,8 +227,10 @@ class ProductRepository extends Repository
                 $query->where('variant_id', $variantId);
             })
             ->when($searchKey, function ($query) use ($searchKey) {
-                $query->where('name', 'like', "%{$searchKey}%")
-                    ->orWhere('price', 'like', "%{$searchKey}%");
+                $query->where(function ($search) use ($searchKey) {
+                    $search->where('name', 'like', "%{$searchKey}%")
+                        ->orWhere('price', 'like', "%{$searchKey}%");
+                });
             });
 
         return $products->orderBy('order', 'asc')->isActive()->get();

@@ -11,7 +11,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center py-2">
-                        <h3 class="m-0">{{__('All_sub_products_under')}} {{ $product->name }} {{('product')}}</h3>
+                        <h3 class="m-0">{{__('All_sub_products_under')}} {{ $product->name_bn ?? $product->name }} {{('product')}}</h3>
                         <a href="{{ route('product.index') }}" class="btn btn-secondary">{{ __('Back') }}</a>
                     </div>
                     <div class="card-body">
@@ -28,7 +28,7 @@
                                 <tbody>
                                     @foreach ($product->subProducts as $subProduct)
                                         <tr>
-                                            <td>{{ $subProduct->name }}</td>
+                                            <td>{{ $subProduct->name_bn ?? $subProduct->name }}</td>
                                             <td>
                                                 {{ currencyPosition($subProduct->price ? $subProduct->price : '00') }}
                                             </td>
@@ -63,16 +63,9 @@
                                                         <div class="modal-body">
                                                             @csrf
                                                             <div class="mb-3">
-                                                                <label
-                                                                    for="">{{ __('Product') . ' ' . __('Name') }}</label>
-                                                                <input class="form-control" type="text" name="name"
-                                                                    placeholder="{{__('Product_Name')}}" value="{{ $subProduct->name }}"
-                                                                    required />
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="">{{ __('Product') . ' ' . __('Name') . ' ' . __('Arabic') }}</label>
+                                                                <label for="">{{ __('Product') . ' ' . __('Name') }}</label>
                                                                 <input class="form-control" type="text" name="name_bn"
-                                                                    value="{{ $subProduct->name_bn }}" />
+                                                                    value="{{ $subProduct->name_bn }}" required />
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="">{{__('Price')}}</label>
@@ -130,10 +123,7 @@
                     @csrf
                     <div class="modal-body">
                         <label class="mb-1">{{ __('Product') . ' ' . __('Name') }}</label>
-                        <input class="form-control" name="name" type="text" placeholder="{{ __('Product') . ' ' . __('Name') }}" required/>
-
-                        <label class="mb-1 mt-3">{{ __('Product') . ' ' . __('Name') . ' ' . __('Arabic') }}</label>
-                        <input class="form-control" name="name_bn" type="text" placeholder="{{ __('Product') . ' ' . __('Name') . ' ' . __('Arabic') }}"/>
+                        <input class="form-control" name="name_bn" type="text" placeholder="{{ __('Product') . ' ' . __('Name') }}" required/>
 
                         <label class="mb-1 mt-3">{{ __('Product') . ' ' . __('Price') }}</label>
                         <input name="price" type="text" class="form-control"

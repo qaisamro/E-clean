@@ -2,18 +2,23 @@
 
 namespace App\Livewire\Order;
 
+use App\Livewire\Concerns\RequiresPermission;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Url;
 
 class OrderList extends Component
 {
+    use RequiresPermission;
+
     use WithPagination;
 
     public string $search = '';
 
+    #[Url(as: 'orderStatus')]
     public $orderStatus = '';
     public $paymentStatus = '';
 
@@ -62,7 +67,7 @@ class OrderList extends Component
 
     public function deleteOrder($order_id): void
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 401);
+        $this->requirePermission('orders.delete');
 
         try {
             Order::destroy($order_id);
@@ -75,6 +80,7 @@ class OrderList extends Component
 
     public function changeStatus(Order $order, OrderStatus $orderStatus): void
     {
+        $this->requirePermission('orders.edit');
         try {
             $order->update([
                 'status' => $orderStatus
@@ -87,6 +93,7 @@ class OrderList extends Component
 
     public function changePaymentStatus(Order $order, PaymentStatus $paymentStatus): void
     {
+        $this->requirePermission('orders.edit');
         try {
             if ($order->has_deferred_payment) {
                 session()->flash('error-msg', 'الطلب يحتوي علي مدفوعات مؤجلة.');

@@ -39,5 +39,14 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'ideal_postcodes' => [
+        'api_key' => env('IDEAL_POSTCODES_API_KEY'),
+    ],
+
+    'orange_pay' => [
+        'api_key' => env('ORANGE_PAY_API_KEY'),
+        'base_url' => env('ORANGE_PAY_BASE_URL', 'https://api.orange-pay.com'),
+    ],
+
     'demo_mode' => env('DEMO_MODE', false)
 ];

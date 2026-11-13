@@ -23,22 +23,20 @@ class CustomerRepository extends Repository
         // للسائق: إظهار فقط العملاء الذين لديهم طلبات معيّنة له
         if (auth()->check() && auth()->user()->hasRole('driver')) {
             $driver = auth()->user()->driver;
-            if (!$driver) {
+            if (!$driver || !$driver->vendor_id) {
                 return collect();
             }
-            $driverOrderIds = $driver->orders->pluck('id')->merge($driver->orderHistories->pluck('id'))->unique()->filter();
-            if ($driverOrderIds->isEmpty()) {
-                return collect();
-            }
-            $customerIds = \App\Models\Order::whereIn('id', $driverOrderIds)->pluck('customer_id')->unique()->filter();
-            if ($customerIds->isEmpty()) {
-                return collect();
-            }
-            $customers = $customers->whereIn('id', $customerIds);
+            $customers = $customers->whereHas('orders', function ($orders) use ($driver) {
+                $orders->where('vendor_id', $driver->vendor_id)
+                    ->where(function ($assigned) use ($driver) {
+                        $assigned->whereHas('drivers', fn ($query) => $query->where('drivers.id', $driver->id))
+                            ->orWhereHas('driverHistories', fn ($query) => $query->where('driver_id', $driver->id));
+                    });
+            });
         }
 
-        // للتاجر: لا يرى العملاء إطلاقاً - فقط السوبر أدمن (root) يرى كل العملاء
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin')) {
+        // للتاجر الفرعي أو المالك: لا يرى عملاء غير متجره إلا كما تقرر صفحات متجره
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
             return collect();
         }
 
@@ -50,7 +48,13 @@ class CustomerRepository extends Repository
             });
         }
 
-        return $customers->latest('id')->get();
+        // Staff accounts (root/admin/vendor_admin/driver/vendor_sub) are never
+        // shown as "customers" of the management list — they have their own
+        // login flows. Legacy rows stay in the DB untouched.
+        return $customers->latest('id')->get()->filter(
+            fn ($customer) => $customer->user
+                && !$customer->user->hasAnyRole(['root', 'admin', 'Admin', 'vendor_admin', 'driver', 'vendor_sub'])
+        )->values();
     }
 
     public function findByUserId(int $userId): ?Customer

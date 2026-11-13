@@ -13,6 +13,7 @@ use App\Repositories\OrderRepository;
 use App\Services\NotificationServices;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Support\StoreOrderAccess;
 
 class OrderController extends Controller
 {
@@ -28,6 +29,8 @@ class OrderController extends Controller
     public function orderDetails($id)
     {
         $order = (new OrderRepository())->findById($id);
+        abort_unless($order, 404);
+        StoreOrderAccess::assertCanView($order);
 
         return $this->json('order details', [
             'order' => (new OrderResource($order))
@@ -36,6 +39,7 @@ class OrderController extends Controller
 
     public function statusUpdate(Order $order)
     {
+        StoreOrderAccess::assertCanMutate($order);
         $status = config('enums.order_status.' . request('status'));
 
         if (!in_array($status, config('enums.order_status'))) {
@@ -50,6 +54,8 @@ class OrderController extends Controller
             'processing' => 'order_processing',
             'cancelled' => 'order_cancelled',
             'delivered' => 'order_delivered',
+            'ready_for_pickup' => 'order_ready_for_pickup',
+            'on_the_way' => 'order_on_the_way',
         ];
         $orderStatus = NotificationManage::where('name', $manageMap[request('status')] ?? request('status'))->first();
 

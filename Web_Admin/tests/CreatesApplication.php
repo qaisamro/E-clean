@@ -17,6 +17,14 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
+        // Never let a DATABASE_URL from the workspace override PHPUnit's
+        // isolated in-memory database connection.
+        if ($app->environment('testing')) {
+            $app['config']->set('database.default', 'sqlite');
+            $app['config']->set('database.connections.sqlite.url', null);
+            $app['config']->set('database.connections.sqlite.database', ':memory:');
+        }
+
         return $app;
     }
 }

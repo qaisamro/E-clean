@@ -23,6 +23,10 @@ class Salary extends Model
     ];
 
     protected $casts = [
+        'value' => 'decimal:2',
+        'basic_salary' => 'decimal:2',
+        'deductions' => 'decimal:2',
+        'bonuses' => 'decimal:2',
         'payment_date' => 'date',
     ];
 

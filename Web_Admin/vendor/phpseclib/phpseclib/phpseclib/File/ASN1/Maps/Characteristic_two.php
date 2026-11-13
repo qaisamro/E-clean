@@ -1,4 +1,0 @@
-"638879286","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":2566,"start_time":"638879286","type":1},"time":"638879286","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=platform_check.php&type=file&limit=200"},"phase":1,"source":{"id":2566,"start_time":"638879286","type":1},"time":"638879286","type":134},
-{"phase":1,"source":{"id":2566,"start_time":"638879286","type":1}

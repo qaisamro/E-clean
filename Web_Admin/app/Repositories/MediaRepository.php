@@ -17,15 +17,15 @@ class MediaRepository extends Repository
     public function storeByRequest(UploadedFile $file, string $path, string $description = null, string $type = null): Media
     {
 
-        $path = Storage::put('/'. trim($path, '/'), $file, 'public');
+        $path = $file->store(trim($path, '/'), 'public');
         $extension = $file->extension();
         if(!$type){
-            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'Image' : $extension;
+            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif', 'webp']) ? 'Image' : $extension;
         }
 
         return $this->create([
             'type' => $type,
-            'name' => $file->getClientOriginalName(),
+            'name' => basename(str_replace('\\', '/', $file->getClientOriginalName())),
             'src' =>  $path,
             'extension' => $extension,
             'path' => $path,
@@ -36,19 +36,19 @@ class MediaRepository extends Repository
     public function updateByRequest(UploadedFile $file,string $path, string $type = null, Media $media): Media
     {
 
-        $path = Storage::put('/'. trim($path, '/'), $file, 'public');
+        $path = $file->store(trim($path, '/'), 'public');
         $extension = $file->extension();
         if(!$type){
-            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'image' : $extension;
+            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif', 'webp']) ? 'image' : $extension;
         }
 
-        if(Storage::exists($media->src)){
-            Storage::delete($media->src);
+        if (Storage::disk('public')->exists($media->src)) {
+            Storage::disk('public')->delete($media->src);
         }
 
         $media->update([
             'type' => $type,
-            'name' => $file->getClientOriginalName(),
+            'name' => basename(str_replace('\\', '/', $file->getClientOriginalName())),
             'src' =>  $path,
             'extension' => $extension,
             'path' => $path,
@@ -58,14 +58,14 @@ class MediaRepository extends Repository
 
     public function updateOrCreateByRequest(UploadedFile $file, string $path, string $type = 'Image', $media = null): Media
     {
-        $src = Storage::put('/'. trim($path, '/'), $file, 'public');
+        $src = $file->store(trim($path, '/'), 'public');
         $extension = $file->extension();
-        if ($media && Storage::exists($media->src)) {
-            Storage::delete($media->src);
+        if ($media && Storage::disk('public')->exists($media->src)) {
+            Storage::disk('public')->delete($media->src);
         }
 
         if (!$type) {
-            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif']) ? 'Image' : $extension;
+            $type = in_array($extension, ['jpg', 'png', 'jpeg', 'gif', 'webp']) ? 'Image' : $extension;
         }
         return $this->query()->updateOrCreate([
             'id' => $media?->id ?? 0,

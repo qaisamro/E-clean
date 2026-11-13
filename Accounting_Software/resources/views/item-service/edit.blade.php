@@ -49,7 +49,7 @@
                             <div class="col-md-4">
                                 <label for="price"
                                        class="form-label">السعر</label>
-                                <input type="number" class="form-control" id="price"
+                                <input type="number" step="0.01" class="form-control" id="price"
                                        min="0"
                                        name="price" value="{{ old('price', $itemService->price) }}"/>
                                 <x-input-error key="price"/>

@@ -12,13 +12,14 @@ class CouponController extends Controller
 {
     public function apply($couponCode, ApplyCouponRequest $request)
     {
-        $coupon = (new CouponRepository())->findByCoupon($couponCode, $request->amount);
+        $vendorId = $request->filled('vendor_id') ? (int) $request->vendor_id : null;
+        $coupon = (new CouponRepository())->findByCoupon($couponCode, $request->amount, $vendorId);
 
         if(!$coupon){
             return $this->json('Invalid coupon', [], Response::HTTP_BAD_REQUEST);
         }
 
-        if($coupon->min_amount >= $request->amount){
+        if($coupon->min_amount > $request->amount){
             return $this->json('Minimum order price is '.$coupon->min_amount.' for this coupon', [], Response::HTTP_BAD_REQUEST);
         }
 

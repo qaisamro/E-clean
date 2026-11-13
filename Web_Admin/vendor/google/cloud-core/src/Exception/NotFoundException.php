@@ -1,5 +1,0 @@
-(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"phase":0,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846988","type":238},
-{"params":{"byte_count":685},"phase":0,"source":{"id":2399,"start_time":"638846975","type":10},"time":"638846988","type":82},
-{"phase":2,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846988","type":237},
-{"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},"time":"638846988","type":242},
-{"phase":1,"source":{"id":2400,"start_time":"638846987","type":1},

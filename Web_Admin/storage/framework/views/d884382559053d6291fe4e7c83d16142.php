@@ -1,0 +1,2 @@
+<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo e(__('close')); ?></button>
+<?php /**PATH C:\Users\Lenovo\OneDrive\Desktop\E_Clean\Web_Admin\resources\views\components\components\modal-close-button.blade.php ENDPATH**/ ?>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemService\ItemServiceStoreRequest;
+use App\Enums\ProductKind;
 use App\Http\Requests\ItemService\ItemServiceUpdateRequest;
-use App\Models\Item;
+use App\Models\Product;
 use App\Models\ItemService;
 use App\Models\Service;
 use Illuminate\Contracts\Foundation\Application;
@@ -73,7 +74,7 @@ class ItemServiceController extends Controller
         return view('item-service.create',
             [
                 'services' => Service::get(['id', 'name']),
-                'items' => Item::get(['id', 'name']),
+                'items' => Product::where('kind', ProductKind::LAUNDRY->value)->orderBy('name')->get(['id', 'name']),
             ]
         );
     }
@@ -102,10 +103,10 @@ class ItemServiceController extends Controller
     /**
      * Show specified Item
      *
-     * @param Item $item
+     * @param \App\Models\Product $item
      * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function show(Item $item)
+    public function show(Product $item)
     {
         return view('item-service.show',
             [
@@ -125,7 +126,7 @@ class ItemServiceController extends Controller
         return view('item-service.edit',
             [
                 'services' => Service::get(['id', 'name']),
-                'items' => Item::get(['id', 'name']),
+                'items' => Product::where('kind', ProductKind::LAUNDRY->value)->orderBy('name')->get(['id', 'name']),
                 'itemService' => $itemService
             ]
         );

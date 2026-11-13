@@ -7,26 +7,40 @@ use App\Enum\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressRequest;
 use App\Http\Resources\ProductResource;
-use App\Http\Resources\VariantResource;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Service;
+use App\Models\Vendor;
 use App\Repositories\CustomerRepository;
 use App\Repositories\DriverRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
-use App\Repositories\VariantRepository;
 use App\Repositories\TransationRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\PaymentGatewayRepository;
 use App\Models\PaymentGateway;
 use App\Repositories\AddressRepository;
+use App\Services\VendorStoreCustomerService;
+use App\Support\OrderVendorOwnership;
 
 class PosController extends Controller
 {
+    /**
+     * POS and invoice actions are store staff tools: store owners only.
+     * Driver accounts are scoped to viewing orders and status changes,
+     * so every entry point in this controller rejects drivers outright.
+     */
+    public function __construct()
+    {
+        if (auth()->check() && auth()->user()->hasRole('driver')) {
+            abort(403, 'Drivers are not allowed to access the POS.');
+        }
+    }
+
     /**
      * The store (vendor) the current staff member belongs to, if any.
      * Super admin returns null (sees everything); store owners and their
@@ -37,8 +51,8 @@ class PosController extends Controller
         if (!auth()->check()) {
             return null;
         }
-        if (auth()->user()->hasRole('vendor_admin')) {
-            return auth()->user()->vendor?->id;
+        if (auth()->user()->hasRole('vendor_admin') || auth()->user()->hasRole('vendor_sub')) {
+            return \App\Support\VendorAccount::idFor(auth()->user());
         }
         if (auth()->user()->hasRole('driver')) {
             return auth()->user()->driver?->vendor_id;
@@ -48,18 +62,87 @@ class PosController extends Controller
 
     /**
      * Whether the current staff member may touch the given order.
-     * Scoped staff (store owners/drivers) are limited to their own
-     * store's orders; legacy orders without a store stay accessible.
+     * Store owners and drivers are limited to orders with explicit ownership
+     * matching their own store; unresolved legacy orders remain inaccessible.
      */
     protected function canTouchOrder(Order $order): bool
     {
-        if (auth()->check() && (auth()->user()->hasRole('vendor_admin') || auth()->user()->hasRole('driver'))) {
+        if ($this->isVendorStaff()) {
             $vendorId = $this->posVendorId();
-            if ($vendorId && $order->vendor_id && (int) $order->vendor_id !== (int) $vendorId) {
-                return false;
-            }
+            return $vendorId !== null
+                && (int) $order->vendor_id === $vendorId
+                && OrderVendorOwnership::productsMatchOrder($order);
+        }
+        if (auth()->check() && auth()->user()->hasRole('driver')) {
+            $driver = auth()->user()->driver;
+            return $driver
+                && $driver->vendor_id
+                && (int) $order->vendor_id === (int) $driver->vendor_id
+                && $driver->orders()->whereKey($order->id)->exists()
+                && OrderVendorOwnership::productsMatchOrder($order);
         }
         return true;
+    }
+
+    /**
+     * Whether the current staff member belongs to a store: store owner or a
+     * driver hired by the store owner. Store staff are scoped to their own
+     * store only (see posVendorId()).
+     */
+    protected function isVendorStaff(): bool
+    {
+        return auth()->check()
+            && (auth()->user()->hasRole('vendor_admin')
+                || auth()->user()->hasRole('vendor_sub')
+                || auth()->user()->hasRole('driver'));
+    }
+
+    protected function customersForCurrentVendor()
+    {
+        if (!$this->isVendorStaff()) {
+            return Customer::latest('id')->get();
+        }
+        $vendorId = $this->posVendorId();
+        $vendor = $vendorId ? Vendor::find($vendorId) : null;
+        if (!$vendor) {
+            return collect();
+        }
+
+        // Store staff (owner or driver) see exactly the customers of their
+        // store: delivered-order clients UNION customers registered in the
+        // POS (store_customers). Creating a customer via the POS therefore
+        // makes it selectable immediately, without an order first.
+        return app(VendorStoreCustomerService::class)
+            ->customersQuery($vendor)
+            ->get()
+            ->sortBy(fn (Customer $customer) => $customer->user?->name ?? '', SORT_NATURAL | SORT_FLAG_CASE)
+            ->values();
+    }
+
+    protected function customerIsAvailableToVendor(int $customerId, $currentOrderCustomerId = null): bool
+    {
+        $vendorId = $this->posVendorId();
+        if (!$vendorId) {
+            return false;
+        }
+        if ($currentOrderCustomerId && (int) $currentOrderCustomerId === $customerId) {
+            return true;
+        }
+
+        $hasVendorOrder = Customer::whereKey($customerId)
+            ->whereHas('orders', fn ($query) => $query->where('vendor_id', $vendorId))
+            ->exists();
+        $linkedToStore = DB::table('store_customers')
+            ->where('vendor_id', $vendorId)
+            ->where('customer_id', $customerId)
+            ->exists();
+        $createdInVendorPos = in_array(
+            $customerId,
+            array_map('intval', session('pos_customer_ids.' . $vendorId, [])),
+            true
+        );
+
+        return $hasVendorOrder || $linkedToStore || $createdInVendorPos;
     }
 
     public function index()
@@ -71,17 +154,23 @@ class PosController extends Controller
 
         $data = [
             'paymentGateways' => $gateways,
-            'customers' => Customer::all(),
-            'services' => Service::all(),
+            'customers' => $this->customersForCurrentVendor(),
+            'services' => Service::isActive()->orderBy('name')->get(),
 
         ];
-        // Each store works only with its own store's services
-        // (legacy services without a store stay visible).
         $vendorId = $this->posVendorId();
-        if ($vendorId) {
-            $data['services'] = Service::where(function ($q) use ($vendorId) {
-                $q->where('vendor_id', $vendorId)->orWhereNull('vendor_id');
-            })->get();
+        if ($this->isVendorStaff()) {
+            // Store owners and drivers see the ACTIVE global catalog (added by
+            // the super admin) directly, plus their own store services.
+            $data['services'] = $vendorId
+                ? Service::query()
+                    ->isActive()
+                    ->where(fn ($query) => $query
+                        ->whereNull('vendor_id')
+                        ->orWhere('vendor_id', $vendorId))
+                    ->orderBy('name')
+                    ->get()
+                : Service::query()->whereRaw('1 = 0')->get();
         }
         return view('pos.index', $data);
     }
@@ -90,14 +179,18 @@ class PosController extends Controller
     {
         $orderStatus = OrderStatus::cases();
 
-        $orders = (new OrderRepository())->query()->latest()->get();
-
-        // Each store sees only its own store's sales
+        $orders = (new OrderRepository())->query();
         $vendorId = $this->posVendorId();
-        if ($vendorId) {
-            $orders = $orders->filter(function ($order) use ($vendorId) {
-                return !$order->vendor_id || (int) $order->vendor_id === (int) $vendorId;
-            })->values();
+        if ($this->isVendorStaff()) {
+            $vendorId
+                ? $orders->where('vendor_id', $vendorId)
+                : $orders->whereRaw('1 = 0');
+        }
+        $orders = $orders->with('products.service')->latest()->get();
+        if ($this->isVendorStaff()) {
+            $orders = $orders
+                ->filter(fn (Order $order) => OrderVendorOwnership::productsMatchOrder($order))
+                ->values();
         }
 
         return view('pos.sales', compact('orders', 'orderStatus'));
@@ -105,14 +198,35 @@ class PosController extends Controller
 
     public function store(Request $request)
     {
+        // An empty address selection must behave like "no address", not fail
+        // the integer/exists validation rules below.
+        if (!$request->filled('address_id')) {
+            $request->merge(['address_id' => null]);
+        }
         $validator = Validator::make($request->all(), [
-            'customer_id' => 'required',
+            'customer_id' => 'required|integer|exists:customers,id',
             'products' => 'required|array|min:1',
+            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
+            'address_id' => 'nullable|integer|exists:addresses,id',
         ]);
 
         if ($validator->fails()) {
             return $this->json(__('Validation Error'), $validator->errors()->all(), 422);
         }
+
+        if ($this->isVendorStaff() && !$this->customerIsAvailableToVendor((int) $request->customer_id)) {
+            return $this->json(__('غير مصرح لك'), [], 404);
+        }
+        if ($request->filled('address_id') && !Address::whereKey($request->address_id)
+            ->where('customer_id', $request->customer_id)->exists()) {
+            return $this->json(__('غير مصرح لك'), [], 404);
+        }
+
+        OrderVendorOwnership::resolveProductVendor(
+            collect($request->products)->pluck('id')->all(),
+            $this->isVendorStaff() ? $this->posVendorId() : null
+        );
 
         $order = (new OrderRepository())->PosStoreByRequest($request);
         (new TransationRepository())->storeForOrder($order);
@@ -148,16 +262,24 @@ class PosController extends Controller
         }
         $data = [
             'paymentGateways' => (new PaymentGatewayRepository())->query()->where('is_active', 1)->get(),
-            'customers' => Customer::all(),
-            'services' => Service::all(),
+            'customers' => $this->customersForCurrentVendor(),
+            'services' => Service::isActive()->orderBy('name')->get(),
             'order' => $order->load(['products', 'address']),
         ];
 
         $vendorId = $this->posVendorId();
-        if ($vendorId) {
-            $data['services'] = Service::where(function ($q) use ($vendorId) {
-                $q->where('vendor_id', $vendorId)->orWhereNull('vendor_id');
-            })->get();
+        if ($this->isVendorStaff()) {
+            // Store owners and drivers see the ACTIVE global catalog (added by
+            // the super admin) directly, plus their own store services.
+            $data['services'] = $vendorId
+                ? Service::query()
+                    ->isActive()
+                    ->where(fn ($query) => $query
+                        ->whereNull('vendor_id')
+                        ->orWhere('vendor_id', $vendorId))
+                    ->orderBy('name')
+                    ->get()
+                : Service::query()->whereRaw('1 = 0')->get();
         }
 
         return view('orders.edit', $data);
@@ -172,20 +294,44 @@ class PosController extends Controller
         if (!$this->canTouchOrder($order)) {
             return $this->json(__('غير مصرح لك'), [], 403);
         }
+        // An empty address selection must behave like "no address".
+        if (!$request->filled('address_id')) {
+            $request->merge(['address_id' => null]);
+        }
         $validator = Validator::make($request->all(), [
             'products' => 'required|array|min:1',
+            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
+            'address_id' => 'nullable|integer|exists:addresses,id',
         ]);
 
         if ($validator->fails()) {
             return $this->json(__('Validation Error'), $validator->errors()->all(), 422);
         }
+        if ($this->isVendorStaff() && $request->filled('customer_id')
+            && !$this->customerIsAvailableToVendor((int) $request->customer_id, $order->customer_id)) {
+            return $this->json(__('غير مصرح لك'), [], 404);
+        }
+        $effectiveCustomerId = $request->customer_id ?: $order->customer_id;
+        $effectiveAddressId = $request->address_id ?: $order->address_id;
+        if ($effectiveAddressId && !Address::whereKey($effectiveAddressId)
+            ->where('customer_id', $effectiveCustomerId)->exists()) {
+            return $this->json(__('غير مصرح لك'), [], 404);
+        }
 
         // Only allow price changes if the user has permission
         if (!$request->user()->can('order.edit.price')) {
             $orderProducts = $order->products->keyBy('id');
-            $products = collect($request->products)->map(function ($product) use ($orderProducts) {
+            $repository = new OrderRepository();
+            $products = collect($request->products)->map(function ($product) use ($orderProducts, $repository) {
                 $existing = $orderProducts->get($product['id']);
-                $product['price'] = $existing ? (float) $existing->pivot->price : (float) $product['price'];
+                $existingPrice = $existing ? (float) $existing->pivot->price : 0.0;
+                // A stored pivot price of 0 is a missing-price artifact, not a
+                // real price — fall back to catalog pricing instead of zeroing
+                // the order total.
+                $product['price'] = $existingPrice > 0
+                    ? $existingPrice
+                    : $repository->resolveProductPrice((int) $product['id']);
                 return $product;
             })->values()->toArray();
 
@@ -256,6 +402,24 @@ class PosController extends Controller
 
         (new CustomerRepository())->storeByUser($user);
 
+        if ($this->isVendorStaff() && $this->posVendorId()) {
+            $vendorId = (int) $this->posVendorId();
+            $customerId = (int) $user->customer->id;
+            $allowed = session('pos_customer_ids.' . $vendorId, []);
+            $allowed[] = $customerId;
+            session(['pos_customer_ids.' . $vendorId => array_values(array_unique($allowed))]);
+
+            // Persist the store ↔ customer link so the customer appears in
+            // the store's customer list (POS picker and «عملاء المتجر»).
+            DB::table('store_customers')->insertOrIgnore([
+                'vendor_id' => $vendorId,
+                'customer_id' => $customerId,
+                'source' => 'pos',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
         return $this->json(__('تم الإنشاء بنجاح'), [
             'user' => (object)[
                 'id' => $user->customer->id,
@@ -268,6 +432,9 @@ class PosController extends Controller
 
     public function storeAddress(AddressRequest $request)
     {
+        if ($this->isVendorStaff() && !$this->customerIsAvailableToVendor((int) $request->customer_id)) {
+            return $this->json(__('غير مصرح لك'), [], 404);
+        }
 
         $address = (new AddressRepository())->storeByPos($request);
 
@@ -280,26 +447,20 @@ class PosController extends Controller
         ], 200);
     }
 
-    public function fetchVariants()
-    {
-
-        $variants = (new VariantRepository())->query()->orderBy('position', 'asc')->get();
-
-        return $this->json(__('variant list'), [
-            'variants' => VariantResource::collection($variants)
-        ]);
-    }
-
     public function fetchProducts(Request $request)
     {
 
         $products = (new ProductRepository())->getByRequest($request);
 
-        // Each store fetches only its own store's products
+        // Products with no store ownership (added by the super admin) are
+        // sold by every store; products with a store are store-only.
         $vendorId = $this->posVendorId();
-        if ($vendorId) {
+        if ($this->isVendorStaff()) {
             $products = $products->filter(function ($product) use ($vendorId) {
-                return !$product->vendor_id || (int) $product->vendor_id === (int) $vendorId;
+                return $vendorId && (
+                    (int) $product->vendor_id === (int) $vendorId
+                    || $product->vendor_id === null
+                );
             })->values();
         }
 

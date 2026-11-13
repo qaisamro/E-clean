@@ -80,7 +80,7 @@
             <div style="padding: 0 8px;border-bottom: 1px solid #E7E5E4;font-size: 12px;margin-top: 8px;">
                 <div style=" margin: 8px 0;;display: table; width: 100%;;display: table; width: 100%;">
                     <span style="color: #57534E; float: left;">Order ID</span>
-                    <span style="color: #1C1917;float: right;">#{{ $order->order_code }}</span>
+                    <span style="color: #1C1917;float: right;">{{ $order->order_code }}</span>
                 </div>
                 <div style=" margin: 8px 0;;display: table; width: 100%;">
                     <span style="color: #57534E; float: left;">Date</span>

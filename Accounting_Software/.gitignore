@@ -26,3 +26,7 @@ Homestead.json
 /.idea
 /.vscode
 /.editorconfig
+
+# Local dev env (may contain local keys; keep out of git)
+.env.local_dev
+

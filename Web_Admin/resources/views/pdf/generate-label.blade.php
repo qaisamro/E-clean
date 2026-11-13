@@ -116,7 +116,7 @@
                         <div>
                             <div class="card text-dark m-3 py-2">
                                 <h4>Name: {{ $item['name'] }}</h4>
-                                <h4>Order Id: #{{ $item['code'] }}</h4>
+                                <h4>Order Id: {{ $item['code'] }}</h4>
                                 <h4>Date: {{ $item['date'] }}</h4>
                                 <h4>Title: {{ $item['title'] }}</h4>
                                 <h4>Item: {{ $item['label'] }}</h4>

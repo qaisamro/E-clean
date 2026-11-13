@@ -1,4 +1,4 @@
-﻿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     $buildTrust = $webSettings->firstWhere('key', 'build_on_trust');
     $buildTrustValue = $buildTrust?->value ?? [];
@@ -11,9 +11,11 @@
         </div>
         <p>
         <h2 class="text-2xl xl:text-4xl font-semibold" style="color:#0B1E2E;font-family:Cairo,sans-serif;margin-top:12px;">
-            {!! !empty($buildTrustValue['title'])
-                ? strip_tags($buildTrustValue['title'], '<span>')
-                : __('Build on Trust and') . ' <span>' . __('Excellence') . '</span>' !!}
+            @if (!empty($buildTrustValue['title']))
+                {{ $buildTrustValue['title'] }}
+            @else
+                {{ __('Build on Trust and') }} <span>{{ __('Excellence') }}</span>
+            @endif
         </h2>
         </p>
         <p style="color:#5B6B7A;">

@@ -6,13 +6,13 @@ namespace App\Repositories;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
-use App\Models\Additional;
 use App\Models\DeliveryCost;
 use App\Enum\OrderStatus;
 use App\Enum\PaymentStatus;
 use App\Enum\PaymentType;
 use App\Models\Product;
 use Carbon\Carbon;
+use App\Support\OrderVendorOwnership;
 
 class OrderRepository extends Repository
 {
@@ -64,22 +64,45 @@ class OrderRepository extends Repository
 
     public function storeByRequest(OrderRequest $request): Order
     {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            $vendorId = OrderVendorOwnership::resolveProductVendor(
+                collect($request->products)->pluck('id')->all(),
+                $request->filled('vendor_id') ? (int) $request->vendor_id : null
+            );
+            // A stable row serializes booking and schedule edits, even before settings exist.
+            if ($vendorId) \App\Models\Vendor::whereKey($vendorId)->lockForUpdate()->firstOrFail();
+            $service = app(\App\Services\VendorAppointments::class);
+            $pair = $vendorId && $service->settings($vendorId)['enabled']
+                ? $service->validatePair($vendorId, $request->all()) : null;
+            $order = $this->createCustomerOrder($request, $pair);
+            if ($pair) $service->snapshot($order, $pair);
+            return $order;
+        }, 3);
+    }
 
-        $lastOrder = $this->query()->latest('id')->first();
+    private function createCustomerOrder(OrderRequest $request, ?array $pair): Order
+    {
         $customer = auth()->user()->customer;
-        $getAmount = $this->getAmount($request);
+        if (!$customer) {
+            abort(403);
+        }
+        $vendorId = OrderVendorOwnership::resolveProductVendor(
+            collect($request->products)->pluck('id')->all(),
+            $request->filled('vendor_id') ? (int) $request->vendor_id : null
+        );
+        $getAmount = $this->getAmount($request, $vendorId);
 
         $order = $this->create([
             'customer_id' => $customer->id,
-            'vendor_id' => $request->vendor_id,
+            'vendor_id' => $vendorId,
             'order_code' => $this->generateUniqueOrderCode(),
             'prefix' => 'LM',
             'coupon_id' => $request->coupon_id,
             'discount' => $getAmount['discount'],
             'pick_date' => $request->pick_date,
             'delivery_date' => $request->delivery_date,
-            'pick_hour' => $this->setPickOrDeliveryTime($request->pick_date, $request->pick_hour),
-            'delivery_hour' => $this->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery'),
+            'pick_hour' => $pair ? $pair['pickup']['hour'].':00' : $this->setPickOrDeliveryTime($request->pick_date, $request->pick_hour),
+            'delivery_hour' => $pair ? $pair['delivery']['hour'].':00' : $this->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery'),
             'amount' => $getAmount['subTotal'],
             'total_amount' => $getAmount['total'],
             'delivery_charge' => $getAmount['deliveryCharge'],
@@ -91,14 +114,32 @@ class OrderRepository extends Repository
         ]);
 
         foreach ($request->products as $product) {
-            $order->products()->attach($product['id'], ['quantity' => $product['quantity']]);
+            $order->products()->attach($product['id'], [
+                'quantity' => $product['quantity'],
+                'price' => $this->resolveProductPrice($product['id']),
+                'title' => $this->resolveProductTitle($product['id']),
+            ]);
         }
 
         return $order;
     }
     public function PosStoreByRequest(Request $request): Order
     {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            $vendorId = OrderVendorOwnership::resolveProductVendor(collect($request->products)->pluck('id')->all(), $this->actorVendorId());
+            if ($vendorId) \App\Models\Vendor::whereKey($vendorId)->lockForUpdate()->firstOrFail();
+            return $this->createPosOrder($request);
+        }, 3);
+    }
+
+    private function createPosOrder(Request $request): Order
+    {
         $products = $request->products;
+        $actorVendorId = $this->actorVendorId();
+        $vendorId = OrderVendorOwnership::resolveProductVendor(
+            collect($products)->pluck('id')->all(),
+            $actorVendorId
+        );
 
         $totalAmount = 0;
 
@@ -107,26 +148,15 @@ class OrderRepository extends Repository
         }
         $grandTotal = ($totalAmount + $request->delivery_charge) - $request->discount;
 
-        // Attribute POS orders to a store: the owner's own store, or the
-        // driver's linked store, so staff only ever touch their own data.
-        $posVendorId = $request->vendor_id ?? null;
-        if (auth()->check() && !$posVendorId) {
-            if (auth()->user()->hasRole('vendor_admin')) {
-                $posVendorId = auth()->user()->vendor?->id;
-            } elseif (auth()->user()->hasRole('driver')) {
-                $posVendorId = auth()->user()->driver?->vendor_id;
-            }
-        }
-
         $order = $this->create([
             'customer_id' => $request->customer_id ?? null,
-            'vendor_id' => $posVendorId,
+            'vendor_id' => $vendorId,
             'order_code' => $this->generateUniqueOrderCode(),
             'prefix' => 'LM',
             'pick_date' => now()->format('Y-m-d'),
             'pick_hour' => now()->format('H:00:00'),
             'delivery_date' => $request->delivery_date ?? now()->format('Y-m-d'),
-            'delivery_hour' => now()->format('H:00:00'),
+            'delivery_hour' => $this->posDeliveryHour($request),
             'delivery_charge' => (float) $request->delivery_charge,
             'discount' => (float) $request->discount,
             'amount' => (float)$totalAmount,
@@ -135,7 +165,7 @@ class OrderRepository extends Repository
             'payment_type' => $request->payment_id ? $request->payment_id : 'cash',
             'payment_method' => $request->payment_method ? strtolower($request->payment_method) : 'cash',
             'order_status' => OrderStatus::CONFIRM->value,
-            'address_id' => $request->address_id ?? 1,
+            'address_id' => $request->address_id ?: null,
             'instruction' => $request->instruction ?? null,
             'confirmed_at' => now(),
         ]);
@@ -166,7 +196,26 @@ class OrderRepository extends Repository
      */
     public function PosUpdateByRequest(Request $request, Order $order): Order
     {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($request, $order) {
+            if ($order->vendor_id) \App\Models\Vendor::whereKey($order->vendor_id)->lockForUpdate()->firstOrFail();
+            return $this->updatePosOrder($request, Order::whereKey($order->id)->lockForUpdate()->firstOrFail());
+        }, 3);
+    }
+
+    private function updatePosOrder(Request $request, Order $order): Order
+    {
+        if (\App\Models\OrderAppointment::where('order_id', $order->id)->exists() &&
+            $request->filled('delivery_date') &&
+            Carbon::parse($request->delivery_date)->toDateString() !== $order->delivery_date?->toDateString()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'delivery_date' => 'هذا الطلب له موعد محجوز؛ استخدم إعادة الجدولة بعد موافقة العميل.',
+            ]);
+        }
         $products = $request->products;
+        OrderVendorOwnership::assertProductsMatchOrder(
+            $order,
+            collect($products)->pluck('id')->all()
+        );
 
         $totalAmount = 0;
         foreach ($products as $product) {
@@ -206,13 +255,28 @@ class OrderRepository extends Repository
         return $order->fresh();
     }
 
-    private function resolveProductPrice($productId)
+    public function resolveProductPrice($productId)
     {
         $product = Product::withTrashed()->find($productId);
         return $product ? (float) ($product->discount_price ?: $product->price) : 0;
     }
 
-    private function resolveProductTitle($productId)
+    /**
+     * Delivery hour chosen on the POS screen (H:i or H:i:s).
+     * Falls back to the current hour when missing or unparsable.
+     */
+    private function posDeliveryHour($request): string
+    {
+        $raw = $request->delivery_hour ?? $request->get('delivery_hour');
+        if (is_string($raw) && preg_match('/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/', trim($raw))) {
+            $time = trim($raw);
+            return strlen($time) === 5 ? $time . ':00' : $time;
+        }
+
+        return now()->format('H:00:00');
+    }
+
+    public function resolveProductTitle($productId)
     {
         $product = Product::withTrashed()->find($productId);
         return $product ? $product->name : '';
@@ -222,7 +286,7 @@ class OrderRepository extends Repository
     public function updateByRequest($request, Order $order)
     {
         $request['coupon_id'] = $order->coupon_id;
-        $getAmount = $this->getAmount($request);
+        $getAmount = $this->getAmount($request, $order->vendor_id);
 
         $this->update($order, [
             'discount' => $getAmount['discount'],
@@ -232,30 +296,40 @@ class OrderRepository extends Repository
         $order->products()->detach($order->products->pluck('id')->toArray());
 
         foreach ($request->products as $product) {
-            $order->products()->attach($product['id'], ['quantity' => $product['quantity']]);
+            $order->products()->attach($product['id'], [
+                'quantity' => $product['quantity'],
+                'price' => $this->resolveProductPrice($product['id']),
+                'title' => $this->resolveProductTitle($product['id']),
+            ]);
         }
 
         return $order;
     }
 
-    private function getAmount($request): array
+    private function getAmount($request, $vendorId = null): array
     {
-
-
         $totalAmount = 0;
         foreach ($request->products as $item) {
-            $product = Product::where('id', $item['id'])->first();
-            $price = $product->discount_price ? $product->discount_price : $product->price;
+            // Catalog prices — mirror resolveProductPrice (trashed products
+            // keep their order lines; try/catch on the null-friendly path).
+            $product = Product::withTrashed()->find($item['id']);
+            $price = $product ? (float) ($product->discount_price ?: $product->price) : 0;
             $totalAmount += (float)$item['quantity'] * $price;
         }
 
-        $totalServiceAmount = 0;
-        if ($request->has('additional_service_id')) {
-            $totalServiceAmount = Additional::whereIn('id', $request->additional_service_id)->get()->sum('price');
-        }
-
-        $total = ($totalAmount + $totalServiceAmount);
+        $total = $totalAmount;
+        // Coupon is validated ONLY at apply time — re-check it at order
+        // placement: wrong store or below minimum means NO discount (never
+        // silently give a lower-scoped coupon than the customer asked for).
         $coupon = (new CouponRepository())->findById($request->coupon_id);
+        if ($coupon) {
+            $matchesScope = $coupon->vendor_id === null
+                || ($vendorId && (int) $coupon->vendor_id === (int) $vendorId);
+            $minOk = $total >= (float) $coupon->min_amount;
+            if (!$matchesScope || !$minOk) {
+                $coupon = null;
+            }
+        }
         $couponDiscount = $coupon ? $coupon->calculate($total, $coupon) : 0;
 
         $deliveryCost = DeliveryCost::first();
@@ -268,7 +342,7 @@ class OrderRepository extends Repository
         return [
             'total' => $total,
             'discount' => $couponDiscount,
-            'subTotal' => ($totalAmount + $totalServiceAmount),
+            'subTotal' => $totalAmount,
             'deliveryCharge' => $deliveryCharge
         ];
     }
@@ -279,28 +353,24 @@ class OrderRepository extends Repository
         $searchKey = $request->search;
         $sort = $request->sort;
 
-        $orders = $this->model()::query();
+        $orders = $this->model()::query()->with('products.service');
 
-        // Store owners see only their own store's orders
-        // (legacy orders without a store stay visible).
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $vendorId = auth()->user()->vendor->id;
-            $orders = $orders->where(function ($query) use ($vendorId) {
-                $query->where('vendor_id', $vendorId)->orWhereNull('vendor_id');
-            });
+        if ($this->isStoreScopedUser()) {
+            $vendorId = $this->actorVendorId();
+            $orders = $vendorId
+                ? $orders->where('vendor_id', $vendorId)
+                : $orders->whereRaw('1 = 0');
         }
 
-        // للسائق: إظهار فقط الطلبات المعيّنة له (من قبل الأدمن)
+        // Drivers see orders currently assigned to them, not another
+        // driver's history or an order linked to a different store.
         if (auth()->check() && auth()->user()->hasRole('driver')) {
             $driver = auth()->user()->driver;
-            if (!$driver) {
+            if (!$driver || !$driver->vendor_id) {
                 return collect();
             }
-            $driverOrderIds = $driver->orders->pluck('id')->merge($driver->orderHistories->pluck('id'))->unique()->filter();
-            if ($driverOrderIds->isEmpty()) {
-                return collect();
-            }
-            $orders = $orders->whereIn('id', $driverOrderIds);
+            $orders->where('vendor_id', $driver->vendor_id)
+                ->whereHas('drivers', fn ($query) => $query->where('drivers.id', $driver->id));
         }
 
         if ($status) {
@@ -326,14 +396,20 @@ class OrderRepository extends Repository
             });
         }
 
-        if ($sort == 'oldest') {
-            return $orders->orderBy('created_at', 'asc')->get();
+        $results = $sort == 'oldest'
+            ? $orders->orderBy('created_at', 'asc')->get()
+            : $orders->latest()->get();
+
+        if ($this->isStoreScopedUser() || (auth()->check() && auth()->user()->hasRole('driver'))) {
+            $results = $results
+                ->filter(fn (Order $order) => OrderVendorOwnership::productsMatchOrder($order))
+                ->values();
         }
 
-        return $orders->latest()->get();
+        return $results;
     }
 
-    public function orderListByStatus($status = null, $pageNo, $perPage)
+    public function orderListByStatus($pageNo, $perPage, $status = null)
     {
         $customer = auth()->user()->customer;
         $perPage = $perPage ?? 10;
@@ -354,7 +430,10 @@ class OrderRepository extends Repository
 
         $drivers = $order->drivers;
 
-        if ($drivers && $status == config('enums.order_status.delivered') || $status == config('enums.order_status.picked_order')) {
+        if ($drivers && in_array($status, [
+            config('enums.order_status.delivered'),
+            config('enums.order_status.picked_order'),
+        ], true)) {
             foreach ($drivers as $driver) {
                 $driver->orderHistories()->attach($driver->pivot->order_id, ['status' => $driver->pivot->status]);
                 $order->drivers()->detach($driver->id);
@@ -365,51 +444,56 @@ class OrderRepository extends Repository
 
     /**
      * Scope an order query to the current store owner's own store
-     * (legacy orders without a store stay visible).
+     * Orders without a proven store are excluded for store owners.
      */
     protected function scopeReportVendor($query)
     {
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $vendorId = auth()->user()->vendor->id;
-            $query->where(function ($q) use ($vendorId) {
-                $q->where('vendor_id', $vendorId)->orWhereNull('vendor_id');
-            });
+        if ($this->isStoreScopedUser()) {
+            $vendorId = $this->actorVendorId();
+            if ($vendorId) {
+                $query->where('vendor_id', $vendorId);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
         }
         return $query;
+    }
+
+    protected function isStoreScopedUser(): bool
+    {
+        return \App\Support\VendorAccount::isStoreStaff(auth()->user());
+    }
+
+    protected function actorVendorId(): ?int
+    {
+        if (!auth()->check()) {
+            return null;
+        }
+
+        $user = auth()->user();
+        if ($user->hasRole('driver')) {
+            return $user->driver?->vendor_id ? (int) $user->driver->vendor_id : null;
+        }
+
+        return \App\Support\VendorAccount::idFor($user);
     }
 
     public function getRevenueReportByBetweenDate($form, $to)
     {
         $query = $this->model()::query();
         $query = $this->scopeReportVendor($query);
-        return $query->whereBetween('delivery_date', [$form, $to])
-            ->where('payment_status', config('enums.payment_status.paid'))
-            ->get();
-    }
-
-
-    public function getRevenueReport()
-    {
-        $year = now()->format('Y');
-        $month = now()->format('m');
-
-        $orders = $this->model()::query()->where('payment_status', config('enums.payment_status.paid'));
-        $orders = $this->scopeReportVendor($orders);
-        if (request()->type == 'month') {
-            $orders = $orders->whereMonth('delivery_date', $month)
-                ->whereYear('delivery_date', $year);
-        } elseif (request()->type  ==  'year') {
-            $orders = $orders->whereYear('delivery_date', $year);
-        } elseif (request()->type == 'week') {
-            $end = now()->format('Y-m-d');
-            $start = now()->subWeek()->format('Y-m-d');
-            $orders = $orders->whereBetween('delivery_date', [$start, $end]);
-        } else {
-            $date = now()->format('Y-m-d');
-            $orders = $orders->where('delivery_date', $date);
+        $query->where('payment_status', config('enums.payment_status.paid'));
+        // When no date range is supplied, show all paid orders instead of
+        // an empty result (delivery_date BETWEEN NULL AND NULL).
+        if ($form && $to) {
+            $query->whereBetween('delivery_date', [$form, $to]);
         }
-        return  $orders->get();
+        $orders = $query->with('products.service')->get();
+        return $this->isStoreScopedUser()
+            ? OrderVendorOwnership::filterConsistentOrders($orders)
+            : $orders;
     }
+
 
     /**
      * Super-admin dashboard income: sum of ALL orders from ALL stores
@@ -433,7 +517,11 @@ class OrderRepository extends Repository
             $base->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59']);
         }
 
-        $orders = (clone $base)->get();
+        $orders = (clone $base)->with('products.service')->get();
+        if ($this->isStoreScopedUser()) {
+            $orders = OrderVendorOwnership::filterConsistentOrders($orders);
+            $base->whereIn('id', $orders->pluck('id'));
+        }
 
         $statuses = array_values(config('enums.order_status'));
 
@@ -561,12 +649,15 @@ class OrderRepository extends Repository
             config('enums.order_status.order_confirmed'),
             config('enums.order_status.picked_order'),
             config('enums.order_status.processing'),
+            config('enums.order_status.on_the_way'),
         ];
 
         return [
             'total' => $orders->count(),
             'in_progress' => $orders->whereIn('order_status', $inProgressStatuses)->count(),
             'completed' => $orders->where('order_status', config('enums.order_status.delivered'))->count(),
+            'ready_for_pickup' => $orders->where('order_status', config('enums.order_status.ready_for_pickup'))->count(),
+            'on_the_way' => $orders->where('order_status', config('enums.order_status.on_the_way'))->count(),
             'cancelled' => $orders->where('order_status', config('enums.order_status.cancelled'))->count(),
         ];
     }

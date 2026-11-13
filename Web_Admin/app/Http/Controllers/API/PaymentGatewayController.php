@@ -19,6 +19,7 @@ use Stripe\Checkout\Session as StripeSession;
 
 
 use App\Models\WebSetting;
+use App\Support\StoreOrderAccess;
 
 class PaymentGatewayController extends Controller
 {
@@ -128,8 +129,9 @@ class PaymentGatewayController extends Controller
 }
 
 
-    public function processOrder(Request $request, $order)
+    public function processOrder(Request $request, Order $order)
     {
+        StoreOrderAccess::assertCanMutate($order);
         $paymentGateway = PaymentGateway::where('name', $request->payment_method)->first();
         $config = json_decode($paymentGateway->config);
 

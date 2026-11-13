@@ -16,6 +16,11 @@ class Order extends Model
         return $this->belongsTo(Vendor::class);
     }
 
+    public function appointment()
+    {
+        return $this->hasOne(OrderAppointment::class);
+    }
+
     protected $casts = [
         'pick_date' => 'datetime',
         'delivery_date' => 'datetime',
@@ -55,7 +60,11 @@ class Order extends Model
 
     public function address()
     {
-        return $this->belongsTo(Address::class, 'address_id');
+        // Include soft-deleted addresses: historical orders must keep the address
+        // they were delivered to, even if the customer later removes the saved
+        // address from the app. Without this, $order->address is null and pages
+        // like /orders crash with "attempt to read property on null".
+        return $this->belongsTo(Address::class, 'address_id')->withTrashed();
     }
 
     public function rating()
@@ -98,14 +107,20 @@ class Order extends Model
 
     public function drivers()
     {
-        return $this->belongsToMany(Driver::class, (new DriverOrder())->getTable())
+        $drivers = $this->belongsToMany(Driver::class, (new DriverOrder())->getTable())
             ->withPivot('status')
             ->withTimestamps();
+        return $this->vendor_id
+            ? $drivers->where('drivers.vendor_id', $this->vendor_id)
+            : $drivers->whereRaw('1 = 0');
     }
 
     public function driverHistories()
     {
-        return $this->hasMany(DriverHistory::class);
+        $histories = $this->hasMany(DriverHistory::class);
+        return $this->vendor_id
+            ? $histories->whereHas('driver', fn ($query) => $query->where('vendor_id', $this->vendor_id))
+            : $histories->whereRaw('1 = 0');
     }
 
     public static function getTime($time)

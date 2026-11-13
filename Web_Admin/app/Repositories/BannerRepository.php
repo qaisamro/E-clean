@@ -24,13 +24,14 @@ class BannerRepository extends Repository
             ->get();
     }
 
-    public function getByBannerStatus($status)
+    public function getByBannerStatus($status, $cityId = null)
     {
-        return $this->model()::where('is_banner', $status)
+        $query = $this->model()::where('is_banner', $status)
             ->where(function ($q) {
                 $q->whereNull('banner_section')->orWhere('banner_section', '!=', 'wide');
             })
-            ->isActive()->get();
+            ->isActive();
+        return \App\Support\CatalogCityFilter::apply($query, $cityId)->get();
     }
 
     public function getWide()
@@ -38,9 +39,10 @@ class BannerRepository extends Repository
         return $this->model()::where('banner_section', 'wide')->get();
     }
 
-    public function getActiveWide()
+    public function getActiveWide($cityId = null)
     {
-        return $this->model()::where('banner_section', 'wide')->isActive()->get();
+        $query = $this->model()::where('banner_section', 'wide')->isActive();
+        return \App\Support\CatalogCityFilter::apply($query, $cityId)->get();
     }
 
     public function storeByRequest(BannerRequest $request): Banner

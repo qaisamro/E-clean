@@ -275,7 +275,7 @@ class CheckoutController extends Controller
                 $paymentUrl = (new PaymentRepository())->stripePaymentURL([
                     'currency' => $currency,
                     'amount' => $grandTotal,
-                    'product_data' => "Order #{$orderCode}",
+                    'product_data' => "Order {$orderCode}",
                 ], $order->id);
 
                 return redirect($paymentUrl);
@@ -297,11 +297,13 @@ class CheckoutController extends Controller
 
     public function orderSuccess($id)
     {
-
         $order = $this->checkoutRepo->findOrderWithRelations($id);
-
-
-
+        abort_unless(
+            auth()->check()
+                && auth()->user()->customer
+                && (int) $order->customer_id === (int) auth()->user()->customer->id,
+            404
+        );
         return view('website.pages.order-success', compact('order'));
     }
 
@@ -311,6 +313,12 @@ class CheckoutController extends Controller
     public function orderDetails($id)
     {
         $order = $this->checkoutRepo->findOrderWithRelations($id);
+        abort_unless(
+            auth()->check()
+                && auth()->user()->customer
+                && (int) $order->customer_id === (int) auth()->user()->customer->id,
+            404
+        );
         return view('website.pages.order-details', compact('order'));
     }
 

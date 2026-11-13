@@ -90,7 +90,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="service_index" permission="service.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="service_create" permission="service.create" />
@@ -194,7 +194,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="additional_index" permission="additional.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="additional_create" permission="additional.create" />
@@ -206,89 +206,6 @@
                                                 <x-permission-input title="Update" :user="$user" name="additional_update" permission="additional.update" />
 
                                                 <x-permission-input title="Status Update" :user="$user" name="additional_status_toggle" permission="additional.status.toggle" />
-
-                                                <div class="text-right mt-3">
-                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
-                                                    <button class="btn btn-danger @role('visitor') visitorMessage @endrole" type="submit">{{ __('Save Permissions') }}</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- ===================== Variant Service ===================== --}}
-                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4 mb-4">
-                        <div class="card p-2" style="min-height: 12em;">
-                            <h2>{{ __('Variants') }}</h2>
-                            <div class="row">
-                                <div class="col-6 mb-2">{{ __('List Show') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('variant.index', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-6 mb-2">{{ __('Store') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('variant.store', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-6 mb-2">{{ __('Update') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('variant.update', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-6 mb-2">{{ __('Show Products') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('variant.products', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="submit">
-                                <button class="btn btn-danger px-2 py-1" data-toggle="modal" data-target="#variantModal">{{ __('Edit Permission') }}</button>
-                            </div>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="variantModal">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h3 class="modal-title">{{ __('Edit Variant Permissions') }}</h3>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-
-                                        <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
-                                                <x-permission-input title="List Show" :user="$user" name="variant_index" permission="variant.index" />
-
-                                                <x-permission-input title="Store" :user="$user" name="variant_store" permission="variant.store" />
-
-                                                <x-permission-input title="Update" :user="$user" name="variant_update" permission="variant.update" />
-
-                                                <x-permission-input title="Show Products" :user="$user" name="variant_products" permission="variant.products" />
 
                                                 <div class="text-right mt-3">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
@@ -344,7 +261,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="Notification Panel" :user="$user" name="notification_index" permission="notification.index" />
 
                                                 <x-permission-input title="Send Notification" :user="$user" name="notification_send" permission="notification.send" />
@@ -439,7 +356,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="customer_index" permission="customer.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="customer_create" permission="customer.create" />
@@ -543,7 +460,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="product_index" permission="product.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="product_create" permission="product.create" />
@@ -648,7 +565,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="banner_promotional" permission="banner.promotional" />
 
                                                 <x-permission-input title="Store" :user="$user" name="banner_store" permission="banner.store" />
@@ -744,7 +661,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="All Orders" :user="$user" name="order_index" permission="order.index" />
 
                                                 <x-permission-input title="Order Details" :user="$user" name="order_show" permission="order.show" />
@@ -818,7 +735,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="Schedule List" :user="$user" name="schedule_index" permission="schedule.index" />
 
                                                 <x-permission-input title="Status Update" :user="$user" name="toggole_status_update" permission="toggole.status.update" />
@@ -836,77 +753,6 @@
                             </div>
                         </div>
                     </div> --}}
-
-                    {{-- ===================== Revenue ===================== --}}
-                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4 mb-4">
-                        <div class="card p-2" style="min-height: 12em;">
-                            <h2>{{ __('Revenue') }}</h2>
-                            <div class="row">
-                                <div class="col-12 mb-2">{{ __('Ravenue panel') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('revenue.index', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-12 mb-2">{{ __('Generate Revenue PDF') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('revenue.generate.pdf', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-12 mb-2">{{ __('Generate Report PDF') }}:
-                                    <div class="text-right float-right">
-                                        @if (in_array('report.generate.pdf', $permissions))
-                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
-                                        @else
-                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="submit">
-                                <button class="btn btn-danger px-2 py-1" data-toggle="modal" data-target="#revenueModal">{{ __('Edit Permission') }}</button>
-                            </div>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="revenueModal">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h3 class="modal-title">{{ __('Edit Revenue Permissions') }}</h3>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-
-                                        <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
-                                                <x-permission-input title="Ravenue panel" :user="$user" name="revenue_index" permission="revenue.index" />
-
-                                                <x-permission-input title="Generate Revenue PDF" :user="$user" name="revenue_generate_pdf" permission="revenue.generate.pdf" />
-
-                                                <x-permission-input title="Generate Report PDF" :user="$user" name="report_generate_pdf" permission="report.generate.pdf" />
-
-                                                <div class="text-right mt-3">
-                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
-                                                    <button class="btn btn-danger @role('visitor') visitorMessage @endrole" type="submit">{{ __('Save Permissions') }}</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     {{-- ===================== Coupon ===================== --}}
                     <div class="col-12 col-sm-6 col-lg-6 col-xl-4 mb-4">
@@ -977,7 +823,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="coupon_index" permission="coupon.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="coupon_create" permission="coupon.create" />
@@ -987,6 +833,100 @@
                                                 <x-permission-input title="Edit" :user="$user" name="coupon_edit" permission="coupon.edit" />
 
                                                 <x-permission-input title="Update" :user="$user" name="coupon_update" permission="coupon.update" />
+
+                                                <div class="text-right mt-3">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                                    <button class="btn btn-danger @role('visitor') visitorMessage @endrole" type="submit">{{ __('Save Permissions') }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ===================== Vendors (Stores) ===================== --}}
+                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4 mb-4">
+                        <div class="card p-2" style="min-height: 12em;">
+                            <h2>إدارة المحلات</h2>
+                            <div class="row">
+                                <div class="col-6 mb-2">{{ __('List Show') }}:
+                                    <div class="text-right float-right">
+                                        @if (in_array('vendors.index', $permissions))
+                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
+                                        @else
+                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="submit">
+                                <button class="btn btn-danger px-2 py-1" data-toggle="modal" data-target="#vendorsModal">{{ __('Edit Permission') }}</button>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="vendorsModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h3 class="modal-title">تعديل صلاحيات إدارة المحلات</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+
+                                        <div class="modal-body pt-0">
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
+                                                <x-permission-input title="List Show" :user="$user" name="vendors_index" permission="vendors.index" />
+
+                                                <div class="text-right mt-3">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                                    <button class="btn btn-danger @role('visitor') visitorMessage @endrole" type="submit">{{ __('Save Permissions') }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ===================== Site Pages ===================== --}}
+                    <div class="col-12 col-sm-6 col-lg-6 col-xl-4 mb-4">
+                        <div class="card p-2" style="min-height: 12em;">
+                            <h2>الصفحات والسياسات</h2>
+                            <div class="row">
+                                <div class="col-6 mb-2">{{ __('List Show') }}:
+                                    <div class="text-right float-right">
+                                        @if (in_array('web.setting', $permissions))
+                                        <span class="badge py-1 badge-success ml-2">{{ __('Yes') }}</span>
+                                        @else
+                                        <span class="badge py-1 badge-danger ml-2">{{ __('No') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="submit">
+                                <button class="btn btn-danger px-2 py-1" data-toggle="modal" data-target="#sitePagesModal">{{ __('Edit Permission') }}</button>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="sitePagesModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h3 class="modal-title">تعديل صلاحيات الصفحات والسياسات</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+
+                                        <div class="modal-body pt-0">
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
+                                                <x-permission-input title="List Show" :user="$user" name="web_setting" permission="web.setting" />
 
                                                 <div class="text-right mt-3">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
@@ -1069,7 +1009,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="List Show" :user="$user" name="driver_index" permission="driver.index" />
 
                                                 <x-permission-input title="Create" :user="$user" name="driver_create" permission="driver.create" />
@@ -1151,14 +1091,14 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="View Profile" :user="$user" name="profile_index" permission="profile.index" />
 
                                                 <x-permission-input title="Edit" :user="$user" name="profile_edit" permission="profile.edit" />
 
                                                 <x-permission-input title="Update" :user="$user" name="profile_update" permission="profile.update" />
 
-                                                <x-permission-input title="Change Password" :user="$user" name="profile_change-password" permission="{{ __('Change_Password') }}" />
+                                                <x-permission-input title="Change Password" :user="$user" name="profile_change-password" permission="profile.change-password" />
 
                                                 <div class="text-right mt-3">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
@@ -1222,7 +1162,7 @@
                                         </div>
 
                                         <div class="modal-body pt-0">
-                                            <form @role('root') action="{{ route('admin.set-permission', $user->id) }}" @endrole method="POST"> @csrf
+                                            <form action="{{ route('admin.set-permission', $user->id) }}" method="POST"> @csrf
                                                 <x-permission-input title="Calculations" :user="$user" name="dashboard_calculation" permission="dashboard.calculation" />
 
                                                 <x-permission-input title="Show Revenue" :user="$user" name="dashboard_revenue" permission="dashboard.revenue" />

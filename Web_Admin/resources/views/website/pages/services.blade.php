@@ -1,4 +1,4 @@
-﻿@extends('website.layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
     <!-- manage-address-modal -->
@@ -12,47 +12,47 @@
             {{-- new test  --}}
             <form action="#" class="rs-manage-addresses-form">
                 <div class="flex justify-between items-center mb-[30px]">
-                    <h3 class="text-neutral-700 text-lg font-semibold">Add New Address </h3>
+                    <h3 class="text-neutral-700 text-lg font-semibold">{{ __('Add New Address') }}</h3>
                     <button type="button" onclick="toggleModal('role')"
                         class="transition-transform duration-300 hover:rotate-90">
                         <img src="{{ asset('website/assets/icons/close.svg') }}" alt="">
                     </button>
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">Label</label>
-                    <input type="text" placeholder="Example : Home, Office ..."
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Label') }}</label>
+                    <input type="text" placeholder="{{ __('Address label example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">Street Address</label>
-                    <input type="text" placeholder="123 Lovely Road, Apt 6B"
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Street Address') }}</label>
+                    <input type="text" placeholder="{{ __('Address example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="flex gap-3 mb-4">
                     <div class="w-[50%]">
-                        <label class="text-neutral-700 text-base font-medium">City</label>
-                        <input type="text" placeholder="New York"
+                        <label class="text-neutral-700 text-base font-medium">{{ __('City') }}</label>
+                        <input type="text" placeholder="{{ __('City example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="w-[50%]">
-                        <label class="text-neutral-700 text-base font-medium">State</label>
+                        <label class="text-neutral-700 text-base font-medium">{{ __('State') }}</label>
                         <input type="text" placeholder="NY"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">ZIP Code</label>
+                    <label class="text-neutral-700 text-base font-medium">{{ __('ZIP Code') }}</label>
                     <input type="text" placeholder="10003"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="mb-[30px]">
-                    <label class="text-neutral-700 text-base font-medium">Phone Number</label>
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Phone Number') }}</label>
                     <input type="text" placeholder="+1 (555) 545-5421"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <button
                     class="rs-add-new-address-btn text-sm bg-[linear-gradient(135deg,#028090,#00A896)] text-white h-[48px] text-center leading-[48px] w-[100%] rounded-[14px]">
-                    Save Address
+                    {{ __('Save Address') }}
                 </button>
             </form>
         </div>
@@ -76,19 +76,19 @@
 
             <ul class="space-y-4 flex flex-col items-center">
                 <li onclick="toggleSidebar()">
-                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">Home</a>
+                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Home') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
                     <a href="#pricing" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Services') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">Nearest Store</a>
+                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Nearest Store') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">FAQ</a>
+                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('FAQ') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">Contact</a>
+                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Contact') }}</a>
                 </li>
             </ul>
         </div>
@@ -112,12 +112,11 @@
             <div class="overflow-y-auto mt-12">
                 <h3 class="text-sm md:text-base font-semibold mb-4">{{ __('Filter by') }}</h3>
                 <form class="mb-4" id="sidebar-filter-form" action="{{ route('web.services') }}" method="GET">
-                    <input type="hidden" name="variant" value="{{ $variant ?? 'all' }}">
                     <label class="text-xs font-medium text-neutral-700">{{ __('Search') }}</label>
                     <div class="relative mt-1">
                         <input type="text" id="service-search" name="search"
                             class="border border-[#E2E8F0] rounded-[14px] h-10 w-full pl-10 pr-10 text-sm placeholder:text-neutral-400"
-                            placeholder="{{ __('Search') }} services ..." value="{{ $search ?? '' }}">
+                            placeholder="{{ __('Search services ...') }}" value="{{ $search ?? '' }}">
                         <button type="submit"
                             class="absolute right-3 top-1/2 -translate-y-1/2 bg-none border-none p-0 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -128,24 +127,6 @@
                         </button>
                     </div>
                 </form>
-                <div class="rs-services-cta">
-                    <h4 class="text-xs font-medium leading-[120%] text-neutral-700 mb-[10px]">
-                        {{ __('Variant') }}
-                    </h4>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="{{ route('web.services', ['variant' => 'all'] + request()->only(['search', 'sort'])) }}"
-                                class="block px-3 py-2 rounded-[12px] text-sm transition-all {{ !isset($variant) || $variant == 'all' ? 'bg-[linear-gradient(135deg,#028090,#00A896)] text-white font-semibold' : 'text-neutral-700 hover:bg-neutral-100' }}">All
-                                {{ __('Variants') }}</a>
-                        </li>
-                        @foreach ($variants as $v)
-                            <li>
-                                <a href="{{ route('web.services', ['variant' => $v] + request()->only(['search', 'sort'])) }}"
-                                    class="block px-3 py-2 rounded-[12px] text-sm transition-all {{ isset($variant) && $variant == $v ? 'bg-[linear-gradient(135deg,#028090,#00A896)] text-white font-semibold' : 'text-neutral-700 hover:bg-neutral-100' }}">{{ $v }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -183,14 +164,13 @@
                         </h3>
                         <form action="{{ route('web.services') }}" method="GET" class="mb-4"
                             id="desktop-filter-form">
-                            <input type="hidden" name="variant" value="{{ $variant ?? 'all' }}">
                             <label class="text-xs font-medium leading-[120%] text-neutral-700">{{ __('Search') }}</label>
                             <div class="relative flex items-center">
                                 <img class="absolute rs-filter-search-icon"
                                     src="{{ asset('website/assets/icons/search-icon.svg') }}" alt="">
                                 <input
                                     class="promo-input filter-input border-[1.50px] mt-[5px] border-[#E2E8F0] leading-[41px] rounded-[14px] h-[40px] w-full px-[16px] pl-[42px]"
-                                    type="text" name="search" placeholder="{{ __('Search') }} services ..."
+                                    type="text" name="search" placeholder="{{ __('Search services ...') }}"
                                     value="{{ $search ?? '' }}">
                                 <button type="submit" class="absolute right-3 bg-none border-none p-0 cursor-pointer">
                                     {{-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -211,32 +191,13 @@
                                 @endif
                             </div>
                         </form>
-                        <div class="rs-services-cta">
-                            <h4 class="text-xs font-medium leading-[120%] text-neutral-700 mb-[10px]">
-                                {{ __('Variant') }}
-                            </h4>
-                            <ul class="space-y-2">
-                                <li>
-                                    <a href="{{ route('web.services', ['variant' => 'all'] + request()->only(['search', 'sort'])) }}"
-                                        class="block px-3 py-2 rounded-[12px] text-sm transition-all {{ !isset($variant) || $variant == 'all' ? 'bg-[linear-gradient(135deg,#028090,#00A896)] text-white font-semibold' : 'text-neutral-700 hover:bg-neutral-100' }}">All
-                                        {{ __('Variants') }}</a>
-                                </li>
-                                @foreach ($variants as $v)
-                                    <li>
-                                        <a href="{{ route('web.services', ['variant' => $v] + request()->only(['search', 'sort'])) }}"
-                                            class="block px-3 py-2 rounded-[12px] text-sm transition-all {{ isset($variant) && $variant == $v ? 'bg-[linear-gradient(135deg,#028090,#00A896)] text-white font-semibold' : 'text-neutral-700 hover:bg-neutral-100' }}">{{ $v }}</a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Right Column -->
                 <div class="rs-services-right-area col-span-12 md:col-span-12 lg:col-span-9">
                     <div class="rs-services-right-top flex items-center justify-between mb-6 flex-wrap gap-4">
-                        <p class="text-lg font-normal leading-[100%] text-neutral-500">Showing {{ $services->count() }}
-                            services</p>
+                        <p class="text-lg font-normal leading-[100%] text-neutral-500">{{ __('Showing :count services', ['count' => $services->count()]) }}</p>
                         <!-- filter sidebar opening button  -->
                         <button
                             class="h-10 w-10 border border-primary2-600 rounded p-1 flex justify-center items-center ml-auto block lg:hidden"
@@ -302,7 +263,7 @@
                                     </div>
 
                                     <h3 class="text-sm text-neutral-900 font-semibold mb-[15px]">
-                                        {{ $service->name }}
+                                        {{ $service->name_bn ?? $service->name }}
                                     </h3>
 
                                     <p class="text-[13px] text-neutral-500 mb-[15px]">
@@ -310,31 +271,25 @@
                                     </p>
 
                                     <p class="text-xs text-neutral-500 mb-[15px]">
-                                        By {{ $service->provider_name ?? 'Service Provider' }}
+                                        {{ __('By :provider', ['provider' => $service->provider_name ?? __('Service Provider')]) }}
                                     </p>
 
                                     <div class="rs-services-bottom-content flex items-center">
                                         <h5 class="text-sm text-[#028090] font-semibold">
                                             @if ($service->lowestProduct)
-                                                  {{ currencyPosition($service->lowestProduct->final_price) }} / Item
+                                                  {{ currencyPosition($service->lowestProduct->final_price) }}{{ __(' / Item') }}
                                             @else
-                                                $ / Item
+                                                ${{ __(' / Item') }}
                                             @endif
                                         </h5>
 
 
-                                        <a href="{{ route('web.cart', ['service_id' => $service->id]) }}"
-                                            class="flex items-center justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold h-[32px] w-[110px] border rounded-[14px] hover:bg-[linear-gradient(135deg,#028090,#00A896)] hover:text-white hover:shadow-md transition-all duration-300">
-                                            {{ __('Book Now') }}
-                                            <img src="{{ asset('website/assets/icons/green-right-arrow.svg') }}"
-                                                alt="">
-                                        </a>
                                     </div>
                                 </div>
                             </div>
                         @empty
                             <p class="col-span-full text-center text-neutral-500">
-                                No services available right now.
+                                {{ __('No services available right now.') }}
                             </p>
                         @endforelse
 
@@ -358,10 +313,10 @@
                 class="max-w-2lg mx-auto py-[60px] px-4 xl-1:px-0 flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-6 lg:gap-0">
                 <div class="flex-1">
                     <p class="text-[32px] font-semibold text-center lg:text-left text-white ">
-                        Ready to Get Started?
+                        {{ __('Ready to Get Started?') }}
                     </p>
                     <p class="text-lg text-center lg:text-left text-neutral-50">
-                        Book your first order and experience hassle-free dry cleaning service
+                        {{ __('Book your first order and experience hassle-free dry cleaning service') }}
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-4">
@@ -410,22 +365,21 @@
         });
 
         // Clear search for mobile sidebar
-        function clear{{ __('Search') }}(inputId) {
+        function clearSearch(inputId) {
             const url = new URL(window.location.href);
             url.searchParams.delete('search');
             window.location.href = url.toString();
         }
 
         // Clear search for desktop
-        function clearDesktop{{ __('Search') }}() {
+        function clearDesktopSearch() {
             const url = new URL(window.location.href);
             url.searchParams.delete('search');
             window.location.href = url.toString();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // {{ __('Search') }} forms will submit naturally via GET method
-            // Variant links will navigate directly to filtered results
+            // Search forms will submit naturally via GET method
         });
     </script>
 @endsection

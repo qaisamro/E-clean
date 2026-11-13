@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" @if (app()->getLocale() == 'ar') dir="rtl" @endif>
 
 <head>
@@ -56,7 +56,7 @@
         <div class="mb-4">
             <h4>{{ __($setting->value['title'] ?? __('privacy_policy_default_title')) }}
             </h4>
-            <p>{!! $setting->value['content'] ?? __('no_content_added') !!}</p>
+            <p>{{ $setting->value['content'] ?? __('no_content_added') }}</p>
         </div>
 
 

@@ -2,12 +2,16 @@
 
 namespace App\Livewire\Order;
 
+
+use App\Livewire\Concerns\RequiresPermission;
 use App\Models\Order;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class OrderByCustomer extends Component
 {
+    use RequiresPermission;
+
     use WithPagination;
 
     public string $search = '';
@@ -43,6 +47,7 @@ class OrderByCustomer extends Component
 
     public function addToOrders(Order $order): void
     {
+        $this->requirePermission('orders.edit');
         abort_if($order->user_id, 401);
 
         try {
@@ -56,6 +61,7 @@ class OrderByCustomer extends Component
 
     public function deleteOrder(Order $order): void
     {
+        $this->requirePermission('orders.delete');
         abort_if($order->user_id, 401);
 
         try {

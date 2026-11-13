@@ -11,47 +11,47 @@
         <div class="modal_content">
             <form action="#" class="rs-manage-addresses-form">
                 <div class="flex justify-between items-center mb-[30px]">
-                    <h3 class="text-neutral-700 text-lg font-semibold">Add New Address</h3>
+                    <h3 class="text-neutral-700 text-lg font-semibold">{{ __('Add New Address') }}</h3>
                     <button type="button" onclick="toggleModal('role')"
                         class="transition-transform duration-300 hover:rotate-90">
                         <img src="{{asset('website/assets/icons/close.svg')}}" alt="">
                     </button>
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">Label</label>
-                    <input type="text" placeholder="Example : Home, Office ..."
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Label') }}</label>
+                    <input type="text" placeholder="{{ __('Address label example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">Street Address</label>
-                    <input type="text" placeholder="123 Lovely Road, Apt 6B"
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Street Address') }}</label>
+                    <input type="text" placeholder="{{ __('Address example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="flex gap-3 mb-4">
                     <div class="w-[50%]">
-                        <label class="text-neutral-700 text-base font-medium">City</label>
-                        <input type="text" placeholder="New York"
+                        <label class="text-neutral-700 text-base font-medium">{{ __('City') }}</label>
+                        <input type="text" placeholder="{{ __('City example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="w-[50%]">
-                        <label class="text-neutral-700 text-base font-medium">State</label>
+                        <label class="text-neutral-700 text-base font-medium">{{ __('State') }}</label>
                         <input type="text" placeholder="NY"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="text-neutral-700 text-base font-medium">ZIP Code</label>
+                    <label class="text-neutral-700 text-base font-medium">{{ __('ZIP Code') }}</label>
                     <input type="text" placeholder="10003"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="mb-[30px]">
-                    <label class="text-neutral-700 text-base font-medium">Phone Number</label>
+                    <label class="text-neutral-700 text-base font-medium">{{ __('Phone Number') }}</label>
                     <input type="text" placeholder="+1 (555) 545-5421"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <button
                     class="rs-add-new-address-btn text-sm bg-[linear-gradient(135deg,#028090,#00A896)] text-white h-[48px] text-center leading-[48px] w-[100%] rounded-[14px]">
-                    Save Address
+                    {{ __('Save Address') }}
                 </button>
             </form>
         </div>
@@ -67,24 +67,24 @@
 
 
             <div class=" items-center justify-center gap-6 hidden lg:flex">
-                <a class="menu_link menu_link_active" href="#">Home</a>
-                <a class="menu_link" href="#Services">Services</a>
-                <a class="menu_link" href="#Services">Nearest Store</a>
-                <a class="menu_link" href="#FAQ">FAQ</a>
-                <a class="menu_link" href="#Contact">Contact</a>
+                <a class="menu_link menu_link_active" href="#">{{ __('Home') }}</a>
+                <a class="menu_link" href="#Services">{{ __('Services') }}</a>
+                <a class="menu_link" href="#Services">{{ __('Nearest Store') }}</a>
+                <a class="menu_link" href="#FAQ">{{ __('FAQ') }}</a>
+                <a class="menu_link" href="#Contact">{{ __('Contact') }}</a>
             </div>
 
 
 
             <div class="hidden lg:flex justify-center items-center gap-4">
                 <button class="btn_solid">
-                    <p>Sign In</p>
+                    <p>{{ __('Sign In') }}</p>
 
                     <img src="{{asset('website/assets/icons/arrow-left.svg')}}" alt="">
                 </button>
 
                 <button class="btn_outline">
-                    <p>Sign Up</p>
+                    <p>{{ __('Sign Up') }}</p>
                 </button>
             </div>
             <!-- sidebar opening button  -->
@@ -117,19 +117,19 @@
 
             <ul class="space-y-4 flex flex-col items-center">
                 <li onclick="toggleSidebar()">
-                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">Home</a>
+                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Home') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#pricing" class="text-lg hover:text-blue-400 cursor-pointer">Services</a>
+                    <a href="#pricing" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Services') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">Nearest Store</a>
+                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Nearest Store') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">FAQ</a>
+                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('FAQ') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">Contact</a>
+                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Contact') }}</a>
                 </li>
             </ul>
         </div>
@@ -142,11 +142,11 @@
             <div class="rs-breadcrumb-content">
                 <h1
                     class="rs-breadcrumb-title mb-[5px] sm:mb-[10px] text-[26px] md:text-[30px]  md:text-4xl text-white font-semibold leading-[140%]">
-                    Find Stores Near You!
+                    {{ __('Find Stores Near You!') }}
                 </h1>
                 <div class="rs-breadcrumb-top-content">
-                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">Home / </a>
-                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">Stores</a>
+                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Home / ') }}</a>
+                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Stores') }}</a>
                 </div>
             </div>
         </section>
@@ -157,7 +157,7 @@
 
                 <div class="rs-find-store-area col-span-12">
                     <div class="rs-services-right-top flex items-center justify-between mb-6 flex-wrap gap-4">
-                        <p class="text-lg font-normal leading-[100%] text-neutral-500">Found 5 Stores</p>
+                        <p class="text-lg font-normal leading-[100%] text-neutral-500">{{ __('Found :count Stores', ['count' => 5]) }}</p>
                     </div>
                     <div class="rs-services-wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="rs-services-box rounded-[20px] overflow-hidden bg-white">
@@ -165,7 +165,7 @@
                                 <img class="object-contain w-full" src="{{asset('website/assets/images/stores/store-01.jpg')}}"
                                     alt="">
                                 <div class="thumb-popular thumb-discount">
-                                    20% OFF
+                                    20% {{ __('OFF') }}
                                 </div>
                                 <div
                                     class="love-icon w-[28px] h-[28px] bg-white backdrop-blur-[4px] bg-opacity-[.3] absolute top-[10px] right-[10px] leading-[28px] rounded-full text-center flex items-center justify-center cursor-pointer">
@@ -194,40 +194,36 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Premium quality dry cleaning services with same-day delivery
+                                    {{ __('Premium quality dry cleaning services with same-day delivery') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Luxury
-                                        Service </span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Luxury Service') }}</span>
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Leather
-                                        Care</span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Leather Care') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">2.1
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">24
-                                        hours</span>
+                                        {{ __('hours') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $15</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -266,40 +262,36 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Professional dry cleaning with eco-friendly washing solutions.
+                                     {{ __('Professional dry cleaning with eco-friendly washing solutions.') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Eco
-                                        Wash </span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Eco Wash') }}</span>
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Express
-                                        Clean</span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Express Clean') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">1.8
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">12
-                                        hours</span>
+                                        {{ __('hours') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $12</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -335,40 +327,36 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Fast and reliable dry cleaning service with guaranteed next-day delivery.
+                                    {{ __('Fast and reliable dry cleaning service with guaranteed next-day delivery.') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Speed
-                                        Service</span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Speed Service') }}</span>
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Ironing
-                                        Included</span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Ironing Included') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">3.1
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">24
-                                        hours</span>
+                                        {{ __('hours') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $10</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -378,7 +366,7 @@
                                 <img class="object-contain w-full" src="{{asset('website/assets/images/stores/store-04.jpg')}}"
                                     alt="">
                                 <div class="thumb-popular thumb-discount">
-                                    15% OFF
+                                    15% {{ __('OFF') }}
                                 </div>
                                 <div
                                     class="love-icon w-[28px] h-[28px] bg-white backdrop-blur-[4px] bg-opacity-[.3] absolute top-[10px] right-[10px] leading-[28px] rounded-full text-center flex items-center justify-center cursor-pointer">
@@ -407,40 +395,38 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Premium washing and folding for all types of fabrics — handled with care.
+                                    {{ __('Premium washing and folding for all types of fabrics — handled with care.') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
                                         class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">
-                                        Fabric Safe </span>
+                                        {{ __('Fabric Safe') }}</span>
                                     <span
                                         class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">
-                                        Steam Press</span>
+                                        {{ __('Steam Press') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">2.1
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">
-                                        Same Day</span>
+                                        {{ __('Same Day') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $18</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -476,40 +462,38 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Luxury cleaning and garment care for your daily and designer wear.
+                                    {{ __('Luxury cleaning and garment care for your daily and designer wear.') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
                                         class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">
-                                        Designer Care </span>
+                                        {{ __('Designer Care') }}</span>
                                     <span
                                         class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">
-                                        Delicate Wash</span>
+                                        {{ __('Delicate Wash') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">1.5
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">48
-                                        hours</span>
+                                        {{ __('hours') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $23</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -519,7 +503,7 @@
                                 <img class="object-contain w-full" src="{{asset('website/assets/images/stores/store-06.jpg')}}"
                                     alt="">
                                 <div class="thumb-popular thumb-discount">
-                                    20% OFF
+                                    20% {{ __('OFF') }}
                                 </div>
                                 <div
                                     class="love-icon w-[28px] h-[28px] bg-white backdrop-blur-[4px] bg-opacity-[.3] absolute top-[10px] right-[10px] leading-[28px] rounded-full text-center flex items-center justify-center cursor-pointer">
@@ -548,40 +532,36 @@
                                     </div>
                                 </div>
                                 <p class="text-[13px] text-neutral-500 font-medium leading-[140%] mb-[15px]">
-                                    Premium quality dry cleaning services with same-day delivery
+                                    {{ __('Premium quality dry cleaning services with same-day delivery') }}
                                 <p>
                                 <div class="flex gap-[5px] items-center pb-[15px] mb-[15px] border-b border-b-neutral-100">
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Luxury
-                                        Service </span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Luxury Service') }}</span>
                                     <span
-                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">Leather
-                                        Care</span>
+                                        class="text-xs text-neutral-500 font-normal leading-[24px] h-6 inline-block px-2 bg-[#FAF7F2] rounded-sm">{{ __('Leather Care') }}</span>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-[15px] mb-[15px]">
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/location.svg')}}"
                                             alt="">2.5
-                                        km</span>
+                                        {{ __('km') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
                                             class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/clock-gray.svg')}}"
                                             alt="">12
-                                        hours</span>
+                                        {{ __('hours') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">Free
-                                        Delivery</span>
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/truck.svg')}}" alt="">{{ __('Free Delivery') }}</span>
                                     <span
                                         class="text-[13px] text-neutral-500 font-normal leading-[140%] flex items-center gap-[5px] w-[44%]"><img
-                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">Min
+                                            class="w-[12px] h-[14px]" src="{{asset('website/assets/icons/dolar.svg')}}" alt="">{{ __('Min') }}
                                         $22</span>
                                 </div>
                                 <div class="rs-services-bottom-content flex items-center">
                                     <button type="submit"
-                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">Book
-                                        Now <img class="filter brightness-0 invert"
+                                        class="flex items-center w-full h-[48px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white justify-center gap-[10px] ml-auto text-xs text-[#028090] font-semibold leading-[133%] h-[32px] w-[110px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">{{ __('Book Now') }} <img class="filter brightness-0 invert"
                                             src="{{asset('website/assets/icons/green-right-arrow.svg')}}" alt=""></button>
                                 </div>
                             </div>
@@ -599,15 +579,15 @@
                 class="max-w-2lg mx-auto py-[60px] px-4 xl-1:px-0 flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-6 lg:gap-0">
                 <div class="flex-1">
                     <p class="text-[32px] font-semibold text-center lg:text-left text-white ">
-                        Ready to Get Started?
+                        {{ __('Ready to Get Started?') }}
                     </p>
                     <p class="text-lg text-center lg:text-left text-neutral-50">
-                        Book your first order and experience hassle-free dry cleaning service
+                        {{ __('Book your first order and experience hassle-free dry cleaning service') }}
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-4">
                     <button class="btn_solid_white_lg">
-                        <p>Book Now</p>
+                        <p>{{ __('Book Now') }}</p>
 
                         <img src="{{asset('website/assets/icons/arrow-left-green.svg')}}" alt="">
                     </button>
@@ -615,7 +595,7 @@
 
 
                     <button class="btn_outline_white_lg">
-                        <p>Become a Partner</p>
+                        <p>{{ __('Become a Partner') }}</p>
                     </button>
                 </div>
             </div>

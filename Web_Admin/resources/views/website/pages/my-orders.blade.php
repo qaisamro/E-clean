@@ -1,4 +1,4 @@
-﻿@extends('website.layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
 
@@ -12,7 +12,7 @@
             </h1>
             <div class="rs-breadcrumb-top-content">
                 <a href="{{ route('web.settings') }}"
-                    class="text-base md:text-lg text-white font-normal leading-[100%]">Dashboard
+                    class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Dashboard') }}
                     / </a>
                 <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('My Orders') }}</a>
             </div>
@@ -25,7 +25,7 @@
             <a href="{{ route('web.settings') }}">
                 <button class="bg-[linear-gradient(135deg,#028090,#00A896)] text-white px-4 py-2 rounded-[12px] hover:bg-[#156172] transition">
                     <i class="ml-2 fas fa-arrow-left"></i>
-                    Back to Settings
+                    {{ __('Back to Settings') }}
                 </button>
             </a>
             @if ($orders->isEmpty())
@@ -38,11 +38,11 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ __('No Orders Yet') }}</h3>
-                    <p class="text-gray-500 mb-6">You haven't placed any orders yet. Start shopping to see your orders here.
+                    <p class="text-gray-500 mb-6">{{ __("You haven't placed any orders yet. Start shopping to see your orders here.") }}
                     </p>
                     <a href="{{ route('web.services') }}"
                         class="inline-block bg-[linear-gradient(135deg,#028090,#00A896)] text-white px-6 py-3 rounded-[12px] hover:bg-[#156172] transition">
-                        Browse {{ __('Services') }}
+                        {{ __('Browse') }} {{ __('Services') }}
                     </a>
                 </div>
             @else
@@ -52,10 +52,10 @@
                             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
                                 <div>
                                     <h4 class="text-base md:text-lg font-semibold text-gray-800">
-                                        Order #{{ $order->order_code }}
+                                        {{ __('Order Code') }} {{ $order->order_code }}
                                     </h4>
                                     <p class="text-sm text-gray-500">
-                                        {{ $order->created_at->format('M d, Y h:i A') }}
+                                        {{ $order->created_at->locale(app()->getLocale())->translatedFormat('M d, Y h:i A') }}
                                     </p>
                                 </div>
                                 <div class="flex gap-2 flex-wrap">
@@ -73,11 +73,11 @@
                                         };
                                     @endphp
                                     <span class="px-3 py-1 text-xs rounded-full {{ $statusClass }}">
-                                        {{ $order->order_status ?? 'Pending' }}
+                                        {{ __($order->order_status ?? 'Pending') }}
                                     </span>
                                     <span
                                         class="px-3 py-1 text-xs rounded-full {{ $order->payment_status == 'Paid' ? 'bg-[#E6F4F1] text-[#156172]' : 'bg-yellow-100 text-yellow-700' }}">
-                                        {{ $order->payment_status ?? 'Pending' }}
+                                        {{ __($order->payment_status ?? 'Pending') }}
                                     </span>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                             <div class="flex items-center gap-4">
                                                 @if ($product->service && $product->service->thumbnailPath)
                                                     <img src="{{ asset($product->service->thumbnailPath) }}"
-                                                        alt="{{ $product->service->name ?? 'Service' }}"
+                                                        alt="{{ $product->service->name_bn ?? $product->service->name ?? __('Service') }}"
                                                         class="w-16 h-16 rounded-[12px] object-cover">
                                                 @else
                                                     <div
@@ -106,8 +106,8 @@
                                                 @endif
                                                 <div class="flex-1">
                                                     <p class="font-medium text-gray-800">
-                                                        {{ $product->service->name ?? 'Service' }}</p>
-                                                    <p class="text-sm text-gray-500">Qty:
+                                                        {{ $product->service->name_bn ?? $product->service->name ?? __('Service') }}</p>
+                                                    <p class="text-sm text-gray-500">{{ __('Qty') }}:
                                                         {{ $product->pivot->quantity ?? 1 }}</p>
                                                 </div>
                                                 <p class="font-semibold text-[#028090]">
@@ -133,12 +133,12 @@
                                     @if (!$order->payment_status || $order->payment_status === config('enums.payment_status.pending'))
                                         <a href="{{ route('web.order.payment', $order->id) }}"
                                             class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-[12px] bg-[linear-gradient(135deg,#028090,#00A896)] text-white hover:bg-[#156172] transition">
-                                            Pay Now
+                                            {{ __('Pay Now') }}
                                         </a>
                                     @endif
                                     <a href="{{ route('web.orders', $order->id) }}"
                                         class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-[12px] border border-[#028090] text-[#028090] hover:bg-[#E6F4F1] transition">
-                                        View Details
+                                        {{ __('View Details') }}
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

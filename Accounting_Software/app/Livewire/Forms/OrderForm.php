@@ -18,10 +18,10 @@ class OrderForm extends Form
     #[Validate(['nullable', 'integer'])]
     public $service_id = '';
 
-    #[Validate(['nullable', 'integer'])]
+    #[Validate(['nullable', 'numeric'])]
     public $price = '';
 
-    #[Validate(['required', 'integer'])]
+    #[Validate(['required', 'numeric', 'min:0.01'])]
     public $quantity = 1;
 
     ############ props ###############
@@ -47,9 +47,12 @@ class OrderForm extends Form
 
     public function addOrder(): void
     {
-        foreach ($this->orders as $orderDetail) {
-            if ($orderDetail['item_id'] == $this->item_id && $orderDetail['service_id'] == $this->service_id && $orderDetail['quantity'] == $this->quantity) {
-                $this->addError('error_msg', 'الطلب موجود بالفعل. لايمكن تكرار الطلب');
+        foreach ($this->orders as $index => $orderDetail) {
+            if ($orderDetail['item_id'] == $this->item_id && $orderDetail['service_id'] == $this->service_id) {
+                $quantity = round((float) $orderDetail['quantity'] + (float) $this->quantity, 2);
+                $this->orders[$index]['quantity'] = $quantity;
+                $this->orders[$index]['total_price'] = round((float) $orderDetail['price'] * $quantity, 2);
+                $this->reset('item_id');
                 return;
             }
         }
@@ -59,6 +62,11 @@ class OrderForm extends Form
          */
         $itemService = ItemService::with(['service', 'item'])->firstWhere(['service_id' => $this->service_id, 'item_id' => $this->item_id]);
         if ($itemService) {
+            if (!is_numeric($itemService->price) || (float) $itemService->price <= 0) {
+                $this->addError('error_msg', 'السعر غير صالح لهذا الصنف مع الخدمة المحددة. حدّث قائمة الأسعار قبل إنشاء الطلب.');
+                return;
+            }
+
             $this->orders[] = [
                 'id' => null,
                 'item' => $itemService->item,

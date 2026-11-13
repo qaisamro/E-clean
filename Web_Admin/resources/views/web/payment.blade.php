@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="card-body">
                                         <h4 class="mb-0 order">
-                                            Order ID <span>#{{ $order->order_code }}</span>
+                                            Order ID <span>{{ $order->order_code }}</span>
                                         </h4>
                                         <p class="mb-0 order">
                                             Picked At :

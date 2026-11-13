@@ -23,41 +23,11 @@
 
 
         <div class="hidden lg:flex justify-cente items-center gap-3 site-nav-actions">
-            <!-- Language Switcher -->
-            <details class="relative group site-lang">
-                <summary
-                    class="list-none flex cursor-pointer items-center gap-2 rounded-full border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 transition hover:border-mint-500 hover:bg-mint-50">
-                    <i class="fa-solid fa-globe"></i>
-                    <span>{{ app()->getLocale() === 'ar' ? 'العربية' : 'English' }}</span>
-                    <i class="fa-solid fa-chevron-down text-xs"></i>
-                </summary>
-                <div
-                    class="absolute right-0 top-[calc(100%+8px)] w-40 overflow-hidden rounded-xl border border-neutral-100 bg-white shadow-lg">
-                    <a href="{{ route('change.local', 'ln=ar') }}"
-                        class="flex items-center gap-2 px-4 py-2.5 text-sm transition hover:bg-mint-50 {{ app()->getLocale() === 'ar' ? 'font-bold text-mint-700' : 'text-neutral-600' }}">العربية</a>
-                    <a href="{{ route('change.local', 'ln=en') }}"
-                        class="flex items-center gap-2 px-4 py-2.5 text-sm transition hover:bg-mint-50 {{ app()->getLocale() === 'en' ? 'font-bold text-mint-700' : 'text-neutral-600' }}">English</a>
-                </div>
-            </details>
-           @guest
-            <!-- Sign In Button -->
-            <a href="{{ route('web.showLogin') }}" class="btn_solid" style="text-decoration: none; display: inline-flex; align-items: center;">
-                {{ __('Sign In') }}
-                <img src="{{ asset('website/assets/icons/arrow-left.svg') }}" alt="" style="margin-left: 8px;">
-            </a>
-
-            <!-- Sign Up Button -->
-            <a href="{{ route('web.showRegister') }}" class="btn_outline" style="text-decoration: none; display: inline-flex; align-items: center;">
-                {{ __('Sign Up') }}
-            </a>
-        @endguest
-
-
             @auth
                 <details class="relative group">
                     <summary
                         class="list-none flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 shadow-sm transition hover:border-mint-500 hover:bg-mint-50">
-                        <span class="sr-only">Open user menu</span>
+                        <span class="sr-only">{{ __('Open user menu') }}</span>
 
                         @if (auth()->user()->profile_photo_path)
                             <img src="{{ auth()->user()->profile_photo_path }}" alt="{{ auth()->user()->name }}"
@@ -82,7 +52,12 @@
                                 {{ __('Dashboard') }}
                             </a>
 
-                            <a href="{{ auth()->user()?->hasRole('vendor_admin') ? route('vendor.settings') : route('web.settings') }}"
+                            @php
+                                $navProfileUrl = auth()->user()?->hasRole('vendor_admin')
+                                    ? route('vendor.settings')
+                                    : (auth()->user()?->hasRole('vendor_sub') ? route('profile.index') : route('web.settings'));
+                            @endphp
+                            <a href="{{ $navProfileUrl }}"
                                 class="flex items-center rounded-xl px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-mint-50 hover:text-mint-700">
                                 {{ __('Profile') }}
                             </a>
@@ -104,7 +79,7 @@
         <!-- sidebar opening button  -->
         <button
             class="site-menu-btn h-10 w-10 border border-primary2-600 rounded p-1 flex lg:hidden flex-col justify-around items-center"
-            onclick="toggleSidebar()" aria-label="Open menu">
+            onclick="toggleSidebar()" aria-label="{{ __('Open menu') }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-7 text-primary2-600">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"

@@ -28,6 +28,7 @@ class User extends Authenticatable
         'job_title',
         'salary',
         'hire_date',
+        'permissions',
     ];
 
     /**
@@ -50,7 +51,16 @@ class User extends Authenticatable
         'role' => Roles::class,
         'status' => UserStatus::class,
         'hire_date' => 'date',
+        'salary' => 'decimal:2',
+        'permissions' => 'array',
     ];
+
+    protected $appends = ['readable_status'];
+
+    public function getReadableStatusAttribute(): string
+    {
+        return $this->isSuspended() ? 'معلق' : 'نشط';
+    }
 
     public function isSuperAdmin(): bool
     {
@@ -62,19 +72,23 @@ class User extends Authenticatable
         return $this->role === Roles::ADMIN;
     }
 
-    public function isCashier(): bool
-    {
-        return $this->role === Roles::CASHIER;
-    }
-
-    public function isEmployee(): bool
-    {
-        return $this->role === Roles::EMPLOYEE;
-    }
 
     public function isAdministrator(): bool
     {
         return $this->role === Roles::ADMIN || $this->role === Roles::SUPER_ADMIN;
+    }
+
+    /**
+     * Permission check — Super admin always passes; everybody else
+     * needs the specific key in their permissions array.
+     */
+    public function hasPermission(string $key): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+        $permissions = $this->permissions ?? [];
+        return in_array($key, $permissions, true);
     }
 
     public function isSuspended(): bool

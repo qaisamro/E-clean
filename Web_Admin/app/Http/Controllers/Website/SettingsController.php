@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Website;
 
-use App\Enum\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\Website\ProfileUpdateRequest;
+use App\Models\Customer;
 use App\Repositories\AddressRepository;
 use App\Repositories\CustomerRepository;
 use App\Repositories\OrderRepository;
@@ -45,11 +45,8 @@ class SettingsController extends Controller
 
     public function orders($orderId)
     {
-        $order = $this->orderRepository->getOrderDetailsById($orderId);
-
-        if (!$order) {
-            abort(404, 'Order not found');
-        }
+        $order = $this->findOwnedOrder($orderId, Auth::user());
+        abort_unless($order, 404, 'Order not found');
 
         return view('website.pages.order-details', compact('order'));
     }
@@ -57,20 +54,8 @@ class SettingsController extends Controller
     public function payOrder($orderId)
     {
         $user = Auth::user();
-        $order = $this->orderRepository->getOrderDetailsById($orderId);
-
-        if (!$order) {
-            abort(404, 'Order not found');
-        }
-
-        $customer = $this->customerRepository->findByUserId($user->id);
-        if (!$customer) {
-            $customer = $this->customerRepository->storeByUser((object)$user);
-        }
-
-        if (!in_array($order->customer_id, [$customer->id, $user->id], true)) {
-            abort(403, 'Unauthorized payment attempt');
-        }
+        $order = $this->findOwnedOrder($orderId, $user);
+        abort_unless($order, 404, 'Order not found');
 
         if ($order->payment_status === config('enums.payment_status.paid')) {
             return redirect()->route('web.orders', $order->id)->with('info', 'الطلب مدفوع بالفعل.');
@@ -86,7 +71,7 @@ class SettingsController extends Controller
             $paymentUrl = (new PaymentRepository())->stripePaymentURL([
                 'currency' => $currency,
                 'amount' => $order->total_amount,
-                'product_data' => "Order #{$order->order_code}",
+                'product_data' => "Order {$order->order_code}",
             ], $order->id);
 
             return redirect($paymentUrl);
@@ -105,13 +90,7 @@ class SettingsController extends Controller
             $customer = $this->customerRepository->storeByUser((object)$user);
         }
 
-        $customerIds = [$customer->id];
-        if ($this->orderRepository->existsByCustomerId($user->id) && $user->id !== $customer->id) {
-            $customerIds[] = $user->id;
-        }
-
-        $orders = $this->orderRepository->query()
-            ->whereIn('customer_id', array_unique($customerIds))
+        $orders = $this->ownedOrdersQuery($user)
             ->with([
                 'products.service',
                 'products.variant',
@@ -135,36 +114,22 @@ class SettingsController extends Controller
             return redirect()->route('login');
         }
 
-        // Get order statistics if user is authenticated
-        $orderStats = [
-            'total' => 0,
-            'in_progress' => 0,
-            'completed' => 0,
-            'cancelled' => 0,
+        $allOrders = $this->ownedOrdersQuery($user)->with('address')->get();
+        $inProgressStatuses = [
+            config('enums.order_status.pending'),
+            config('enums.order_status.order_confirmed'),
+            config('enums.order_status.picked_order'),
+            config('enums.order_status.processing'),
+            config('enums.order_status.on_the_way'),
         ];
-
-        $customer = $this->customerRepository->findByUserId($user->id);
-
-        // Create customer record if not exists
-        if (!$customer) {
-            $customer = $this->customerRepository->storeByUser((object)$user);
-        }
-
-        // Get customer ID for querying orders
-        $customerId = $customer->id;
-
-        // Check if there are orders stored with user_id as customer_id (legacy data)
-        $legacyOrders = $this->orderRepository->existsByCustomerId($user->id);
-        if ($legacyOrders) {
-            // Use user->id for legacy orders compatibility
-            $customerId = $user->id;
-        }
-
-        // Get order statistics using repository
-        $orderStats = $this->orderRepository->getStatsByCustomerId($customerId, $user->id);
-
-        // Get favorite stores (using orders directly)
-        $allOrders = $this->orderRepository->getByCustomerIdWithAddress($customerId);
+        $orderStats = [
+            'total' => $allOrders->count(),
+            'in_progress' => $allOrders->whereIn('order_status', $inProgressStatuses)->count(),
+            'completed' => $allOrders->where('order_status', config('enums.order_status.delivered'))->count(),
+            'ready_for_pickup' => $allOrders->where('order_status', config('enums.order_status.ready_for_pickup'))->count(),
+            'on_the_way' => $allOrders->where('order_status', config('enums.order_status.on_the_way'))->count(),
+            'cancelled' => $allOrders->where('order_status', config('enums.order_status.cancelled'))->count(),
+        ];
 
         // Group orders by address to create favorite stores list
         $favoriteStores = $allOrders->groupBy('address_id')->map(function ($orders) {
@@ -193,7 +158,7 @@ class SettingsController extends Controller
             $customer = $this->customerRepository->storeByUser((object)$user);
         }
 
-        $orders = $this->orderRepository->getByCustomerIdWithAddress($customer->id);
+        $orders = $this->ownedOrdersQuery($user)->with('address')->latest()->get();
         $addresses = $this->addressRepository->getByCustomerId($customer->id);
         return view('website.pages.overview', compact('user', 'orders', 'addresses'));
     }
@@ -230,12 +195,6 @@ class SettingsController extends Controller
         }
 
         $addressCount = $this->addressRepository->countByCustomerId($customer->id);
-        if ($addressCount >= 3) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => "عذراً، لا يمكنك إضافة أكثر من 3 عناوين"]);
-            }
-            return back()->with('error', 'عذراً، لا يمكنك إضافة أكثر من 3 عناوين');
-        }
 
         $this->addressRepository->storeByWebsiteRequest($request, $customer->id);
 
@@ -282,14 +241,7 @@ class SettingsController extends Controller
             return back()->with('error', 'العميل غير موجود');
         }
 
-        // Check for legacy data
-        $customerId = $customer->id;
-        $legacyAddress = $this->addressRepository->existsByIdAndCustomerId($id, $user->id);
-        if ($legacyAddress) {
-            $customerId = $user->id;
-        }
-
-        $address = $this->addressRepository->findByIdAndCustomerId($id, $customerId);
+        $address = $this->findOwnedAddress($id, $user, $customer);
 
         if (!$address) {
             return back()->with('error', 'العنوان غير موجود');
@@ -321,20 +273,13 @@ class SettingsController extends Controller
             return back()->with('error', 'العميل غير موجود');
         }
 
-        // Check for legacy data
-        $customerId = $customer->id;
-        $legacyAddress = $this->addressRepository->existsByIdAndCustomerId($id, $user->id);
-        if ($legacyAddress) {
-            $customerId = $user->id;
-        }
-
-        $address = $this->addressRepository->findByIdAndCustomerId($id, $customerId);
+        $address = $this->findOwnedAddress($id, $user, $customer);
 
         if (!$address) {
             return back()->with('error', 'العنوان غير موجود');
         }
 
-        $this->addressRepository->delete($id);
+        $address->delete();
 
         if ($request->ajax()) {
             return response()->json(['success' => true, 'message' => 'تم حذف العنوان بنجاح!']);
@@ -360,25 +305,60 @@ class SettingsController extends Controller
             return back()->with('error', 'العميل غير موجود');
         }
 
-        // Check for legacy data
-        $customerId = $customer->id;
-        $legacyAddress = $this->addressRepository->existsByIdAndCustomerId($id, $user->id);
-        if ($legacyAddress) {
-            $customerId = $user->id;
-        }
-
-        $address = $this->addressRepository->findByIdAndCustomerId($id, $customerId);
+        $address = $this->findOwnedAddress($id, $user, $customer);
 
         if (!$address) {
             return back()->with('error', 'العنوان غير موجود');
         }
 
-        $this->addressRepository->setDefault($id, $customerId);
+        $this->addressRepository->setDefault($address->id, (int) $address->customer_id);
 
         if ($request->ajax()) {
             return response()->json(['success' => true, 'message' => 'تم تعيين العنوان الافتراضي بنجاح!']);
         }
 
         return back()->with('success', 'تم تعيين العنوان الافتراضي بنجاح');
+    }
+
+    private function ownedOrdersQuery($user)
+    {
+        return $this->orderRepository->query()
+            ->where(function ($query) use ($user) {
+                $query->whereHas('customer', function ($customerQuery) use ($user) {
+                    $customerQuery->where('user_id', $user->id);
+                })->orWhere(function ($legacyQuery) use ($user) {
+                    $legacyQuery->where('customer_id', $user->id)
+                        ->whereDoesntHave('customer');
+                });
+            });
+    }
+
+    private function findOwnedOrder($orderId, $user)
+    {
+        $order = $this->ownedOrdersQuery($user)->whereKey($orderId)->first();
+
+        return $order
+            ? $this->orderRepository->getOrderDetailsById($order->id)
+            : null;
+    }
+
+    private function findOwnedAddress($addressId, $user, $customer)
+    {
+        $address = $this->addressRepository
+            ->findByIdAndCustomerId((int) $addressId, (int) $customer->id);
+
+        if ($address) {
+            return $address;
+        }
+
+        // Legacy rows sometimes stored the user ID in customer_id. Only use
+        // that fallback when it cannot resolve to another customer's record.
+        $legacyCustomer = Customer::query()->find($user->id);
+        if ($legacyCustomer && (int) $legacyCustomer->user_id !== (int) $user->id) {
+            return null;
+        }
+
+        return $this->addressRepository
+            ->findByIdAndCustomerId((int) $addressId, (int) $user->id);
     }
 }

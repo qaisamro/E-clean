@@ -61,3 +61,6 @@ android/app/*.keystore
 
 # Firebase Android config — not needed for iOS/Codemagic; supply locally or via CI secrets
 google-services.json
+
+# Gradle / Kotlin build cache
+.kotlin/

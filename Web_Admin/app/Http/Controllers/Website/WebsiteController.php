@@ -14,8 +14,8 @@ class WebsiteController extends Controller
 
     public function index(WebsiteSettingsRepository $websiteRepo)
     {
-        // Redirect vendor_admin users to their separate settings page
-        if (auth()->check() && auth()->user()?->hasRole('vendor_admin')) {
+        // Redirect store staff (owner or child account) to their settings page
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
             return redirect()->route('vendor.settings');
         }
         $webSettings = $websiteRepo->index();
@@ -40,6 +40,7 @@ class WebsiteController extends Controller
             'privacy_policy'     => $this->updatePrivacyPolicy($request, $websiteRepo),
             'contact_us'         => $this->updateContactUs($request, $websiteRepo),
             'about_us'           => $this->updateAboutUs($request, $websiteRepo),
+            'app_partners'        => $this->updateAppPartners($request, $websiteRepo),
             default               => abort(400, 'Invalid form type'),
         };
     }
@@ -126,6 +127,22 @@ class WebsiteController extends Controller
         $websiteRepo->updatePrivacyPolicy($request);
 
         return back()->with('success', 'تم تحديث سياسة الخصوصية بنجاح.');
+    }
+
+    /**
+     * Super-admin visibility toggle for the mobile app's «شركاؤنا الموثوقون»
+     * home-screen section (read by the app from /api/master).
+     */
+    public function updateAppPartners(WebsiteSettingsRequest $request, WebsiteSettingsRepository $websiteRepo)
+    {
+        $websiteRepo->updateOrCreateByKey('app_partners_section', [
+            'enabled' => $request->boolean('enabled'),
+        ]);
+
+        Cache::forget('website_settings');
+        Cache::forget('app_partners_section_enabled');
+
+        return back()->with('success', 'تم تحديث ظهور قسم «شركاؤنا الموثوقون» في التطبيق.');
     }
 
     public function updateContactUs(WebsiteSettingsRequest $request, WebsiteSettingsRepository $websiteRepo)

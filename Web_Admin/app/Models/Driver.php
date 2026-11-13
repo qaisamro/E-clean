@@ -24,6 +24,9 @@ class Driver extends Model
     public function orders()
     {
         return $this->belongsToMany(Order::class, (new DriverOrder())->getTable())
+            ->join('drivers', 'drivers.id', '=', 'driver_orders.driver_id')
+            ->whereColumn('orders.vendor_id', 'drivers.vendor_id')
+            ->select('orders.*')
             ->withPivot('is_accept', 'status')
             ->withTimestamps();
     }
@@ -31,6 +34,9 @@ class Driver extends Model
     public function orderHistories()
     {
         return $this->belongsToMany(Order::class, (new DriverHistory())->getTable())
+            ->join('drivers', 'drivers.id', '=', 'driver_histories.driver_id')
+            ->whereColumn('orders.vendor_id', 'drivers.vendor_id')
+            ->select('orders.*')
             ->withPivot('status')
             ->withTimestamps();
     }

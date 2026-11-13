@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Models\Service;
 use App\Models\WebSetting;
 use Illuminate\Support\Facades\DB;
+use App\Support\OrderVendorOwnership;
+use App\Models\Address;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutRepository extends Repository
 {
@@ -64,6 +67,23 @@ class CheckoutRepository extends Repository
      */
     public function placeOrder($request)
     {
+        $order = \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
+            $vendorId = OrderVendorOwnership::resolveProductVendor(array_keys(session('cart', [])));
+            if ($vendorId) \App\Models\Vendor::whereKey($vendorId)->lockForUpdate()->firstOrFail();
+            $service = app(\App\Services\VendorAppointments::class);
+            $pair = $vendorId && $service->settings($vendorId)['enabled']
+                ? $service->validatePair($vendorId, $request->all()) : null;
+            $order = $this->placeLockedOrder($request, $pair);
+            if ($pair) $service->snapshot($order, $pair);
+            return $order;
+        }, 3);
+        // Session data is not transactional: clear it only after the order commits.
+        session()->forget('cart');
+        return $order;
+    }
+
+    private function placeLockedOrder($request, ?array $pair)
+    {
 
       $cart = session('cart');
 
@@ -84,9 +104,18 @@ class CheckoutRepository extends Repository
                 'phone'   => $user->mobile,
             ]);
         }
+        $addressBelongsToCustomer = Address::whereKey($request->address_id)
+            ->where('customer_id', $customer->id)
+            ->exists();
+        if (!$addressBelongsToCustomer) {
+            throw ValidationException::withMessages([
+                'address_id' => 'The selected address is unavailable.',
+            ]);
+        }
 
         $productIds = array_keys($cart);
-        $products = Product::whereIn('id', $productIds)->get();
+        $products = Product::with('service')->whereIn('id', $productIds)->get();
+        $vendorId = OrderVendorOwnership::resolveProductVendor($productIds);
 
         $subtotal = $products->sum(fn($p) => ($p->discount_price ?? $p->price) * $cart[$p->id]['quantity']);
         $tax = $subtotal * (self::getTaxRate() / 100);
@@ -100,12 +129,13 @@ class CheckoutRepository extends Repository
             'prefix' => 'IM',
             'order_code' => $orderCode,
             'customer_id' => $customer->id,  // Use Customer's ID, not User's ID
+            'vendor_id' => $vendorId,
             'coupon_id' => null,
             'discount' => 0,
             'pick_date' => $request->pick_date,
             'delivery_date' => $request->delivery_date,
-            'pick_hour' => $request->pick_hour ? (new OrderRepository())->setPickOrDeliveryTime($request->pick_date, $request->pick_hour) : null,
-            'delivery_hour' => $request->delivery_hour ? (new OrderRepository())->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery') : null,
+            'pick_hour' => $pair ? $pair['pickup']['hour'].':00' : ($request->pick_hour ? (new OrderRepository())->setPickOrDeliveryTime($request->pick_date, $request->pick_hour) : null),
+            'delivery_hour' => $pair ? $pair['delivery']['hour'].':00' : ($request->delivery_hour ? (new OrderRepository())->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery') : null),
             'amount' => $subtotal,
             'total_amount' => $grandTotal,
             'payment_status' => 'Pending',
@@ -114,15 +144,17 @@ class CheckoutRepository extends Repository
             'address_id' => $request->address_id,
         ]);
 
-        // Attach products to order (pivot table)
+        // Attach products to order (pivot table).
+        // The pivot MUST carry price/title — otherwise the invoice builder
+        // shows 0/NaN line totals for these orders (observed: ~20 rows with
+        // NULL price from web checkout orders).
         foreach ($products as $product) {
             $order->products()->attach($product->id, [
                 'quantity' => $cart[$product->id]['quantity'],
+                'price' => (float) ($product->discount_price ?: $product->price),
+                'title' => $product->name,
             ]);
         }
-
-        // Clear cart
-        session()->forget('cart');
 
         return $order;
     }

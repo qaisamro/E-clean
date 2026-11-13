@@ -1,7 +1,0 @@
-":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":2274,"start_time":"638768973","type":32},"time":"638768973","type":194},
-{"phase":1,"source":{"id":2272,"start_time":"638768971","type":1},"time":"638768973","type":180},
-{"params":{"source_dependency":{"id":2274,"type":32}},"phase":0,"source":{"id":2272,"start_time":"638768971","type":1},"time":"638768973","type":195},
-{"params":{"source_dependency":{"id":2272,"type":1}},"phase":0,"source":{"id":2274,"start_time":"638768973","type":32},"time":"638768973","type":195},
-{"phase":1,"source":{"id":2274,"start_time":"638768973","type":32},"time":"638768973","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":2274,"start_time":"638768973","type":32},"time":"638768973","type":35},
-{"phase":2,"source":{"id":2274,"start_time":"638768973",

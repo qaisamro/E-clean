@@ -15,7 +15,7 @@ class CustomerProfilePasswordUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'current_password' => ['required', 'current_password'],
+            'current_password' => ['required', 'current_password:customer'],
             'password' => ['required', 'string', Password::defaults(), 'confirmed'],
         ];
     }

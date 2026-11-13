@@ -12,6 +12,11 @@ class Coupon extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
+
     //========= relationships ==============
     public function users(): BelongsToMany
     {
@@ -25,6 +30,20 @@ class Coupon extends Model
         return $builder->where('min_amount', '<=', $minAmount)
             ->where('expired_at', '>=', now())
             ->where('started_at', '<=', now());
+    }
+
+    /**
+     * Only "global" coupons (vendor_id IS NULL) — created by a Super Admin and
+     * usable in every store. Kept separate from each vendor's own coupons.
+     */
+    public function scopeGlobal(Builder $builder): Builder
+    {
+        return $builder->whereNull('vendor_id');
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->vendor_id === null;
     }
 
     public static function calculate($total, $coupon)

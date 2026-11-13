@@ -15,7 +15,7 @@
                         <a href="{{ route('driver.index') }}" class="btn btn-info">
                             {{ __('Active Driver') }}
                         </a>
-                        @else
+                        @elseif (!\App\Support\VendorAccount::isStoreStaff(auth()->user()))
                         <a href="{{ route('driver.index','deactive=1') }}" class="btn btn-danger">
                             {{ __('Inactive Driver') }}
                         </a>

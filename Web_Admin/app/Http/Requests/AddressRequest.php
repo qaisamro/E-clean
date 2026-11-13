@@ -24,11 +24,12 @@ class AddressRequest extends FormRequest
     public function rules()
     {
         return [
-            'address_name' => ['required', 'string', 'max:256'],
+            'address_name' => [$this->routeIsAddressUpdate() ? 'required_without:is_default' : 'required', 'string', 'max:256'],
+            'is_default' => ['sometimes', 'boolean'],
             'road_no' => ['nullable'],
             'house_no' => ['nullable'],
             'house_name' => ['nullable'],
-            'area' => ['required'],
+            'area' => [$this->routeIsAddressUpdate() ? 'required_without:is_default' : 'required'],
             'flat_no' => ['nullable'],
             'sub_district_id' => ['nullable'],
             'district_id' => ['nullable'],
@@ -40,5 +41,10 @@ class AddressRequest extends FormRequest
             'latitude' => ['nullable'],
             'longitude' => ['nullable'],
         ];
+    }
+
+    private function routeIsAddressUpdate(): bool
+    {
+        return $this->route('address') !== null;
     }
 }

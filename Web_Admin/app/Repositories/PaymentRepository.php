@@ -120,18 +120,27 @@ class PaymentRepository extends Repository
             $productData = ['name' => 'Laundry Product'];
         }
 
+        $amountMinor = (int) round(((float) ($payload['amount'] ?? 0)) * 100);
+        $currency = strtolower($payload['currency'] ?? 'usd');
+
         try{
             $response = Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => strtolower($payload['currency'] ?? 'usd'),
+                        'currency' => $currency,
                         'product_data' => $productData,
-                        'unit_amount' => (int) ($payload['amount'] * 100),
+                        'unit_amount' => $amountMinor,
                     ],
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
+                'client_reference_id' => (string) $orderId,
+                'metadata' => [
+                    'order_id' => (string) $orderId,
+                    'amount_minor' => (string) $amountMinor,
+                    'currency' => $currency,
+                ],
                 'success_url' => route('stripe.success', $orderId) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('stripe.cancel', $orderId),
             ]);

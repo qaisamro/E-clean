@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Cache;
 
 class ItemService extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'item_service';
@@ -18,14 +19,18 @@ class ItemService extends Model
         'service_id',
         'item_id',
         'price',
-        'note'
+        'note',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
     ];
 
     ########################## Relations ##########################
 
     public function item(): BelongsTo
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Product::class, 'item_id');
     }
 
     public function service(): BelongsTo

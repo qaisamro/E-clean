@@ -13,15 +13,16 @@
     <meta name="description" content=""/>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ $logo ?? asset('assets/img/favicon/favicon.ico') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}?v=ec10"/>
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}"/>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css"/>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') }}"
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') . '?v=fix2' }}"
           class="template-customizer-theme-css"/>
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/ec-theme.css') }}?v=ec10"/>
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
@@ -37,17 +38,12 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
-    <script>
-        // Fix Livewire for subfolder /pos_private - ensure correct update URI
-        window.livewireScriptConfig = window.livewireScriptConfig || {};
-        window.livewireScriptConfig.uri = "{{ url('livewire/update') }}";
-        window.livewireScriptConfig.csrf = "{{ csrf_token() }}";
-    </script>
 
 
 </head>
 
 <body>
+<a class="ec-skip-link" href="#main-content">الانتقال إلى المحتوى</a>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -55,16 +51,8 @@
         @include('layouts.partials.sidebar');
         <div class="layout-page">
 
-            <!-- Navbar -->
-            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                 id="layout-navbar">
-            @include('layouts.partials.navbar')
-
-            </nav>
-            <!-- / Navbar -->
-
             <!-- Content wrapper -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" id="main-content">
                 <div class="container-xxl flex-grow-1 container-p-y">
                     {{ $slot }}
                 </div>
@@ -76,6 +64,11 @@
         </div>
     </div>
 </div>
+
+        {{-- Floating menu toggle — mobile/tablet only (direct body child, bulletproof) --}}
+        <a href="javascript:void(0);" class="layout-menu-toggle ec-mobile-menu-fab" aria-label="فتح القائمة">
+            <i class="bx bx-menu"></i>
+        </a>
 
 <!-- Overlay -->
 <div class="layout-overlay layout-menu-toggle"></div>

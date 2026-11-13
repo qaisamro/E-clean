@@ -23,6 +23,12 @@ class OrderDetail extends Model
         'description',
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'quantity' => 'decimal:2',
+        'total_price' => 'decimal:2',
+    ];
+
     ####################### Relations ############################
 
     public function order(): BelongsTo
@@ -32,7 +38,7 @@ class OrderDetail extends Model
 
     public function item(): BelongsTo
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Product::class, 'item_id');
     }
 
     public function service(): BelongsTo

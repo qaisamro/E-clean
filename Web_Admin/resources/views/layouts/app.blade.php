@@ -17,53 +17,50 @@
     <link rel="stylesheet" href="{{ asset('web/css/all.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('web/css/bootstrap.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('web/css/select2.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('web/css/style.css?v=2') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('web/css/style.css?v=3') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('web/css/custom.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('web/css/datatables.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('web/css/toastr.min.css') }}" type="text/css">
     @if (app()->getLocale() === 'ar')
         <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
             rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('web/css/rtl.css?v=8') }}" type="text/css">
+        <link rel="stylesheet" href="{{ asset('web/css/rtl.css?v=9') }}" type="text/css">
     @endif
     {{-- Identity overlay last so it wins ties --}}
-    <link rel="stylesheet" href="{{ asset('web/css/admin-identity.css?v=8') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('web/css/admin-identity.css?v=21') }}" type="text/css">
+    @yield('styles')
 
 </head>
 
 <style>
-    .nav-profile-box {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .dropdown-toggle {
+        white-space: nowrap;
+    }
+
+    .notification-empty {
+        min-width: 310px;
+        padding: 18px;
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .notification-sound-toggle {
+        border: 0;
+        background: transparent;
+        color: #6c757d;
+        padding: 8px;
         cursor: pointer;
     }
 
-    .language-image {
-        background: #29aae130;
-        padding: 8px 8px 4px 8px;
-        border-radius: 4px;
+    #notification .dropdown-item {
+        min-width: 330px;
+        max-width: 420px;
+        white-space: normal;
     }
 
-    .language-image div {
-        margin-top: 2px;
-        font-weight: 400;
-    }
-
-    .language-image a img {
-        width: 28px;
-    }
-
-    .nav-profile-box.dropdown-toggle::after {
-        display: none;
-    }
-
-    .badgeButtonBox .dropdown-toggle::after {
-        display: none;
-    }
-
-    .dropdown-toggle {
-        white-space: nowrap;
+    #notification .notification-title {
+        font-weight: 700;
+        margin-bottom: 3px;
     }
 </style>
 
@@ -79,97 +76,23 @@
 
     @include('layouts.partials.sidebar')
 
-
-
     <div class="main-content">
 
-        @php
-            use App\Models\Language;
-            $languages = Language::All();
-            $language = Language::where('name', app()->getLocale())->first();
-        @endphp
-
-        {{-- Mobile language toggle --}}
-        <div class="mobile-lang-toggle" id="mobileLangToggle" style="display:none;">
-            <span class="lang-icon"><i class="fa fa-language"></i></span>
-            <img src="{{ $language?->file }}" alt="{{ $language?->title }}">
-            <span>{{ $language?->title }}</span>
-        </div>
-        <div class="dropdown-menu profile-item" id="mobileLangDropdown" style="position:fixed;top:52px;right:12px;z-index:1001;min-width:140px;display:none;">
-            @foreach ($languages as $lang)
-                <a href="{{ route('change.local', 'ln=' . $lang->name) }}" class="dropdown-item">
-                    <img src="{{ $lang->file }}" alt="{{ $lang->title }}" width="20" class="me-2">
-                    {{ $lang->title }}
-                </a>
-            @endforeach
-        </div>
-
         <div class="main-header shadow-sm">
-
-            <div class="user-profile-box dropdown mx-3" style="display:none;">
-                <div class="nav-profile-box dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <div class="profile-image language-image d-flex gap-2">
-                        <a href="#">
-                            <img class="" src="{{ $language?->file }}" alt="{{ $language?->title }}">
-                        </a>
-                        <div>{{ $language?->title }}</div>
-                    </div>
-                </div>
-                <div class="dropdown-menu profile-item">
-                    @foreach ($languages as $lang)
-                        <a href="{{ route('change.local', 'ln=' . $lang->name) }}" class="dropdown-item">
-                            <img src="{{ $lang->file }}" alt="{{ $lang->title }}" width="20" class="me-2">
-                            {{ $lang->title }}
-                        </a>
-                    @endforeach
-                </div>
-            </div>
             <div class="btn-group dropdown">
+                <button type="button" id="notificationSoundToggle" class="notification-sound-toggle"
+                    title="تشغيل أو كتم صوت الإشعارات" aria-label="تشغيل أو كتم صوت الإشعارات">
+                    <i class="fas fa-volume-up"></i>
+                </button>
                 <button type="button" class="notificationBell dropdown-toggle" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell Icon"></i>
                     <div id="total">0</div>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" id="notification">
-                    <a class="dropdown-item" href="#">
-                        <div class="message"></div>
-                        <div class="time"></div>
-                    </a>
+                    <div class="notification-empty">جاري تحميل الإشعارات...</div>
                 </div>
             </div>
-            @auth
-                <div class="dropdown mx-3 ">
-                    <div class="nav-profile-box dropdown-toggle" data-toggle="dropdown">
-                        <div class="profile-image language-image d-flex gap-2">
-                            <img src="{{ auth()->user()->image ?? asset('images/dummy/dummy-user.png?v=2') }}" width="28">
-                        </div>
-
-                    </div>
-
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{{ route('profile.index') }}" class="dropdown-item">
-                            <i class="fas fa-user me-2"></i> {{ __('Profile') }}
-                        </a>
-
-                        @if (!auth()->user()?->hasRole('root'))
-                            <a href="{{ auth()->user()?->hasRole('vendor_admin') ? route('vendor.settings') : route('webSetting.index') }}" class="dropdown-item">
-                                <i class="fas fa-cog me-2"></i> {{ __('Settings') }}
-                            </a>
-                        @endif
-
-                        <div class="dropdown-divider"></div>
-
-                        <a href="{{ route('logout') }}" class="dropdown-item"
-                            onclick="event.preventDefault(); if(confirm('{{ __('Are you sure you want to logout?') }}')){ document.getElementById('logout-form').submit(); }">
-                            <i class="fas fa-sign-out-alt me-2"></i> {{ __('Logout') }}
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-                            @csrf
-                        </form>
-                    </div>
-                </div>
-            @endauth
         </div>
 
         @if ($errors->any())
@@ -190,6 +113,15 @@
 
     </div>
 
+    {{-- Mobile drawer toggle + backdrop live OUTSIDE the sidebar/main-content
+         sibling relationship so the `.fixed-left + .main-content` margin
+         selectors (272px sidebar offset) keep working on desktop. --}}
+    <button type="button" class="ec-mobile-menu-btn" id="mobileSidebarToggle"
+        aria-label="القائمة" aria-expanded="false" aria-controls="sidenav-main">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="ec-sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
     <script src="{{ asset('web/js/jquery.min.js') }}"></script>
     <script src="{{ asset('web/js/popper.js') }}"></script>
     <script src="{{ asset('web/js/sweet-alert.js') }}"></script>
@@ -201,46 +133,192 @@
     <script src="{{ asset('web/js/datatables.min.js') }}"></script>
     <script src="{{ asset('web/js/toastr.min.js') }}"></script>
 
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    @auth
     <script>
-        var pusher = new Pusher("{{ config('app.pusher_key') }}", {
-            cluster: "{{ config('app.pusher_cluster') }}"
-        });
+        (function() {
+            const feedUrl = @json(route('web-notifications.feed'));
+            const storagePrefix = 'eclean-web-notifications-{{ auth()->id() }}';
+            const soundKey = storagePrefix + '-sound';
+            const knownKeys = new Set();
+            let initialized = false;
+            let timer = null;
+            let audioContext = null;
+            let audioUnlocked = false;
+            let soundEnabled = localStorage.getItem(soundKey) !== 'muted';
 
-        var channel = pusher.subscribe('popup-channel');
-        channel.bind('order-notification', function(data) {
-            toastr.success(JSON.stringify(data.message))
-            showNotifications()
-        });
-    </script>
+            function updateSoundIcon() {
+                const icon = document.querySelector('#notificationSoundToggle i');
+                if (!icon) return;
+                icon.className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            }
 
-    <script>
-        const showNotifications = function() {
-            var totalNumber = $('#total');
+            async function unlockAudio() {
+                if (!soundEnabled) return false;
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return false;
+                audioContext = audioContext || new AudioContext();
+                if (audioContext.state === 'suspended') {
+                    try {
+                        await audioContext.resume();
+                    } catch (error) {
+                        return false;
+                    }
+                }
+                audioUnlocked = audioContext.state === 'running';
+                return audioUnlocked;
+            }
 
-            $.ajax({
-                type: 'GET',
-                url: "{{ route('new.orders') }}",
-                dataType: 'json',
-                success: function(response) {
-                    $('#total').text(response.data.orders.length)
-                    $('#notification').empty()
-                    $.each(response.data.orders, function(key, value) {
-                        $('#notification').append(
-                            "<a class='dropdown-item' href='/orders/" + value.id +
-                            "'><div class='message'>طلب جديد من <strong>" + value.customer
-                            .user.name + "</strong> رقم الطلب: " + value.order_code +
-                            "</div> <div class='time'>" + value.ordered_at + "</div></a>"
-                        );
-                    })
-                },
-                error: function(e) {
-                    $('#notification').empty()
-                    $("#notification").html(e.responseText);
+            function playNotificationSound() {
+                if (!soundEnabled || !audioUnlocked || !audioContext || audioContext.state !== 'running') return;
+
+                const startedAt = audioContext.currentTime;
+                const notes = [784, 988, 1175, 988, 1175, 1319];
+                const masterGain = audioContext.createGain();
+                masterGain.gain.setValueAtTime(0.62, startedAt);
+                masterGain.gain.setValueAtTime(0.62, startedAt + 2.85);
+                masterGain.gain.exponentialRampToValueAtTime(0.0001, startedAt + 3);
+                masterGain.connect(audioContext.destination);
+
+                notes.forEach(function(frequency, index) {
+                    const noteStart = startedAt + (index * 0.48);
+                    const oscillator = audioContext.createOscillator();
+                    const noteGain = audioContext.createGain();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(frequency, noteStart);
+                    noteGain.gain.setValueAtTime(0.0001, noteStart);
+                    noteGain.gain.exponentialRampToValueAtTime(0.72, noteStart + 0.025);
+                    noteGain.gain.setValueAtTime(0.72, noteStart + 0.34);
+                    noteGain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.44);
+                    oscillator.connect(noteGain);
+                    noteGain.connect(masterGain);
+                    oscillator.start(noteStart);
+                    oscillator.stop(noteStart + 0.45);
+                });
+            }
+
+            function cleanMessage(item) {
+                let msg = (item && typeof item.message === 'string') ? item.message.trim() : '';
+                if (msg.startsWith('{') || msg.startsWith('[')) {
+                    try {
+                        const parsed = JSON.parse(msg);
+                        if (parsed && typeof parsed === 'object') {
+                            const inner = parsed.message ?? parsed.title ?? parsed.body ?? parsed.notification ?? '';
+                            msg = typeof inner === 'string' ? inner : String(inner ?? '');
+                            msg = msg.trim();
+                        }
+                    } catch (e) {
+                        // keep original text if it does not parse
+                    }
+                }
+                return msg;
+            }
+
+            function render(items) {
+                const container = document.getElementById('notification');
+                const total = document.getElementById('total');
+                if (!container || !total) return;
+
+                total.textContent = String(items.length);
+                container.replaceChildren();
+
+                if (!items.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'notification-empty';
+                    empty.textContent = 'لا توجد إشعارات جديدة';
+                    container.appendChild(empty);
+                    return;
+                }
+
+                items.forEach(function(item) {
+                    const link = document.createElement('a');
+                    link.className = 'dropdown-item';
+                    link.href = item.url || '#';
+
+                    const cleanMsg = cleanMessage(item);
+
+                    const title = document.createElement('div');
+                    title.className = 'notification-title';
+                    title.textContent = item.title || 'إشعار جديد';
+
+                    const message = document.createElement('div');
+                    message.className = 'message';
+                    message.textContent = cleanMsg || (item.title || 'إشعار جديد');
+
+                    const time = document.createElement('div');
+                    time.className = 'time';
+                    time.textContent = item.time || '';
+
+                    link.append(title, message, time);
+                    container.appendChild(link);
+                });
+            }
+
+            function schedule(delay) {
+                window.clearTimeout(timer);
+                timer = window.setTimeout(poll, delay);
+            }
+
+            function poll() {
+                if (document.hidden) {
+                    schedule(15000);
+                    return;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: feedUrl,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(response) {
+                        const items = Array.isArray(response?.data?.items) ? response.data.items : [];
+                        const newItems = initialized
+                            ? items.filter(item => !knownKeys.has(item.key))
+                            : [];
+
+                        items.forEach(item => knownKeys.add(item.key));
+                        render(items);
+
+                        if (newItems.length) {
+                            playNotificationSound();
+                            const first = newItems[0];
+                            const firstMsg = cleanMessage(first) || (first.title || 'إشعار جديد');
+                            const suffix = newItems.length > 1 ? ` (+${newItems.length - 1})` : '';
+                            toastr.success(firstMsg + suffix, first.title || 'إشعار جديد');
+                        }
+
+                        initialized = true;
+                        schedule(8000);
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401 || xhr.status === 403) {
+                            window.clearTimeout(timer);
+                            return;
+                        }
+                        schedule(20000);
+                    }
+                });
+            }
+
+            document.addEventListener('pointerdown', unlockAudio, { once: true });
+            document.addEventListener('keydown', unlockAudio, { once: true });
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) poll();
+            });
+            document.getElementById('notificationSoundToggle')?.addEventListener('click', function(event) {
+                event.stopPropagation();
+                soundEnabled = !soundEnabled;
+                localStorage.setItem(soundKey, soundEnabled ? 'enabled' : 'muted');
+                updateSoundIcon();
+                if (soundEnabled) {
+                    unlockAudio().then(function(unlocked) {
+                        if (unlocked) playNotificationSound();
+                    });
                 }
             });
-        }
-        showNotifications()
+
+            updateSoundIcon();
+            poll();
+        })();
 
         $('.visitorMessage').click(function(e) {
             e.preventDefault()
@@ -251,6 +329,7 @@
             )
         })
     </script>
+    @endauth
 
     @if (session('visitor'))
         <script>
@@ -347,6 +426,33 @@
                 }
             })
         });
+    </script>
+
+    {{-- Mobile sidebar drawer toggle (phones & small tablets only) --}}
+    <script>
+        (function () {
+            var btn = document.getElementById('mobileSidebarToggle');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            var sidebar = document.getElementById('sidenav-main');
+            if (!btn || !sidebar) return;
+            var open = function () {
+                document.body.classList.add('ec-sidebar-open');
+                btn.setAttribute('aria-expanded', 'true');
+            };
+            var close = function () {
+                document.body.classList.remove('ec-sidebar-open');
+                btn.setAttribute('aria-expanded', 'false');
+            };
+            btn.addEventListener('click', function () {
+                document.body.classList.contains('ec-sidebar-open') ? close() : open();
+            });
+            if (backdrop) backdrop.addEventListener('click', close);
+            sidebar.querySelectorAll('a[href]').forEach(function (a) {
+                a.addEventListener('click', function () {
+                    if (window.innerWidth < 992) close();
+                });
+            });
+        })();
     </script>
     <!-- Print handler: opens the invoice (HTML POS invoice or PDF) in a new tab.
          The previous hidden 0x0 iframe approach failed silently, because browsers

@@ -1,0 +1,200 @@
+[
+    {
+        "id": "city_74fe4cf48223fe49f46e",
+        "name": "العروب",
+        "districts": [
+            "الخليل"
+        ]
+    },
+    {
+        "id": "city_741990912ada0a220e39",
+        "name": "الفوار",
+        "districts": [
+            "الخليل"
+        ]
+    },
+    {
+        "id": "city_a1f55c85bbfeb5e333e5",
+        "name": "سردا",
+        "districts": [
+            "رام الله والبيرة"
+        ]
+    },
+    {
+        "id": "city_45180cb9dafca1f1e1e0",
+        "name": "عبود",
+        "districts": [
+            "رام الله والبيرة"
+        ]
+    },
+    {
+        "id": "city_48c696c97410aa51d3c8",
+        "name": "الطيّبة",
+        "districts": [
+            "رام الله والبيرة"
+        ]
+    },
+    {
+        "id": "city_fd227d6e8be11963cbd9",
+        "name": "بيت رما",
+        "districts": [
+            "رام الله والبيرة"
+        ]
+    },
+    {
+        "id": "city_a9f42234df158c3e28ca",
+        "name": "أبو فلاح",
+        "districts": [
+            "رام الله والبيرة"
+        ]
+    },
+    {
+        "id": "city_22e1d17e77326b304496",
+        "name": "عقبة",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_e2250f8ae1c82f3d09f8",
+        "name": "برقة",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_8753d14fce99de68c873",
+        "name": "قلقلية",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_61bfceb69951e297e82f",
+        "name": "طلفيت",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_e20fa93308adbb5230dc",
+        "name": "اللبن",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_d7dfe47b7cca0bdd3a2c",
+        "name": "أصيرة",
+        "districts": [
+            "نابلس"
+        ]
+    },
+    {
+        "id": "city_2d3525c62901bdd29333",
+        "name": "الفرعة",
+        "districts": [
+            "نابلس",
+            "طوباس"
+        ]
+    },
+    {
+        "id": "city_cbfdcf8b108f234f02bd",
+        "name": "تمنية",
+        "districts": [
+            "نابلس",
+            "طوباس"
+        ]
+    },
+    {
+        "id": "city_e936b0154867d2c55952",
+        "name": "زعترة",
+        "districts": [
+            "بيت لحم"
+        ]
+    },
+    {
+        "id": "city_8c9a847106166eb53ce0",
+        "name": "المشاير",
+        "districts": [
+            "بيت لحم"
+        ]
+    },
+    {
+        "id": "city_03e4c5639df990015693",
+        "name": "المعلة",
+        "districts": [
+            "بيت لحم"
+        ]
+    },
+    {
+        "id": "city_b23ad282af1cfee48ec2",
+        "name": "حسان",
+        "districts": [
+            "بيت لحم"
+        ]
+    },
+    {
+        "id": "city_3d9e650dd2b7b29633d2",
+        "name": "جيب",
+        "districts": [
+            "بيت لحم"
+        ]
+    },
+    {
+        "id": "city_c2c12f143bc820610516",
+        "name": "اليمام",
+        "districts": [
+            "جنين"
+        ]
+    },
+    {
+        "id": "city_b3464923029b62385a9d",
+        "name": "مقيبلة",
+        "districts": [
+            "جنين"
+        ]
+    },
+    {
+        "id": "city_d9d4ac63a139314c2ead",
+        "name": "الخضيرة",
+        "districts": [
+            "جنين"
+        ]
+    },
+    {
+        "id": "city_741a1e18354de2d5507d",
+        "name": "كفر قاسم",
+        "districts": [
+            "قلقيلية"
+        ]
+    },
+    {
+        "id": "city_339c7f69632e111b400f",
+        "name": "الزاوية",
+        "districts": [
+            "سلفيت"
+        ]
+    },
+    {
+        "id": "city_73986c7080391209f146",
+        "name": "الأغوار",
+        "districts": [
+            "أريحا"
+        ]
+    },
+    {
+        "id": "city_af0a809dc04f7fae5386",
+        "name": "العوجة",
+        "districts": [
+            "أريحا"
+        ]
+    },
+    {
+        "id": "city_ac5313d5bf834df91462",
+        "name": "Nu'eima",
+        "districts": [
+            "أريحا"
+        ]
+    }
+]

@@ -38,6 +38,7 @@ class WebsiteSettingsRequest extends FormRequest
             'privacy_policy' => $this->privacyPolicyRules(),
             'contact_us' => $this->contactUsRules(),
             'about_us' => $this->aboutUsRules(),
+            'app_partners' => ['enabled' => 'nullable|boolean'],
             default => [],
         };
     }
@@ -49,8 +50,8 @@ class WebsiteSettingsRequest extends FormRequest
     {
         return [
             'header' => 'nullable|string|max:255',
-            'header_img' => 'nullable|image',
-            'trusted_client_image_group.*.img' => 'nullable|image',
+            'header_img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'trusted_client_image_group.*.img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'nullable|string',
             'description' => 'nullable|string',
         ];
@@ -85,7 +86,7 @@ class WebsiteSettingsRequest extends FormRequest
     {
         return [
             'title' => 'nullable|string',
-            'right_side_img' => 'nullable|image',
+            'right_side_img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'work_steps.*.number' => 'nullable|integer',
             'work_steps.*.title' => 'nullable|string',
             'work_steps.*.sub_title' => 'nullable|string',
@@ -102,7 +103,7 @@ class WebsiteSettingsRequest extends FormRequest
             'sub_title' => 'nullable|string',
             'sample.*.title' => 'nullable|string',
             'sample.*.description' => 'nullable|string',
-            'sample.*.icon' => 'nullable|image',
+            'sample.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 
@@ -114,8 +115,8 @@ class WebsiteSettingsRequest extends FormRequest
         return [
             'title' => 'nullable|string',
             'sub_title' => 'nullable|string',
-            'background_image' => 'nullable|image',
-            'side_image' => 'nullable|image',
+            'background_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'side_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 
@@ -130,7 +131,7 @@ class WebsiteSettingsRequest extends FormRequest
             'lists.*.list' => 'nullable|string',
             'facilities.*.title' => 'nullable|string',
             'facilities.*.description' => 'nullable|string',
-            'facilities.*.icon' => 'nullable|image',
+            'facilities.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 
@@ -140,10 +141,10 @@ class WebsiteSettingsRequest extends FormRequest
     protected function takeWithYouRules(): array
     {
         return [
-            'right_side_image' => 'nullable|image',
-            'image_group.*.img' => 'nullable|image',
-            'infos.*.icon' => 'nullable|image',
-            'take_info.icon' => 'nullable|image',
+            'right_side_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image_group.*.img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'infos.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'take_info.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'title' => 'nullable|string',
             'sub_title' => 'nullable|string',
             'take_info.title' => 'nullable|string',
@@ -170,8 +171,8 @@ class WebsiteSettingsRequest extends FormRequest
     protected function footerRules(): array
     {
         return [
-            'footer_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg',
-            'footer_background' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg',
+            'footer_logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'footer_background' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'footer_title' => 'nullable|string',
             'footer_left_side_text' => 'nullable|string',
             'footer_right_side_text' => 'nullable|string',
@@ -180,8 +181,7 @@ class WebsiteSettingsRequest extends FormRequest
             'contact_us.phone_number' => 'nullable|string',
             'follow_us' => 'nullable|array',
             'follow_us.*.link' => 'nullable|string',
-            'follow_us.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'follow_us.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'follow_us.*.icon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
         ];
     }
 

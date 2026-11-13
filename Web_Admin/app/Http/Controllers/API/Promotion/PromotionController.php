@@ -11,7 +11,7 @@ class PromotionController extends Controller
     public function index()
     {
         #todo this banner should be replaced by promotion
-        $banners = (new BannerRepository())->getByBannerStatus(false);
+        $banners = (new BannerRepository())->getByBannerStatus(false, \App\Support\CatalogCityFilter::selected(request()));
 
         return $this->json('Promotion list', [
             'promotions' => PromotionResource::collection($banners)

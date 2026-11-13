@@ -91,6 +91,12 @@ class UserRepository extends Repository
             "date_of_birth" => $request->date_of_birth,
         ]);
 
+        if ($request->has('vendor_notifications_enabled')) {
+            $user->update([
+                'vendor_notifications_enabled' => $request->boolean('vendor_notifications_enabled'),
+            ]);
+        }
+
         return $user;
     }
     public function updateProfilePhotoByRequest(ProfilePhotoRequest $request, $user): User

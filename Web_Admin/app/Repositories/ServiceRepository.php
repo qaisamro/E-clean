@@ -19,6 +19,7 @@ class ServiceRepository extends Repository
     public function getActive($paginate = false, $perPage = 4, $search = null, $category = null, $sort = 'recommended')
     {
         $query = Service::query()
+            ->global()
             ->where('services.is_active', 1);
 
         // Apply search filter
@@ -62,6 +63,7 @@ class ServiceRepository extends Repository
     public function getActiveWithLowestProduct()
     {
         return Service::query()
+            ->global()
             ->where('is_active', 1)
             ->with('lowestProduct')
             ->get();
@@ -70,8 +72,7 @@ class ServiceRepository extends Repository
 
     public function getAll($isLatest = false)
     {
-        $category = $this->model()::query();
-        $category = $this->scopeVendor($category);
+        $category = $this->model()::query()->global();
         if ($isLatest) {
             $category->latest('id');
         }
@@ -80,12 +81,11 @@ class ServiceRepository extends Repository
 
     public function getActiveServices()
     {
-        return Service::isActive()->get();
+        return Service::global()->isActive()->get();
     }
 
     public function storeByRequest(ServiceRequest $request)
     {
-        $variantIds = $request->variant_ids;
         $thumbnail = (new MediaRepository())->storeByRequest(
             $request->image,
             $this->path,
@@ -94,28 +94,22 @@ class ServiceRepository extends Repository
         );
 
         $service = $this->model()::create([
-            'name' => $request->name,
+            'name' => $request->name_bn,
             'description' => $request->description,
             'name_bn' => $request->name_bn,
-            'description_bn' => $request->description_bn,
+            'description_bn' => $request->description,
             'thumbnail_id' => $thumbnail->id,
-            'vendor_id' => $this->currentVendorId(),
+            'vendor_id' => null,
             // New services are visible in the app immediately; the owner can
             // deactivate them later from the services list toggle.
             'is_active' => 1,
         ]);
-
-        // A service without variants blocks product creation downstream,
-        // so default to all variants when none were explicitly chosen.
-        $variantIds = $request->variant_ids ?: \App\Models\Variant::pluck('id')->toArray();
-        $service->variants()->sync($variantIds);
 
         return $service;
     }
 
     public function updateByRequest(ServiceRequest $request, Service $service): Service
     {
-        $variantIds = $request->variant_ids ? $request->variant_ids : $service->variants->pluck('id')->toArray();
         if ($request->hasFile('image')) {
             $mediaRepo = new MediaRepository();
             if ($service->thumbnail) {
@@ -137,14 +131,13 @@ class ServiceRepository extends Repository
         }
 
         $service->update([
-            'name' => $request->name,
+            'name' => $request->name_bn,
             'description' => $request->description,
             'name_bn' => $request->name_bn,
-            'description_bn' => $request->description_bn,
+            'description_bn' => $request->description,
             'amount' => $request->amount,
+            'vendor_id' => null,
         ]);
-
-        $service->variants()->sync($variantIds);
 
         return $service;
     }

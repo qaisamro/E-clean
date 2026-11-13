@@ -39,10 +39,10 @@ class AdditionalRepository extends Repository
     public function storeByRequest(AdditionalRequest $request)
     {
         $service = $this->model()::create([
-            'title' => $request->title,
+            'title' => $request->title_bn,
             'title_bn' => $request->title_bn,
             'price' => $request->price,
-            'description' => $request->description,
+            'description' => $request->description_bn,
             'description_bn' => $request->description_bn,
         ]);
 
@@ -52,10 +52,10 @@ class AdditionalRepository extends Repository
     public function updateByRequest(AdditionalRequest $request, Additional $additional): Additional
     {
         $additional->update([
-            'title' => $request->title,
+            'title' => $request->title_bn,
             'title_bn' => $request->title_bn,
             'price' => $request->price,
-            'description' => $request->description,
+            'description' => $request->description_bn,
             'description_bn' => $request->description_bn,
         ]);
 

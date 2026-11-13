@@ -17,13 +17,9 @@
                     </div>
                     <div class="card-body">
                         <x-form route="product.store" type="Submit">
-                            <label class="mb-1">{{ __('Product') . ' ' . __('Name') . ' ' . __('English') }}</label>
-                            <x-input name="name" type="text"
-                                placeholder="{{ __('Product') . ' ' . __('Name') . ' ' . __('English') }}" />
-
-                            <label class="mb-1">{{ __('Product') . ' ' . __('Name') . ' ' . __('Arabic') }}</label>
+                            <label class="mb-1">{{ __('Product') . ' ' . __('Name') }}</label>
                             <x-input name="name_bn" type="text"
-                                placeholder="{{ __('Product') . ' ' . __('Name') . ' ' . __('Arabic') }}" />
+                                placeholder="{{ __('Product') . ' ' . __('Name') }}" required="true"/>
 
                             <label class="mb-1">{{ __('Product') . ' ' . __('Price') }}</label>
                             <input name="price" type="text" class="form-control"
@@ -44,16 +40,7 @@
                                 <option value="">{{ __('Select') }}</option>
                                 @foreach ($services as $service)
                                     <option value="{{ $service->id }}">
-                                        {{ session()->get('local') == 'ar' ? $service->name_bn ?? $service->name : $service->name }}
-                                    </option>
-                                @endforeach
-                            </x-select>
-
-                            <label class="mb-1">{{ __('Select') . ' ' . __('Variant') }}</label>
-                            <x-select name="variant_id">
-                                @foreach ($variants as $variant)
-                                    <option value="{{ $variant->id }}">
-                                        {{ session()->get('local') == 'ar' ? $variant->name_bn ?? $variant->name : $variant->name }}
+                                        {{ $service->name_bn ?? $service->name }}
                                     </option>
                                 @endforeach
                             </x-select>
@@ -93,25 +80,5 @@
             $('#slug').val($(this).val().toLowerCase().split(',').join('').replace(/\s/g, "-"));
         });
 
-        $('select[name="service_id"]').on('change', function() {
-            var serviceId = $(this).val();
-            if (serviceId) {
-                $.ajax({
-                    url: `/services/${serviceId}/variants`,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        $('select[name="variant_id"]').empty().trigger('change.select2');
-                        var local = '{{ session()->get('local') }}';
-                        $.each(data, function(key, value) {
-                            $('select[name="variant_id"]').append('<option value="'+value.id+'">'+ (local == 'ar' ? (value.name_bn ?value.name_bn : value.name) : value.name) +'</option>');
-                        });
-                        $('select[name="variant_id"]').trigger('change.select2');
-                    }
-                });
-            } else {
-                $('select[name="variant_id"]').empty().trigger('change.select2');
-            }
-        });
     </script>
 @endpush

@@ -1,0 +1,38 @@
+.invoice-builder { --ib-ink: #172b4d; --ib-teal: #0f766e; color: var(--ib-ink); padding: 12px 20px 32px; font-family: Tahoma, Arial, sans-serif; }
+.invoice-builder .ib-header { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.invoice-builder h1 { font-size: 27px; font-weight: 800; color: var(--ib-ink); margin: 8px 0; }
+.invoice-builder p { line-height: 1.7; margin: 4px 0; }
+.invoice-builder .ib-kicker { color: var(--ib-teal); font-size: 13px; font-weight: 700; }
+.invoice-builder .ib-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.invoice-builder button { background: #fff; color: var(--ib-ink); border: 1px solid #b8c8d6; border-radius: 9px; padding: 10px 15px; font-size: 13px; cursor: pointer; font-family: inherit; }
+.invoice-builder button:disabled { opacity: .6; cursor: wait; }
+.invoice-builder button.ib-primary { background: var(--ib-teal); color: #fff; border-color: var(--ib-teal); }
+.invoice-builder button:focus-visible, .invoice-builder input:focus-visible, .invoice-builder select:focus-visible, .invoice-builder textarea:focus-visible { outline: 3px solid #5eead4; outline-offset: 2px; }
+.invoice-builder #builder-status { padding: 12px 16px; margin-bottom: 18px; background: #eef8f6; border: 1px solid #bde1d9; border-radius: 10px; font-size: 13px; white-space: pre-line; }
+.invoice-builder #builder-status[data-error="true"] { background: #fff1f2; color: #991b1b; border-color: #fecdd3; }
+.invoice-builder .ib-layout { display: grid; grid-template-columns: minmax(310px, 1fr) minmax(340px, 1.2fr); align-items: start; gap: 22px; }
+.invoice-builder .ib-settings { min-width: 0; }
+.invoice-builder details { background: #fff; border: 1px solid #d8e2ec; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.invoice-builder summary { padding: 16px; font-weight: 700; cursor: pointer; color: var(--ib-ink); background: #f9fbfd; }
+.invoice-builder .ib-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px; }
+.invoice-builder label { display: flex; flex-direction: column; gap: 7px; font-size: 12px; font-weight: 700; margin: 0; color: var(--ib-ink); min-width: 0; }
+.invoice-builder .ib-full { grid-column: 1 / -1; }
+.invoice-builder input:not([type="checkbox"]), .invoice-builder select, .invoice-builder textarea { width: 100%; border: 1px solid #b8c8d6; border-radius: 7px; padding: 9px; color: #172b4d; background: #fff; font: 13px Tahoma, Arial, sans-serif; }
+.invoice-builder input[type="color"] { height: 39px; padding: 4px; }
+.invoice-builder textarea { resize: vertical; min-height: 58px; }
+.invoice-builder label.ib-check { flex-direction: row; align-items: center; font-weight: 500; line-height: 1.7; }
+.invoice-builder input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--ib-teal); flex-shrink: 0; }
+.invoice-builder .ib-help, .invoice-builder small { color: #52667c; font-size: 11px; font-weight: 400; line-height: 1.8; }
+.invoice-builder details > .ib-help { padding: 10px 16px; }
+.invoice-builder #invoice-sections { padding: 0 16px; list-style: none; }
+.invoice-builder #invoice-sections li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+.invoice-builder #invoice-sections button { padding: 5px 12px; margin-inline-start: 5px; }
+.invoice-builder .ib-preview { position: sticky; top: 15px; background: #fff; border: 1px solid #d8e2ec; border-radius: 12px; overflow: hidden; min-width: 0; }
+.invoice-builder .ib-preview-top { padding: 16px; border-bottom: 1px solid #e2e8f0; }
+.invoice-builder #preview-badge { display: inline-block; font-size: 10px; padding: 3px 8px; background: #d1fae5; color: #065f46; border-radius: 20px; margin-inline-start: 10px; }
+.invoice-builder .ib-preview-top small { display: block; margin-top: 5px; }
+.invoice-builder .ib-preview-selects { display: grid; grid-template-columns: 1fr 1fr; padding: 14px; gap: 10px; }
+.invoice-builder iframe { width: 100%; height: 680px; border: 0; display: block; background: #e9eef3; }
+.invoice-builder aside > .ib-help { padding: 12px 16px; }
+@media (max-width: 1000px) { .invoice-builder .ib-layout { grid-template-columns: 1fr; } .invoice-builder .ib-preview { position: static; } }
+@media (max-width: 480px) { .invoice-builder { padding: 8px; } .invoice-builder h1 { font-size: 22px; } .invoice-builder .ib-grid { padding: 12px; gap: 12px; } .invoice-builder .ib-preview-selects { grid-template-columns: 1fr; } }

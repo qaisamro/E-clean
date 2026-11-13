@@ -9,6 +9,7 @@ use App\Http\Requests\PaymentGatewayRequest;
 use App\Models\PaymentGateway;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Support\StoreOrderAccess;
 use App\Services\StripePayService;
 use App\Services\PaypalService;
 use App\Services\RazorPayService;
@@ -59,8 +60,9 @@ class PaymentGatewayController extends Controller
         return view('subscriptionPurchase.payment');
     }
 
-    public function process(Request $request, $order)
+    public function process(Request $request, Order $order)
     {
+        StoreOrderAccess::assertCanMutate($order);
         $paymentGateway = PaymentGateway::where('name', $request->payment_method)->first();
         $config = json_decode($paymentGateway->config);
 

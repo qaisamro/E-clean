@@ -159,12 +159,13 @@
                 <tbody>
                     @foreach ($order->products as $product)
                         @php
-                            $unitPrice = $product->pivot->price
-                                ?: ($product->discount_price ?: $product->price);
+                            $unitPrice = (float) $product->pivot->price > 0
+                                ? (float) $product->pivot->price
+                                : (float) ($product->discount_price ?: $product->price);
                         @endphp
                         <tr>
                             <td style="padding-bottom: 0" colspan="2">
-                                <h4 style="margin: 0">{{ $product->pivot->title ?: $product->name }}</h4>
+                                <h4 style="margin: 0">{{ $product->pivot->title ?: ($product->name_bn ?? $product->name) }}</h4>
                                 {{ $product->pivot->quantity }} x {{ currencyPosition($unitPrice) }}
                             </td>
                             <td style="text-align:right;vertical-align:bottom;padding-bottom: 0">

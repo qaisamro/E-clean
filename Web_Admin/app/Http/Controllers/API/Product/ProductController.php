@@ -16,7 +16,7 @@ class ProductController extends Controller
         $searchKey = \request('search');
 
         $products = (new ProductRepository())
-            ->getProductsByRequest($serviceId, $variantId, $vendorId, $searchKey);
+            ->getProductsByRequest($serviceId, $variantId, $vendorId, $searchKey, \App\Support\CatalogCityFilter::selected(request()));
 
         return $this->json('product list', [
             'products' => ProductResource::collection($products)
@@ -30,7 +30,7 @@ class ProductController extends Controller
         $searchKey = \request('search');
 
         $products = (new ProductRepository())
-            ->getProductsByRequest($serviceId, $variantId, $vendorId, $searchKey);
+            ->getProductsByRequest($serviceId, $variantId, $vendorId, $searchKey, \App\Support\CatalogCityFilter::selected(request()));
 
         return $this->json('vendor product list', [
             'vendor_id' => (int) $vendorId,

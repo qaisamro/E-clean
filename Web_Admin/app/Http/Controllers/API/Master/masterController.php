@@ -8,9 +8,22 @@ use App\Models\DeliveryCost;
 use App\Models\MobileAppUrl;
 use App\Models\PaymentGateway;
 use App\Models\WebSetting;
+use Illuminate\Support\Facades\Cache;
 
 class masterController extends Controller
 {
+    /**
+     * Whether the super admin wants the partners section visible in the app.
+     * Edited at /website-settings (الصفحات والسياسات → إعدادات التطبيق). Cached 1h.
+     */
+    protected function partnersSectionEnabled(): bool
+    {
+        return Cache::remember('app_partners_section_enabled', 3600, function () {
+            $row = \App\Models\Website\WebsiteSetting::query()->where('key', 'app_partners_section')->first();
+            return $row ? (bool) ($row->value['enabled'] ?? true) : true;
+        });
+    }
+
     public function index()
     {
 
@@ -26,6 +39,8 @@ class masterController extends Controller
         $mobileAppLink = MobileAppUrl::first();
 
         return $this->json('',[
+            'tracking_recovery_available' => app(\App\Services\OtpService::class)->enabled(),
+            'show_partners_section' => $this->partnersSectionEnabled(),
             'currency' => $currency,
             'currency_position' => config('app.currency_position'),
             'delivery_cost' => $costFee,

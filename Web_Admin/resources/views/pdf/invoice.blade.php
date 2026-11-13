@@ -178,7 +178,7 @@
             height: 50px;
         }
     </style>
-    <title>#{{ $order->order_code }} - invioce</title>
+    <title>{{ $order->order_code }} - invioce</title>
 </head>
 
 <body>
@@ -268,11 +268,12 @@
             <tbody>
                 @foreach ($order->products as $product)
                     @php
-                        $unitPrice = $product->pivot->price
-                            ?: ($product->discount_price ?: $product->price);
+                        $unitPrice = (float) $product->pivot->price > 0
+                            ? (float) $product->pivot->price
+                            : (float) ($product->discount_price ?: $product->price);
                     @endphp
                     <tr>
-                        <td>{{ $product->pivot->title ?: $product->name }}</td>
+                        <td>{{ $product->pivot->title ?: ($product->name_bn ?? $product->name) }}</td>
                         <td>{{ $product->pivot->quantity }}</td>
                         <td>{{ currencyPosition($unitPrice) }}</td>
                         <td style="text-align: right">

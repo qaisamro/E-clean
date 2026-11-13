@@ -39,11 +39,31 @@ class LoginController extends Controller
                 ->withInput();
         }
 
+        // The web console is staff-only. Customers (and any non-staff role)
+        // must not authenticate here at all — send them to the app with a
+        // clear message instead of dumping them on a bare 403 page.
+        $webRoles = ['root', 'admin', 'driver', 'vendor_admin', 'vendor_sub', 'visitor'];
+        $isStaff = collect($webRoles)->contains(fn ($role) => $user->hasRole($role));
+        if (!$isStaff) {
+            return redirect()->back()
+                ->withErrors(['email' => ['لا يمكنك تسجيل الدخول عبر الويب — حسابك للتطبيق فقط، سجّل الدخول من التطبيق.']])
+                ->withInput($loginRequest->only('email'));
+        }
+
         Auth::login($user);
 
         // Drivers land on their own account page after login
         if ($user->hasRole('driver')) {
             return redirect()->route('driver.account');
+        }
+
+        // Store owners land straight on the store dashboard; child accounts
+        // without the dashboard permission land on their profile instead.
+        if (\App\Support\VendorAccount::isStoreStaff($user)) {
+            if ($user->hasRole('vendor_sub') && !$user->can('vendor.dashboard')) {
+                return redirect()->route('profile.index');
+            }
+            return redirect()->route('vendor.dashboard');
         }
 
         return redirect()->route('root');

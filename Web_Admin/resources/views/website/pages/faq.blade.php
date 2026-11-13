@@ -1,4 +1,4 @@
-﻿@extends('website.layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
     <!-- manage-address-modal -->

@@ -32,16 +32,16 @@
     <meta name="description" content=""/>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ $logo ?? asset('assets/img/favicon/favicon.ico') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}?v=ec10"/>
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}"/>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css"/>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') }}"
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') . '?v=fix2' }}"
           class="template-customizer-theme-css"/>
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}"/>
-
+    <link rel="stylesheet" href="{{ asset('assets/css/ec-theme.css') }}?v=ec10"/>
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
@@ -58,6 +58,7 @@
 </head>
 
 <body>
+<a class="ec-skip-link" href="#main-content">الانتقال إلى المحتوى</a>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -69,16 +70,8 @@
         <!-- Layout container -->
         <div class="layout-page">
 
-            <!-- Navbar -->
-            <nav
-                class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                id="layout-navbar">
-                @include('layouts.partials.navbar')
-            </nav>
-            <!-- / Navbar -->
-
             <!-- Content wrapper -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" id="main-content">
                 <!-- Content -->
 
                 <div class="container-fluid flex-grow-1 container-p-y">
@@ -95,7 +88,12 @@
         <!-- / Layout page -->
     </div>
 
-    <!-- Overlay -->
+            {{-- Floating menu toggle — mobile/tablet only (direct body child, bulletproof) --}}
+        <a href="javascript:void(0);" class="layout-menu-toggle ec-mobile-menu-fab" aria-label="فتح القائمة">
+            <i class="bx bx-menu"></i>
+        </a>
+
+<!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->

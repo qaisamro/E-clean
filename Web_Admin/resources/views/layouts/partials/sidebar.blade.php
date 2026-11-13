@@ -43,18 +43,78 @@
 
                 @php
                     $isDriver = Auth::user() && Auth::user()->hasRole('driver');
+                    // Super-Admin-only sections (Customers, Site pages, Stores)
+                    // open up for any admin that was granted the matching
+                    // permission, so granted permissions behave exactly like
+                    // they do for the Super Admin.
+                    $ecUser = auth()->user();
+                    $ecIsRoot = (bool) optional($ecUser)->hasRole('root');
+                    $ecAllows = function ($permission) use ($ecUser, $ecIsRoot) {
+                        return $ecIsRoot || (bool) optional($ecUser)->can($permission);
+                    };
+                    // Child vendor accounts (vendor_sub) share the store scope but
+                    // are limited to the capabilities their owner granted them.
+                    // The store owner keeps the same visibility as before.
+                    $ecIsSub = (bool) optional($ecUser)->hasRole('vendor_sub');
+                    $ecIsStoreStaff = (bool) optional($ecUser)->hasRole('vendor_admin') || $ecIsSub;
+                    $ecCanForSub = fn ($permission) => !$ecIsSub || (bool) optional($ecUser)->can($permission);
+                    $ecCanForSubAny = fn (array $permissions) => !$ecIsSub || collect($permissions)->contains(fn ($p) => optional($ecUser)->can($p));
                 @endphp
-                @if (!$isDriver)
+                @if (!$isDriver && $ecCanForSub('vendor.dashboard'))
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('root', 'vendor.dashboard') ? 'active' : '' }}" href="{{ auth()->user()?->hasRole('vendor_admin') ? route('vendor.dashboard') : route('root') }}">
+                        <a class="nav-link {{ request()->routeIs('root', 'vendor.dashboard') ? 'active' : '' }}" href="{{ $ecIsStoreStaff ? route('vendor.dashboard') : route('root') }}">
                             
                             <span class="nav-link-text">{{ __('Dashboard') }}</span>
                         </a>
                     </li>
                 @endif
 
-                @role('vendor_admin')
-                    @can('order.index')
+                @if ($ecIsRoot || optional($ecUser)->hasRole('admin') || optional($ecUser)->hasRole('Admin'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('service.*') ? 'active' : '' }}"
+                            href="{{ route('service.index') }}">
+                            <i class="fas fa-tools" aria-hidden="true"></i>
+                            <span class="nav-link-text">{{ __('Services') }}</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if ($ecIsStoreStaff && $ecCanForSub('vendor.customers.index'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('vendor.customers.*') ? 'active' : '' }}"
+                            href="{{ route('vendor.customers.index') }}">
+                            <span class="nav-link-text">عملاء المتجر</span>
+                        </a>
+                    </li>
+                @endif
+                @if ($ecIsStoreStaff && $ecCanForSub('vendor.notifications.send'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('vendor.notifications.*') ? 'active' : '' }}"
+                            href="{{ route('vendor.notifications.index') }}">
+                            <span class="nav-link-text">إرسال إشعار</span>
+                        </a>
+                    </li>
+                @endif
+                @if ($ecIsStoreStaff && $ecCanForSub('vendor.settings'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('vendor.settings') ? 'active' : '' }}"
+                            href="{{ route('vendor.settings') }}">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span class="nav-link-text">إعدادات المتجر</span>
+                        </a>
+                    </li>
+                @endif
+                @if (optional($ecUser)->hasRole('vendor_admin'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('vendor.subs.*') ? 'active' : '' }}"
+                            href="{{ route('vendor.subs.index') }}">
+                            <i class="fas fa-users-cog" aria-hidden="true"></i>
+                            <span class="nav-link-text">الحسابات الفرعية</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if ($ecIsStoreStaff && $ecCanForSub('order.index'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('order.*') ? 'active' : '' }}"
                                 href="{{ route('order.index') }}">
@@ -62,38 +122,20 @@
                                 <span class="nav-link-text">{{ __('Orders') }}</span>
                             </a>
                         </li>
-                    @endcan
-                @endrole
+                @endif
 
-                @role('vendor_admin')
-                    @canany(['product.index', 'coupon.index', 'variant.index', 'service.index'])
+                @if ($ecIsStoreStaff && $ecCanForSubAny(['product.index', 'coupon.index']))
                     <li class="nav-item">
-                        <a class="nav-link  {{ request()->routeIs('service.*', 'variant.*', 'product.*', 'coupon.*') ? 'active' : '' }}"
+                        <a class="nav-link  {{ request()->routeIs('service.*', 'product.*', 'coupon.*') ? 'active' : '' }}"
                             href="#product_manage" data-toggle="collapse" aria-expanded="false" role="button"
                             aria-controls="navbar-examples">
                             
                             <span class="nav-link-text">{{ __('Product_Manage') }}</span>
                         </a>
 
-                        <div class="collapse {{ request()->routeIs('service.*', 'variant.*', 'product.*', 'coupon.*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->routeIs('service.*', 'product.*', 'coupon.*') ? 'show' : '' }}"
                             id="product_manage">
                             <ul class="nav nav-sm flex-column">
-                                @can('service.index')
-                                    <a class="nav-link sub-menu {{ request()->routeIs('service.*') ? 'active' : '' }}"
-                                        href="{{ route('service.index') }}">
-                                        {{--  --}}
-                                        
-                                        <span class="nav-link-text">{{ __('Services') }}</span>
-                                    </a>
-                                @endcan
-
-                                @can('variant.index')
-                                    <a class="nav-link sub-menu {{ request()->routeIs('variant.*') ? 'active' : '' }}"
-                                        href="{{ route('variant.index') }}">
-                                        
-                                        <span class="nav-link-text">{{ __('Variants') }}</span>
-                                    </a>
-                                @endcan
                                 @can('product.index')
                                     <a class="nav-link sub-menu {{ request()->routeIs('product.*') ? 'active' : '' }}"
                                         href="{{ route('product.index') }}">
@@ -102,61 +144,69 @@
                                     </a>
                                 @endcan
 
-                                @can('coupon.index')
-                                    <a class="nav-link sub-menu {{ request()->routeIs('coupon.*') ? 'active' : '' }}"
-                                        href="{{ route('coupon.index') }}">
-                                        
-                                        <span class="nav-link-text">{{ __('Coupon') }}</span>
-                                    </a>
-                                @endcan
+                                @if ($ecIsStoreStaff && $ecCanForSub('coupon.index'))
+                                    <div class="d-flex align-items-center justify-content-between pe-2">
+                                        <a class="nav-link sub-menu {{ request()->routeIs('coupon.*') ? 'active' : '' }}"
+                                            href="{{ route('coupon.index') }}">
+                                            <span class="nav-link-text">كوبونات متجري</span>
+                                        </a>
+                                        @canany(['coupon.create', 'coupon.store'])
+                                            <a href="{{ route('coupon.create') }}" class="btn btn-sm btn-link p-0 ms-1"
+                                                title="إضافة كوبون خاص بمتجري" style="line-height:1">
+                                                <i class="fa fa-plus-circle" style="font-size:1.1rem"></i>
+                                                <span class="sr-only">إضافة كوبون</span>
+                                            </a>
+                                        @endcanany
+                                    </div>
+                                @endif
 
-                                @can('additional.index')
-                                    <a class="nav-link sub-menu {{ request()->routeIs('additional.*') ? 'active' : '' }}"
-                                        href="{{ route('additional.index') }}">
-                                        
-                                        <span class="nav-link-text">{{ __('Additional_Services') }}</span>
-                                    </a>
-                                @endcan
                             </ul>
                         </div>
                     </li>
-                @endcanany
-                @endrole
+                @endif
 
-                @role('vendor_admin')
+                @if ($ecIsStoreStaff && $ecCanForSubAny(['pos.index', 'pos.sales', 'vendor.appointments.edit', 'vendor.invoice-template.edit']))
                     <li class="nav-item">
-                        <a class="nav-link  {{ request()->routeIs('pos.*') ? 'active' : '' }}" href="#posManage"
+                        <a class="nav-link  {{ request()->routeIs('pos.*', 'vendor.invoice-template.*', 'vendor.appointments.*') ? 'active' : '' }}" href="#posManage"
                             data-toggle="collapse" aria-expanded="false" role="button" aria-controls="navbar-examples">
                             
                             <span class="nav-link-text">{{ __('Pos_Manage') }}</span>
                         </a>
-                        <div class="collapse {{ request()->routeIs('pos.*') ? 'show' : '' }}" id="posManage">
+                        <div class="collapse {{ request()->routeIs('pos.*', 'vendor.invoice-template.*', 'vendor.appointments.*') ? 'show' : '' }}" id="posManage">
                             <ul class="nav nav-sm flex-column">
+                                @if ($ecCanForSub('pos.index'))
                                 <a class="nav-link sub-menu {{ request()->routeIs('pos.index') ? 'active' : '' }}"
                                     href="{{ route('pos.index') }}">
                                     
                                     <span class="nav-link-text">{{ __('POS') }}</span>
                                 </a>
+                                @endif
+                                @if ($ecCanForSub('pos.sales'))
                                 <a class="nav-link sub-menu {{ request()->routeIs('pos.sales') ? 'active' : '' }}"
                                     href="{{ route('pos.sales') }}">
                                     
                                     <span class="nav-link-text">{{ __('Pos_Sales') }}</span>
                                 </a>
+                                @endif
+                                @if ($ecCanForSub('vendor.appointments.edit'))
+                                <a class="nav-link sub-menu {{ request()->routeIs('vendor.appointments.*') ? 'active' : '' }}" href="{{ route('vendor.appointments.edit') }}">
+                                    <i class="fas fa-calendar-alt" aria-hidden="true"></i><span class="nav-link-text">إدارة مواعيد الاستلام والتوصيل</span>
+                                </a>
+                                @endif
+                                @if ($ecCanForSub('vendor.invoice-template.edit'))
+                                <a class="nav-link sub-menu {{ request()->routeIs('vendor.invoice-template.*') ? 'active' : '' }}" href="{{ route('vendor.invoice-template.edit') }}">
+                                    <i class="fas fa-file-invoice" aria-hidden="true"></i><span class="nav-link-text">تصميم قالب الفاتورة</span>
+                                </a>
+                                @endif
                             </ul>
                         </div>
                     </li>
-                @endrole
+                @endif
                 @role('driver')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('driver.account') ? 'active' : '' }}" href="{{ route('driver.account') }}">
-                            
+
                             <span class="nav-link-text">طلباتي</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('pos.*') ? 'active' : '' }}" href="{{ route('pos.index') }}">
-                            
-                            <span class="nav-link-text">{{ __('POS') }}</span>
                         </a>
                     </li>
                 @endrole
@@ -167,16 +217,6 @@
                             href="{{ route('notification.index') }}">
                             
                             <span class="nav-link-text">{{ __('Notifications') }}</span>
-                        </a>
-                    </li>
-                @endcan
-
-                @can('revenue.index')
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('revenue.*') ? 'active' : '' }}"
-                            href="{{ route('revenue.index', ['from' => now()->subMonth(1)->format('Y-m-d'), 'to' => now()->addDay(1)->format('Y-m-d')]) }}">
-                            
-                            <span class="nav-link-text">{{ __('Reports') }}</span>
                         </a>
                     </li>
                 @endcan
@@ -198,8 +238,7 @@
                     </li>
                 @endcan
 
-                @role('vendor_admin')
-                    @can('offer.index')
+                @if ($ecIsStoreStaff && $ecCanForSub('offer.index'))
                     <li class="nav-item">
                         <a class="nav-link  {{ request()->routeIs('offer.*') ? 'active' : '' }}"
                             href="{{ route('offer.index') }}">
@@ -207,22 +246,19 @@
                             <span class="nav-link-text">{{ __('العروض') }}</span>
                         </a>
                     </li>
-                    @endcan
-                @endrole
+                @endif
 
-                @role('root')
-                    @can('customer.index')
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('customer.*') ? 'active' : '' }}"
-                                href="{{ route('customer.index') }}">
-                                
-                                <span class="nav-link-text">{{ __('Customer') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                @endrole
+                @if (!$ecIsStoreStaff && $ecAllows('customer.index'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('customer.*') ? 'active' : '' }}"
+                            href="{{ route('customer.index') }}">
+ 
+                            <span class="nav-link-text">{{ __('Customer') }}</span>
+                        </a>
+                    </li>
+                @endif
 
-                @role('vendor_admin')
+                @if ($ecIsStoreStaff && $ecCanForSub('driver.index'))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('driver.*') ? 'active' : '' }}"
                             href="{{ route('driver.index') }}">
@@ -230,7 +266,7 @@
                             <span class="nav-link-text">{{ __('Drivers') }}</span>
                         </a>
                     </li>
-                @endrole
+                @endif
 
                 {{-- @can('contact')
                     <li class="nav-item">
@@ -241,8 +277,8 @@
                         </a>
                     </li>
                 @endcan --}}
-                {{-- صفحات الموقع - للسوبر أدمن فقط --}}
-                @role('root')
+                {{-- صفحات الموقع - Site pages (السوبر أدمن أو من يملك صلاحية web.setting) --}}
+                @if ($ecAllows('web.setting'))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('web.setting') ? 'active' : '' }}" href="#sitePagesManage"
                             data-toggle="collapse" aria-expanded="false" role="button" aria-controls="navbar-examples">
@@ -275,7 +311,7 @@
                             </ul>
                         </div>
                     </li>
-                @endrole
+                @endif
                 {{-- اعدادات الموقع - Website Setting (معلّق) --}}
                 {{-- <a class="nav-link sub-menu {{ request()->is('your-url-slug*') ? 'active' : '' }}"
                     href="{{ route('web.setting') }}">
@@ -303,12 +339,49 @@
                         </a>
                     </ul>
                 </div> --}}
-                @role('root')
+                @role('root|admin')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('coupon.admin.*') ? 'active' : '' }}"
+                            href="{{ route('coupon.admin.index') }}">
+
+                            <span class="nav-link-text">كوبونات الخصم</span>
+                        </a>
+                    </li>
+                @endrole
+                @role('root|admin')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('integrations.*') ? 'active' : '' }}"
+                            href="{{ route('integrations.index') }}">
+                            
+                            <span class="nav-link-text">مركز التكاملات</span>
+                        </a>
+                    </li>
+                @endrole
+                @if ($ecAllows('vendors.index'))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('vendors.*') ? 'active' : '' }}"
                             href="{{ route('vendors.index') }}">
                             
                             <span class="nav-link-text">إدارة المحلات</span>
+                        </a>
+                    </li>
+                @endif
+                @role('root|admin')
+                    <li class="nav-item">
+                        @php
+                            try {
+                                $cjrPendingCount = \Illuminate\Support\Facades\Cache::remember('customer_join_requests.pending_count', 60, fn () => \App\Models\CustomerJoinRequest::pending()->count());
+                            } catch (\Throwable $e) {
+                                $cjrPendingCount = null;
+                            }
+                        @endphp
+                        <a class="nav-link {{ request()->routeIs('customer-join-requests.*') ? 'active' : '' }}"
+                            href="{{ route('customer-join-requests.index') }}">
+                            
+                            <span class="nav-link-text">طلبات الانضمام</span>
+                            @if ($cjrPendingCount !== null && $cjrPendingCount > 0)
+                                <span class="badge bg-danger rounded-pill ms-1 cjr-pending-badge">{{ $cjrPendingCount }}</span>
+                            @endif
                         </a>
                     </li>
                 @endrole
@@ -324,14 +397,14 @@
 
                     @if(false) {{-- الاعدادات - Settings (معلّق حسب الطلب) --}}
                     <li class="nav-item">
-                        <a class="nav-link  {{ request()->routeIs('setting.*', 'deliveryCost', 'mobileApp', 'socialLink.*', 'webSetting.*', 'stripeKey.*', 'notification.manage', 'fcm.*', 'mail-config.*') ? 'active' : '' }}"
+                        <a class="nav-link  {{ request()->routeIs('setting.*', 'deliveryCost', 'mobileApp', 'socialLink.*', 'stripeKey.*', 'notification.manage', 'fcm.*', 'mail-config.*') ? 'active' : '' }}"
                             href="#setting" data-toggle="collapse" aria-expanded="false" role="button"
                             aria-controls="navbar-examples">
                             
                             <span class="nav-link-text">{{ __('Settings') }}</span>
                         </a>
 
-                        <div class="collapse {{ request()->routeIs('setting.*', 'deliveryCost', 'mobileApp', 'socialLink.*', 'profile.*', 'webSetting.*', 'stripeKey.*', 'schedule.*', 'invoiceManage.*', 'areas.*', 'sms-gateway.*', 'notification.manage', 'fcm.*', 'mail-config.*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->routeIs('setting.*', 'deliveryCost', 'mobileApp', 'socialLink.*', 'profile.*', 'stripeKey.*', 'schedule.*', 'invoiceManage.*', 'areas.*', 'sms-gateway.*', 'notification.manage', 'fcm.*', 'mail-config.*') ? 'show' : '' }}"
                             id="setting">
                             <ul class="nav nav-sm flex-column">
                                 @foreach (config('enums.settings') as $index => $item)
@@ -380,11 +453,6 @@
                                     <span class="nav-link-text">{{ __('Delivery_Schedules') }}</span>
                                 </a>
 
-                                <a class="nav-link sub-menu {{ request()->routeIs('webSetting.*') ? 'active' : '' }}"
-                                    href="{{ route('webSetting.index') }}">
-                                    
-                                    <span class="nav-link-text">{{ __('Web_Setting') }}</span>
-                                </a>
                                 {{-- @can('payment-gateway.index') --}}
                                 <a href="{{ route('payment-gateway.index') }}"
                                     class="nav-link sub-menu  {{ request()->routeIs('payment-gateway.index') ? 'active' : '' }}">

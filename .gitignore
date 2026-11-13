@@ -1,0 +1,52 @@
+# ============ Local/session/tooling state — never pushed ============
+.local/
+.opencode/
+.kilo/
+.codex-deploy/
+.github/modernize/
+test scan/
+
+# ============ Secrets / credentials ============
+**/storage/*.key
+storage/oauth-*.key
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.jks
+*.keystore
+key.properties
+app_store_connect_private_key.p8
+
+# ============ Build outputs / binaries ============
+build/
+dist/
+out/
+*.apk
+*.aab
+*.ipa
+*.xcarchive
+.gradle/
+.kotlin/
+Pods/pids/
+
+# ============ Logs ============
+*.log
+logs/
+
+# ============ OS / editor ============
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ============ Node / vendor caches ============
+node_modules/
+
+# PHPUnit cache artefacts (contents are runtime state)
+.phpunit.cache/
+
+vendor/
+vendor/
+composer.phar

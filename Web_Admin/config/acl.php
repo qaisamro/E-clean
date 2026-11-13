@@ -6,7 +6,8 @@ return [
         'admin',
         'customer',
         'visitor',
-        'driver'
+        'driver',
+        'vendor_sub'
     ],
     'permissions' => [
         'root' => ['root', 'admin', 'visitor'],
@@ -24,13 +25,6 @@ return [
         'additional.edit' => ['root', 'visitor'],
         'additional.update' => ['root', 'visitor'],
         'additional.status.toggle' => ['root'],
-
-        'variant.index' => ['root', 'visitor'],
-        'variant.create' => ['root', 'visitor'],
-        'variant.edit' => ['root', 'visitor'],
-        'variant.update' => ['root', 'visitor'],
-        'variant.store' => ['root', 'visitor'],
-        'variant.products' => ['root', 'visitor'],
 
         'notification.index' => ['root', 'visitor'],
         'notification.send' => ['root', 'visitor'],
@@ -73,16 +67,12 @@ return [
         'order.update' => ['root', 'visitor'],
         'order.delete' => ['root'],
         'order.edit.price' => ['root', 'visitor'],
-        'order.payment-status' => ['root', 'visitor'],
+        'order.payment-status' => ['root', 'visitor', 'vendor_admin'],
         'order.status.change' => ['root', 'visitor'],
         'order.print.labels' => ['root', 'visitor'],
         'order.print.invioce' => ['root', 'visitor'],
         'orderIncomplete.index' => ['root', 'visitor'],
         'orderIncomplete.paid' => ['root'],
-
-        'revenue.index' => ['root', 'visitor'],
-        'revenue.generate.pdf' => ['root', 'visitor'],
-        'report.generate.pdf' => ['root', 'visitor'],
 
         'coupon.index' => ['root', 'visitor'],
         'coupon.create' => ['root', 'visitor'],
@@ -98,10 +88,11 @@ return [
         'driverAssign' => ['root', 'visitor'],
         'driver.details' => ['root', 'visitor'],
 
-        'profile.index' => ['root', 'visitor'],
-        'profile.update' => ['root', 'visitor'],
-        'profile.edit' => ['root', 'visitor'],
-        'profile.change-password' => ['root', 'visitor'],
+        'profile.index' => ['root', 'visitor', 'vendor_admin'],
+        'profile.update' => ['root', 'visitor', 'vendor_admin'],
+        'profile.edit' => ['root', 'visitor', 'vendor_admin'],
+        'profile.change-password' => ['root', 'visitor', 'vendor_admin'],
+        'profile.change-password.form' => ['root', 'visitor', 'vendor_admin'],
 
         'schedule.index' => ['root', 'visitor'],
         'toggole.status.update' => ['root'],
@@ -124,7 +115,5 @@ return [
         'admin.store' => ['root'],
         'admin.edit' => ['root', 'visitor'],
         'admin.update' => ['root'],
-        'admin.show' => ['root', 'visitor'],
-        'admin.set-permission' => ['root'],
     ],
 ];

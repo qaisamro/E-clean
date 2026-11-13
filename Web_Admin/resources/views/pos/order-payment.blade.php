@@ -340,7 +340,7 @@
 
             },
             error: function(xhr, status, error) {
-                console.error('Error fetching variants:', error);
+                console.error('Payment submission failed:', error);
             }
         });
     }

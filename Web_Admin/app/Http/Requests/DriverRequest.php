@@ -29,7 +29,7 @@ class DriverRequest extends FormRequest
             'mobile' => 'nullable|numeric|unique:users',
             'email' => 'required|unique:users',
             'password' => 'required|min:6|confirmed',
-            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png',
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'vendor_id' => 'nullable|exists:vendors,id',
         ];
     }

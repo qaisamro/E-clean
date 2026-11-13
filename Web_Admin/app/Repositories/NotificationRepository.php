@@ -40,6 +40,45 @@ class NotificationRepository extends Repository
         return $notification;
     }
 
+    /**
+     * Create the per-customer inbox rows for a store notification campaign.
+     *
+     * @param  array<int, int>  $customerIds
+     */
+    public function storeManyForVendor(
+        array $customerIds,
+        string $message,
+        ?string $title,
+        int $vendorId,
+        int $vendorNotificationLogId
+    ): int {
+        $customerIds = array_values(array_unique(array_map('intval', $customerIds)));
+        if ($customerIds === []) {
+            return 0;
+        }
+
+        $now = now();
+        $rows = [];
+        foreach ($customerIds as $customerId) {
+            $rows[] = [
+                'customer_id' => $customerId,
+                'vendor_id' => $vendorId,
+                'vendor_notification_log_id' => $vendorNotificationLogId,
+                'title' => $title,
+                'message' => $message,
+                'isRead' => 0,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        foreach (array_chunk($rows, 500) as $chunk) {
+            $this->model()::insert($chunk);
+        }
+
+        return count($rows);
+    }
+
     public function readUpdateByRequest(Notification $notification): Notification
     {
         $notification->update([

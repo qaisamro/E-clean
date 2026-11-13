@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    // Buttons below the permission gates: hidden entirely for ungranted
+    // child (sub) accounts; owners always see everything.
+    $ecIsSub = auth()->user()?->hasRole('vendor_sub');
+    $ecCanForSub = fn ($permission) => !$ecIsSub || (bool) auth()->user()?->can($permission);
+@endphp
     <style>
         .client_payment_box {
             cursor: pointer;
@@ -24,6 +30,33 @@
         }
         .client_payment_box.selected .visa-label {
             color: #0a0e5c;
+        }
+        /* Basket quantity (+/-): explicit contrast — never rely on the
+           theme's button text color */
+        .ec-qty-btn {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px !important;
+            background: linear-gradient(135deg, #028090, #00A896) !important;
+            border: none !important;
+            color: #fff !important;
+            font-size: 15px !important;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(2, 128, 144, .35);
+        }
+        .ec-qty-btn i,
+        .ec-qty-btn span {
+            color: #fff !important;
+        }
+        .ec-qty-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(2, 128, 144, .45);
+        }
+        .ec-qty-btn:active {
+            transform: translateY(0);
         }
     </style>
 
@@ -53,7 +86,7 @@
                                         id="service-{{ $service->id }}">
                                         <img src="{{ asset($service->thumbnailPath) }}" alt="" width="100%"
                                             class="rounded">
-                                        <h3 class="text-center mb-0">{{ $service->name }}</h3>
+                                        <h3 class="text-center mb-0">{{ $service->name_bn ?? $service->name }}</h3>
                                     </div>
                                 @empty
                                     <h3 class="text-center">
@@ -74,12 +107,6 @@
                             <h3 class="m-0">{{ __('Select') . ' ' . __('Products') }}</h3>
                         </div>
                         <div class="card-body">
-
-                            {{-- variants --}}
-                            <div class="d-flex flex-wrap mb-3" id="varients" style="gap: 12px 0">
-
-                            </div>
-
                             {{-- product list --}}
                             <div class="d-flex gap-3 flex-wrap" id="products">
 
@@ -119,26 +146,26 @@
 
                                     </div>
                                 </div>
-                                <div class="flex-grow-1 flex-lg-grow-0">
-                                    <button type="button" class="btn btn-outline-primary w-100 py-2" data-toggle="modal"
-                                        data-target="#customerModal">
-                                        <i class="bi bi-plus-circle-fill me-2"></i>
-                                        {{ __('Add Customer') }}
-                                    </button>
-                                </div>
+                                @if ($ecCanForSub('pos.customerStore'))
+                                    <div class="flex-grow-1 flex-lg-grow-0">
+                                        <button type="button" class="btn btn-outline-primary w-100 py-2" data-toggle="modal"
+                                            data-target="#customerModal">
+                                            <i class="bi bi-plus-circle-fill me-2"></i>
+                                            {{ __('Add Customer') }}
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="d-flex flex-wrap gap-3 border-bottom border-light pb-3 mb-3"
                                 style="border-top-right-radius: 0 !important;">
                                 <div class="flex-grow-1">
-                                    <div class="input-group d-flex">
+                                    <div class="input-group d-flex align-items-center">
 
                                         <div class="flex-grow-1 addressSelect">
                                             <select name="address_id" class="form-control select2" style="width: 100%;"
                                                 data-placeholder="{{ __('Enter customer address') }}" id="addressId">
-                                                <option selected value="">
-                                                    {{ __('Select Address') }}
-                                                </option>
+                                                <option selected value="">{{ __('بدون عنوان') }} — حقل اختياري</option>
 
                                             </select>
                                             <input type="hidden" name="address_id" id="addressInfo">
@@ -146,14 +173,16 @@
 
                                     </div>
                                 </div>
-                                <div class="flex-grow-1 flex-lg-grow-0">
-                                    <button type="button"
-                                        class="btn btn-outline-primary w-100 py-2 d-none"id="addAddressButton"
-                                        data-toggle="modal" data-target="#addressModal">
-                                        <i class="bi bi-plus-circle-fill me-2"></i>
-                                        {{ __('Add Address') }}
-                                    </button>
-                                </div>
+                                @if ($ecCanForSub('pos.addressStore'))
+                                    <div class="flex-grow-1 flex-lg-grow-0">
+                                        <button type="button"
+                                            class="btn btn-outline-primary w-100 py-2 d-none"id="addAddressButton"
+                                            data-toggle="modal" data-target="#addressModal">
+                                            <i class="bi bi-plus-circle-fill me-2"></i>
+                                            {{ __('Add Address') }}
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="d-flex flex-column gap-3" id="basketProducts">
@@ -192,6 +221,12 @@
                                     <label class="form-label mb-1">{{ __('Delivery_Date') }}</label>
                                     <input type="date" name="delivery_date" id="deliveryDateInput" class="form-control"
                                         min="{{ now()->format('Y-m-d') }}" value="{{ now()->format('Y-m-d') }}">
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="form-label mb-1">ساعة التسليم</label>
+                                    <input type="time" name="delivery_hour" id="deliveryHourInput" class="form-control"
+                                        value="{{ now()->format('H:i') }}">
                                 </div>
 
                                 <div class="mt-3">
@@ -258,11 +293,11 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px solid #e9ecff;">
                             <span class="text-muted" style="font-size: 13px;"><i class="bi bi-wallet2 me-1"></i>{{ __('Payment_method') }}</span>
-                            <span id="successPaymentMethod" class="badge px-3 py-2" style="font-size: 12px; border-radius: 8px; background: #fff; border: 1px solid #e9ecff; color: #495057;"></span>
+                            <span id="successPaymentMethod" class="badge badge-primary px-3 py-2" style="font-size: 12px; border-radius: 8px;"></span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2">
                             <span class="text-muted" style="font-size: 13px;"><i class="bi bi-receipt me-1"></i>حالة الدفع</span>
-                            <span id="successPaymentStatusBadge" class="badge px-3 py-2" style="font-size: 12px; border-radius: 8px; background: #fff3cd; color: #856404; border: 1px solid #ffeaa7;">
+                            <span id="successPaymentStatusBadge" class="badge badge-warning px-3 py-2" style="font-size: 12px; border-radius: 8px;">
                                 <i class="bi bi-clock me-1"></i>غير مدفوع
                             </span>
                         </div>
@@ -289,6 +324,7 @@
             </div>
         </div>
     </div>
+    @if ($ecCanForSub('pos.addressStore'))
     <!-- address create modal -->
     <form action="#" id="addressForm">
         <div class="modal fade" id="addressModal">
@@ -352,6 +388,34 @@
 
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mt-3 p-3 rounded" style="background:#f8fafc; border:1px dashed #cbd5e1;">
+                                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                                <button type="button" class="btn btn-outline-primary" id="posUseMyLocation">
+                                                    <i class="fas fa-map-marker-alt me-2"></i>تحديد موقعي الحالي (موقع العميل)
+                                                </button>
+                                                <a href="#" id="posViewOnMap" class="btn btn-outline-info d-none" target="_blank" rel="noopener">
+                                                    <i class="fas fa-map-marked-alt me-2"></i>رؤية الموقع على الخريطة
+                                                </a>
+                                                <small id="posLocationStatus" class="text-muted"></small>
+                                            </div>
+                                            <input type="hidden" name="latitude" id="posLatitude">
+                                            <input type="hidden" name="longitude" id="posLongitude">
+                                            <div class="mt-3">
+                                                <label class="form-label mb-1" for="posLocationText">الموقع <span class="text-muted">(اختياري — اكتبه يدويًا)</span></label>
+                                                <input type="text" name="address_line" id="posLocationText" class="form-control"
+                                                    placeholder="اكتبه يدويًا (مثال: الشارع الرئيسي بجانب الفرن)" />
+                                            </div>
+                                            <div class="mt-3">
+                                                <label class="form-label mb-1" for="posLocationNote">وصف الموقع <span class="text-muted">(اختياري)</span></label>
+                                                <input type="text" name="delivery_note" id="posLocationNote" class="form-control"
+                                                    placeholder="مثال: مبنى أبيض — الطابق الثاني، اطرق على الجرس" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -370,7 +434,9 @@
             </div>
         </div>
     </form>
+    @endif
     <!-- customer create modal -->
+    @if ($ecCanForSub('pos.customerStore'))
     <form action="#" id="customerForm">
         <div class="modal fade" id="customerModal">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -457,9 +523,29 @@
             </div>
         </div>
     </form>
+    @endif
 @endsection
 @push('scripts')
     <script>
+        // Safe Ajax error message — never crash on HTML 403/419/500 bodies.
+        window.ecErrorMessage = function (error, fallback) {
+            if (error && error.responseJSON) {
+                if (error.responseJSON.message) {
+                    return error.responseJSON.message;
+                }
+                if (error.responseJSON.errors) {
+                    var first = Object.values(error.responseJSON.errors)[0];
+                    return Array.isArray(first) ? first[0] : first;
+                }
+            }
+            if (error && error.status === 403) {
+                return 'غير مصرح — يحتاج الحساب صلاحية من مالك المتجر';
+            }
+            if (error && error.status === 419) {
+                return 'انتهت الجلسة — حدّث الصفحة وحاول مجددًا';
+            }
+            return fallback || 'حدث خطأ — حاول مرة أخرى';
+        };
         $(document).ready(function() {
             $('#customerId').on('change', function() {
                 let customerId = $(this).val();
@@ -477,36 +563,36 @@
                     addAddressButton.addClass('d-none');
                 }
                 if (customerId) {
-                    addressSelect.html('<option selected>{{ __('Loading...') }}</option>');
+                    addressSelect.html('<option value="">{{ __('Loading...') }}</option>');
 
                     $.ajax({
                         url: '/customers/' +
                             customerId + '/addresses',
                         type: 'GET',
                         success: function(response) {
-                            addressSelect.html(
-                                '<option selected value="">{{ __('Select Address') }}</option>'
-                            );
-
-
+                            var html = '<option value="">{{ __('بدون عنوان') }} — حقل اختياري</option>';
                             response.forEach(function(address) {
-
-                                addressSelect.append(
-                                    `<option value="${address.id}">${address.id} ${address.address_name} (${address.road_no})</option>`
-
-                                );
-
+                                var name = address.address_name || address.address_line || ('عنوان ' + address.id);
+                                var detail = [address.area, address.road_no, address.house_no]
+                                    .filter(function (v) { return v && String(v).trim() !== ''; })
+                                    .join('، ');
+                                html += '<option value="' + address.id + '">'
+                                    + name
+                                    + (detail ? ' — ' + detail : '')
+                                    + '</option>';
                             });
-
+                            addressSelect.html(html);
+                            // select2 caches its own copy of <option> — rebuild it so new rows appear.
+                            addressSelect.select2('destroy').select2({ placeholder: '{{ __('Select Address') }}' });
                         },
                         error: function() {
-                            addressSelect.html(
-                                '<option selected value="">{{ __('Failed to load addresses') }}</option>'
-                            );
+                            addressSelect.html('<option value="">{{ __('Address field is hidden — no permission') }}</option>');
+                            addressSelect.select2('destroy').select2({ placeholder: '{{ __('Select Address') }}' });
                         },
                     });
                 } else {
-                    addressSelect.html('<option selected value="">{{ __('Select Address') }}</option>');
+                    addressSelect.html('<option value="">{{ __('بدون عنوان') }} — حقل اختياري</option>');
+                    addressSelect.select2('destroy').select2({ placeholder: '{{ __('Select Address') }}' });
                 }
             });
         });
@@ -547,8 +633,7 @@
             var payment_gateway = data['payment_gateway'] ?? 'cash'
             var payment_method = $('input[name="payment_method"]:checked').val() || 'cash';
 
-            let addressId =   $('select[name="address_id"]').val();
-            console.log(addressId,'hhh');
+            let addressId = $('select[name="address_id"]').val();
 
 
             $.ajax({
@@ -559,13 +644,14 @@
                     customer_id: data['customer_id'],
                     delivery_charge: data['delivery_charge'],
                     delivery_date: data['delivery_date'],
+                    delivery_hour: data['delivery_hour'],
                     payment_id: payment_gateway,
                     payment_method: payment_method,
                     payment_status: 'pending',
                     instruction: data['instruction'],
                     discount: data['discount'],
                     products: data['products'],
-                    address_id: $('#addressId').val(),
+                    address_id: $('#addressId').val() || null,
                 },
                 success: (response) => {
 
@@ -618,11 +704,11 @@
                         var pmText = order.payment_method === 'visa' ? 'VISA' : 'كاش';
                         var pmIcon = order.payment_method === 'visa' ? '<i class="bi bi-credit-card me-1"></i>' : '<i class="bi bi-cash me-1"></i>';
                         $('#successPaymentMethod').html(pmIcon + pmText);
-                        // reset payment status to unpaid
-                        $('#successPaymentStatusBadge').html('<i class="bi bi-clock me-1"></i>غير مدفوع').css({background:'#fff3cd', color:'#856404', border:'1px solid #ffeaa7'});
+                        // reset payment status to unpaid — identity badge (white text on gold)
+                        $('#successPaymentStatusBadge').removeClass('badge-success').addClass('badge-warning').html('<i class="bi bi-clock me-1"></i>غير مدفوع');
                         $('#successMarkPaid').show().prop('disabled', false).html('<i class="bi bi-check-circle" style="font-size:18px;"></i> {{ __('Mark_As_Paid') }} — تأكيد الدفع');
                         $('#markPaidWrapper').show();
-                        $('#printOrderInvoice').attr('href', "{{ route('order.print.invioce', ':orderId') }}".replace(':orderId', order.id));
+                        $('#printOrderInvoice').attr('href', "{{ route(auth()->user()->hasAnyRole(['root', 'admin']) || (auth()->user()->hasRole('vendor_admin')) || (auth()->user()->hasRole('vendor_sub') && auth()->user()->can('order.pos-invoice')) ? 'order.pos-invoice' : 'order.print.invioce', ':orderId') }}".replace(':orderId', order.id));
                         $('#successModal').modal('show');
 
                     }
@@ -630,11 +716,12 @@
 
                 },
                 error: (error) => {
+                    var msg = window.ecErrorMessage(error, 'تعذر تنفيذ العملية');
                     Toast.fire({
                         icon: 'error',
-                        title: error.responseJSON.message,
+                        title: msg,
                     });
-                    console.log(error.responseJSON.message);
+                    console.log(msg);
                 },
 
 
@@ -650,64 +737,15 @@
             $('.service-card').removeClass('active');
             $('#service-' + serviceId).addClass('active');
             currentServiceId = serviceId;
-            fetchVariants(serviceId);
+            fetchProducts();
         }
 
-        function fetchVariants(serviceId) {
-            var variantId = null;
-            $('#varients').empty();
-            $.ajax({
-                url: "{{ route('pos.fetch.variants') }}",
-                type: 'GET',
-                data: {
-                    service_id: serviceId
-                },
-                success: function(response) {
-                    // Clear existing variants
-                    $('#varients').empty();
-
-                    // Append new variants
-                    response.data.variants.forEach(function(variant, index) {
-                        var variantButton = $('<button>')
-                            .addClass('btn border')
-                            .text(variant.name)
-                            .attr('onclick', 'selectVariant(' + variant.id + ')')
-                            .attr('id', 'variant-' + variant.id)
-                            .attr('type', 'button');
-
-                        // Add the btn-primary class to the first variant
-                        if (index === 0) {
-                            variantButton.addClass('btn-primary');
-                            variantId = variant.id;
-                        }
-
-                        $('#varients').append(variantButton);
-                    });
-
-                    if (variantId) {
-                        fetchProducts(variantId);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching variants:', error);
-                }
-            });
-        }
-
-        function selectVariant(variantId) {
-            $('#varients .btn').removeClass('btn-primary');
-            $('#variant-' + variantId).addClass('btn-primary');
-
-            fetchProducts(variantId);
-        }
-
-        function fetchProducts(varintId) {
+        function fetchProducts() {
             $.ajax({
                 url: "{{ route('pos.fetch.products') }}",
                 type: 'GET',
                 data: {
-                    service_id: currentServiceId,
-                    variant_id: varintId
+                    service_id: currentServiceId
                 },
                 success: function(response) {
                     // Clear existing products
@@ -780,11 +818,11 @@
                         </p>
                         <input type="hidden" name="products[${product.id}][price]" value="${product.current_price}">
                         <div class="d-flex align-items-center gap-3">
-                            <button class="btn btn-sm m-0" onclick="changeQuantity(${product.id}, -1)">
+                            <button type="button" class="btn btn-sm m-0 ec-qty-btn" onclick="changeQuantity(${product.id}, -1)" aria-label="إنقاص الكمية">
                                 <i class="fa fa-minus"></i>
                             </button>
                             <input type="text" class="text-center border rounded" value="${product.quantity}" readonly style="width: 46px">
-                            <button class="btn btn-sm m-0" onclick="changeQuantity(${product.id}, 1)">
+                            <button type="button" class="btn btn-sm m-0 ec-qty-btn" onclick="changeQuantity(${product.id}, 1)" aria-label="زيادة الكمية">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -872,7 +910,7 @@
                     payment_status: 'paid',
                 },
                 success: function(response) {
-                    $('#successPaymentStatusBadge').html('<i class="bi bi-check-circle-fill me-1"></i>مدفوع').css({background:'#d4edda', color:'#155724', border:'1px solid #c3e6cb'});
+                    $('#successPaymentStatusBadge').removeClass('badge-warning').addClass('badge-success').html('<i class="bi bi-check-circle-fill me-1"></i>مدفوع');
                     $btn.html('<i class="bi bi-check-circle-fill me-1"></i> تم التأكيد — مدفوع').removeClass('btn-success').addClass('btn-outline-success').prop('disabled', true);
                     setTimeout(function(){ $('#markPaidWrapper').slideUp(300); }, 1200);
                     Toast.fire({
@@ -882,9 +920,13 @@
                 },
                 error: function(error) {
                     $btn.prop('disabled', false).html('<i class="bi bi-check-circle" style="font-size:18px;"></i> {{ __('Mark_As_Paid') }} — تأكيد الدفع');
+                    var msg = error.responseJSON?.message;
+                    if (!msg && error.status === 403) {
+                        msg = 'غير مصرح بتأكيد الدفع — يحتاج الحساب صلاحية «تأكيد الدفع» من صاحب المتجر';
+                    }
                     Toast.fire({
                         icon: 'error',
-                        title: error.responseJSON?.message || 'فشل التحديث',
+                        title: msg || 'فشل التحديث',
                     });
                 },
             });
@@ -932,6 +974,9 @@
                         `<option value="${user.id}" selected>${user.name}-(${user.mobile})</option>`
                     );
                     customer.val(user.id);
+                    // Fire the same change pipeline as a manual selection so
+                    // addresses reload and hiddenCustomerId is populated.
+                    customer.trigger('change');
 
                     $('input[name="first_name"]').val('');
                     $('input[name="last_name"]').val('');
@@ -942,12 +987,51 @@
                     $('input[name="password_confirmation"]').val('');
                 },
                 error: (error) => {
+                    var msg = window.ecErrorMessage(error, 'تعذر تنفيذ العملية');
                     Toast.fire({
                         icon: 'error',
-                        title: error.responseJSON.message,
+                        title: msg,
                     });
-                    console.log(error.responseJSON.message);
+                    console.log(msg);
                 },
+            });
+        });
+
+        // ===== POS "Add New Address": locate the customer on the map =====
+        $('#posUseMyLocation').on('click', function() {
+            const btn = $(this);
+            const status = $('#posLocationStatus');
+            const mapLink = $('#posViewOnMap');
+
+            if (!navigator.geolocation) {
+                status.text('المتصفح لا يدعم تحديد الموقع');
+                return;
+            }
+
+            btn.prop('disabled', true);
+            status.text('جاري تحديد الموقع…');
+
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude.toFixed(6);
+                const lng = pos.coords.longitude.toFixed(6);
+
+                $('#posLatitude').val(lat);
+                $('#posLongitude').val(lng);
+
+                mapLink.attr('href', 'https://www.google.com/maps?q=' + lat + ',' + lng)
+                    .removeClass('d-none');
+
+                status.text('تم تحديد الموقع (' + lat + ', ' + lng + ')');
+                btn.prop('disabled', false);
+                // «الموقع» (address_line) is deliberately NOT auto-filled —
+                // the vendor types it manually when needed.
+            }, function(err) {
+                status.text(err && err.code === 1 ? 'تم رفض إذن الموقع من المتصفح' : 'تعذر تحديد الموقع');
+                btn.prop('disabled', false);
+            }, {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
             });
         });
 
@@ -976,6 +1060,10 @@
                     house_no: $('input[name="house_no"]').val(),
                     house_name: $('input[name="house_name"]').val(),
                     area: $('input[name="area"]').val(),
+                    latitude: $('#posLatitude').val(),
+                    longitude: $('#posLongitude').val(),
+                    address_line: $('#posLocationText').val(),
+                    delivery_note: $('#posLocationNote').val(),
                     customer_id: $('input[name="customer_id"]').val(),
                 },
                 success: (response) => {
@@ -997,13 +1085,23 @@
 
                     $('input[name="address_name"]').val('');
                     $('input[name="road_no"]').val('');
+                    $('input[name="house_no"]').val('');
+                    $('input[name="house_name"]').val('');
+                    $('input[name="area"]').val('');
+                    $('#posLatitude').val('');
+                    $('#posLongitude').val('');
+                    $('#posLocationText').val('');
+                    $('#posLocationNote').val('');
+                    $('#posLocationStatus').text('');
+                    $('#posViewOnMap').attr('href', '#').addClass('d-none');
                 },
                 error: (error) => {
+                    var msg = window.ecErrorMessage(error, 'تعذر تنفيذ العملية');
                     Toast.fire({
                         icon: 'error',
-                        title: error.responseJSON.message,
+                        title: msg,
                     });
-                    console.log(error.responseJSON.message);
+                    console.log(msg);
                 },
             });
         });

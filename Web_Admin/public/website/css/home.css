@@ -1,0 +1,115 @@
+.headline {
+  font-weight: 600;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  /* 24px → 32px */
+  line-height: 140%;
+  color: var(--color-neutral-900);
+}
+
+.headline > span {
+  color: var(--color-mint-600, #32D3A0);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+
+/* sections */
+.section_container {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  margin-top: clamp(50px, 10vw, 100px);
+  margin-bottom: clamp(50px, 10vw, 100px);
+}
+
+.heading_section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.section_container .heading_section p:first-child {
+  font-weight: 600;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  /* 24px → 32px */
+  line-height: 140%;
+  text-align: center;
+  color: var(--color-neutral-900);
+}
+
+.section_container .heading_section p:last-child {
+  font-weight: 400;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  /* 16px → 24px */
+  line-height: 100%;
+  text-align: center;
+  color: var(--color-neutral-500);
+}
+
+.section_container .heading_section p:first-child span {
+  color: var(--color-mint-600, #32D3A0);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+
+
+.heading_section_2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+@media (min-width: 740px) {
+  .heading_section_2 {
+    align-items: start;
+  }
+}
+
+
+.heading_section_2 p:first-child {
+  font-weight: 600;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  /* 24px → 32px */
+  line-height: 140%;
+  text-align: center;
+  color: var(--color-neutral-900);
+}
+
+@media (min-width: 740px) {
+  .heading_section_2 p:first-child {
+    text-align: start;
+  }
+}
+
+.heading_section_2 p:last-child {
+  font-weight: 400;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  /* 16px → 24px */
+  line-height: 100%;
+  text-align: center;
+
+  color: var(--color-neutral-500);
+}
+
+@media (min-width: 740px) {
+  .heading_section_2 p:last-child {
+    text-align: start;
+  }
+}
+
+.heading_section_2 p:first-child span {
+  color: var(--color-mint-600, #32D3A0);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
+
+
+/* service cards */

@@ -17,8 +17,6 @@ class Faq extends Model
         'status',
     ];
 
-    protected $guarded = [];
-
     public function category()
     {
         return $this->belongsTo(FaqCategory::class, 'faq_category_id');

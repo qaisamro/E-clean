@@ -8,10 +8,6 @@
                     <div class="card-header">
                         <h2 class="card-title float-left my-1">{{ __('All') . ' ' . __('Service') }}</h2>
                         <div class="w-100 text-right">
-                            @can('additional.index')
-                                <a href="{{ route('additional.index') }}"
-                                    class="text-right btn btn-primary my-md-0 my-1">{{ __('Additional_Services') }}</a>
-                            @endcan
                             @can('service.create')
                                 <a href="{{ route('service.create') }}"
                                     class="text-right btn btn-primary my-md-0 my-1">{{ __('Add_New') . ' ' . __('Service') }}</a>
@@ -25,8 +21,7 @@
                                 id="myTable">
                                 <thead>
                                     <tr>
-                                        <th scope="col">{{ __('Name') . ' ' . __('of') . ' ' . __('English') }}</th>
-                                        <th scope="col">{{ __('Name') . ' ' . __('of') . ' ' . __('Arabic') }}</th>
+                                        <th scope="col">{{ __('Name') }}</th>
                                         <th scope="col">{{ __('Thumbnail') }}</th>
                                         <th scope="col">{{ __('Description') }}</th>
                                         @can('service.status.toggle')
@@ -38,7 +33,6 @@
                                 <tbody>
                                     @foreach ($services as $service) 
                                         <tr>
-                                            <td>{{ $service->name }}</td>
                                             <td>{{ $service->name_bn }}</td>
                                             <td>
                                                 <img width="100" src="{{ asset($service->thumbnailPath) }}"
@@ -67,13 +61,15 @@
                                                     </a>
                                                 @endcan
 
-                                                @can('service.delete')
-                                                    <form action="{{ route('service.delete', $service->id) }}" method="POST" style="display:inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger delete-confirm"><i class="fas fa-trash"></i></button>
-                                                    </form>
-                                                @endcan
+                                                <form action="{{ route('service.delete', $service->id) }}" method="POST" style="display:inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger delete-confirm"
+                                                        title="{{ __('Delete') }} {{ __('Service') }}">
+                                                        <i class="fas fa-trash"></i>
+                                                        <span class="sr-only">{{ __('Delete') }} {{ __('Service') }}</span>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

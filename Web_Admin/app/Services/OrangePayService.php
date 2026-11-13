@@ -1,40 +1,44 @@
 <?php
 
-    namespace App\Services;
+namespace App\Services;
 
-    use GuzzleHttp\Client;
+use GuzzleHttp\Client;
+use RuntimeException;
 
-    class OrangePayService
+class OrangePayService
+{
+    protected $client;
+    protected $apiKey;
+    protected $baseUrl;
+
+    public function __construct()
     {
-        protected $client;
-        protected $apiKey;
-        protected $apiSecret;
-        protected $baseUrl;
-
-        public function __construct()
-        {
-            $this->client = new Client();
-            $this->apiKey = '4d2ceeaa-8ceb-4841-a3a9-4f8a05702092';
-            $this->apiSecret = 'bd912517-9db0-4770-9806-61b28414f369';
-            $this->baseUrl = 'https://api.orange-pay.com';
-        }
-
-        public function createPayment($amount, $currency, $description)
-        {
-            $response = $this->client->post($this->baseUrl . '/payments', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => [
-                    'amount' => $amount,
-                    'currency' => $currency,
-                    'description' => $description,
-                ],
-            ]);
-
-            return json_decode($response->getBody(), true);
-        }
-
-        // Add other methods as needed...
+        $this->client = new Client([
+            'connect_timeout' => 5,
+            'timeout' => 15,
+        ]);
+        $this->apiKey = config('services.orange_pay.api_key');
+        $this->baseUrl = rtrim((string) config('services.orange_pay.base_url'), '/');
     }
+
+    public function createPayment($amount, $currency, $description)
+    {
+        if (!is_string($this->apiKey) || trim($this->apiKey) === '') {
+            throw new RuntimeException('OrangePay is not configured.');
+        }
+
+        $response = $this->client->post($this->baseUrl . '/payments', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'amount' => $amount,
+                'currency' => $currency,
+                'description' => $description,
+            ],
+        ]);
+
+        return json_decode((string) $response->getBody(), true);
+    }
+}

@@ -8,11 +8,8 @@ use App\Models\Customer;
 use App\Models\Service;
 use App\Repositories\OrderRepository;
 use App\Repositories\TransactionRepository;
-use App\Repositories\VariantRepository;
-use App\Http\Requests\OrderRequest;
 use App\Repositories\ProductRepository;
 use App\Http\Resources\ProductResource;
-use App\Models\Variant;
 use Illuminate\Validation\Rules\Enum;
 use App\Models\PaymentGateway;
 
@@ -66,17 +63,6 @@ class PosController extends Controller
 
             ]);
         }
-
-
-    }
-
-    public function fetchVariants()
-    {
-        $variants = Variant::all();
-        return $this->json('Variant Info',[
-            'variants' => $variants
-        ]);
-
 
 
     }

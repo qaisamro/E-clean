@@ -71,7 +71,7 @@
                                     class="flex justify-center items-center  w-fit h-[30px] gap-1 p-2 rounded-[25px] bg-neutral-900 mt-[15px]">
                                     <img src="{{ asset('website/assets/icons/star-gold.svg') }}" alt=""
                                         class="h-3 w-3">
-                                    <p class="text-xs text-left text-[#eab800]">Premium Member</p>
+                                    <p class="text-xs text-left text-[#eab800]">{{ __('Premium Member') }}</p>
 
                                 </div>
                             </div>
@@ -83,19 +83,19 @@
 
 
                 <li onclick="toggleSidebar()">
-                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">Home</a>
+                    <a href="#" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Home') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#pricing" class="text-lg hover:text-blue-400 cursor-pointer">Services</a>
+                    <a href="#pricing" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Services') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">Nearest Store</a>
+                    <a href="#features" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Nearest Store') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">FAQ</a>
+                    <a href="#services" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('FAQ') }}</a>
                 </li>
                 <li onclick="toggleSidebar()">
-                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">Contact</a>
+                    <a href="#support" class="text-lg hover:text-blue-400 cursor-pointer">{{ __('Contact') }}</a>
                 </li>
             </ul>
         </div>
@@ -108,11 +108,11 @@
         <section class="max-w-2lg mx-auto pt-[60px] pb-[80px] px-4 xl:px-0 space-y-5 md:space-y-10">
 
             <div class="w-full">
-                <p class="text-2xl md:text-4xl font-semibold text-left text-gray-700">
-                    My Dashboard
+                    <p class="text-2xl md:text-4xl font-semibold text-left text-gray-700">
+                    {{ __('My Dashboard') }}
                 </p>
-                <p class="text-base md:text-xl text-left text-gray-500">
-                    Manage your orders, addresses, and preferences
+                                    <p class="text-base md:text-xl text-left text-gray-500">
+                    {{ __('Manage your orders, addresses, and preferences') }}
                 </p>
             </div>
 
@@ -140,7 +140,7 @@
                                         class="flex justify-center items-center  w-fit h-[30px] gap-1 p-2 rounded-[25px] bg-neutral-900 mt-[15px]">
                                         <img src="{{ asset('website/assets/icons/star-gold.svg') }}" alt=""
                                             class="h-3 w-3">
-                                        <p class="text-xs text-left text-[#eab800]">Premium Member</p>
+                                        <p class="text-xs text-left text-[#eab800]">{{ __('Premium Member') }}</p>
 
                                     </div>
                                 </div>
@@ -166,7 +166,7 @@
                                     <p
                                         class="text-base font-medium transition-all duration-150
                       {{ $isActive ? 'text-white' : 'text-neutral-700 group-hover:text-white' }}">
-                                        {{ $item['label'] }}
+                                        {{ __($item['label']) }}
                                     </p>
                                 </a>
                             @endforeach
@@ -182,7 +182,7 @@
 
                                     <p
                                         class="text-base font-medium text-neutral-700 group-hover:text-white transition-all duration-150">
-                                        Sign Out
+                                        {{ __('Sign Out') }}
                                     </p>
                                 </button>
                             </form>
@@ -198,33 +198,30 @@
                         class="rounded-[20px] p-6 bg-white shadow-[0_6px_14px_rgba(11,30,46,0.06)]">
                         @csrf
                         <div class="flex justify-between items-center">
-                            <h3 class="text-neutral-700 text-lg font-semibold"> Account Setting</h3>
+                            <h3 class="text-neutral-700 text-lg font-semibold">{{ __('Account Settings') }}</h3>
                         </div>
 
 
                         <div class="space-y-4 mt-6 mb-[30px]">
                             <div>
                                 <label for="name"
-                                    class="text-sm md:text-base font-medium text-left text-neutral-700">Full
-                                    Name</label>
+                                    class="text-sm md:text-base font-medium text-left text-neutral-700">{{ __('Full Name') }}</label>
                                 <input type="text" value="{{ old('first_name', $user->first_name ?? '') }}"
-                                    id="name" name="name" placeholder="John Doe"
+                                    id="name" name="name" placeholder="{{ __('Full Name') }}"
                                     class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] p-3 rounded-[14px] text-sm focus:outline-[#028090] ">
                             </div>
                             <div>
                                 <label for="email"
-                                    class="text-sm md:text-base font-medium text-left text-neutral-700">Email
-                                    Address</label>
+                                    class="text-sm md:text-base font-medium text-left text-neutral-700">{{ __('Email_Address') }}</label>
                                 <input type="text" value="{{ old('email', $user->email ?? '') }}" id="email"
-                                    name="email" placeholder="john.doe@email.com"
+                                    name="email" placeholder="{{ __('Enter_Email_Address') }}"
                                     class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] p-3 rounded-[14px] text-sm focus:outline-[#028090] ">
                             </div>
                             <div>
                                 <label for="phone"
-                                    class="text-sm md:text-base font-medium text-left text-neutral-700">Phone
-                                    Number</label>
+                                    class="text-sm md:text-base font-medium text-left text-neutral-700">{{ __('Phone_Number') }}</label>
                                 <input type="phone" value="{{ old('phone', $user->mobile ?? '') }}" id="phone"
-                                    name="phone" placeholder="Your phone number"
+                                    name="phone" placeholder="{{ __('Your phone number') }}"
                                     class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] p-3 rounded-[14px] text-sm focus:outline-[#028090] ">
                             </div>
                         </div>
@@ -233,7 +230,7 @@
                         <button type="submit"
                             class="flex justify-center items-center w-full h-12 overflow-hidden px-5 py-3.5 rounded-[14px] bg-[linear-gradient(135deg,#028090,#00A896)]">
                             <p class="text-sm font-semibold text-center text-white">
-                                Save Changes
+                                {{ __('Save_Changes') }}
                             </p>
                         </button>
                     </form>
@@ -243,14 +240,14 @@
                     <!-- notification -->
                     <div class="rounded-[20px] p-6 bg-white shadow-[0_6px_14px_rgba(11,30,46,0.06)]">
                         <div class="flex justify-between items-center">
-                            <h3 class="text-neutral-700 text-lg font-semibold">Notifications</h3>
+                            <h3 class="text-neutral-700 text-lg font-semibold">{{ __('Notifications') }}</h3>
                         </div>
 
                         <div class="mt-6">
                             <div class="flex justify-start items-center py-4 border-b border-[#E2E8F0]">
                                 <label for="notification" class="flex-1">
-                                    <p class="text-sm font-semibold text-left text-neutral-700">Order Updates</p>
-                                    <p class="text-sm text-left text-neutral-500">Get notified about your order status
+                                    <p class="text-sm font-semibold text-left text-neutral-700">{{ __('Order Updates') }}</p>
+                                    <p class="text-sm text-left text-neutral-500">{{ __('Get notified about your order status') }}
                                     </p>
                                 </label>
                                 <label for="notification">
@@ -263,8 +260,8 @@
                             </div>
                             <div class="flex justify-start items-center py-4">
                                 <label for="promotion" class="flex-1">
-                                    <p class="text-sm font-semibold text-left text-neutral-700">Promotions</p>
-                                    <p class="text-sm text-left text-neutral-500">Receive special offers and discounts
+                                    <p class="text-sm font-semibold text-left text-neutral-700">{{ __('Promotions') }}</p>
+                                    <p class="text-sm text-left text-neutral-500">{{ __('Receive special offers and discounts') }}
                                     </p>
                                 </label>
                                 <label for="promotion">
@@ -294,16 +291,16 @@
                 class="max-w-2lg mx-auto py-[60px] px-4 xl-1:px-0 flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-6 lg:gap-0">
                 <div class="flex-1">
                     <p class="text-[32px] font-semibold text-center lg:text-left text-white ">
-                        Ready to Get Started?
+                        {{ __('Ready to Get Started?') }}
                     </p>
                     <p class="text-lg text-center lg:text-left text-neutral-50">
-                        Book your first order and experience hassle-free dry cleaning service
+                        {{ __('Book your first order and experience hassle-free dry cleaning service') }}
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-4">
                     <button class="btn_solid_white_lg">
                         <a href="{{ route('web.service') }}">
-                            <p>Book Now</p>
+                            <p>{{ __('Book Now') }}</p>
                         </a>
 
                         <img src="{{ asset('website/assets/icons/arrow-left-green.svg') }}" alt="">

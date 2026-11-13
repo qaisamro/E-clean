@@ -32,12 +32,6 @@
                 </li>
             </ul>
 
-            <div class="site-drawer-lang mt-6 flex items-center gap-3 text-sm">
-                <a href="{{ route('change.local', 'ln=ar') }}"
-                    class="site-drawer-pill px-4 py-2 rounded-full border transition {{ app()->getLocale() === 'ar' ? 'site-drawer-pill-active font-bold' : '' }}">العربية</a>
-                <a href="{{ route('change.local', 'ln=en') }}"
-                    class="site-drawer-pill px-4 py-2 rounded-full border transition {{ app()->getLocale() === 'en' ? 'site-drawer-pill-active font-bold' : '' }}">English</a>
-            </div>
             </div>
         </div>
     </div>

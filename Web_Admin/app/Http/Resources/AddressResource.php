@@ -16,6 +16,7 @@ class AddressResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'is_default' => (bool) $this->is_default,
             'address_name' => $this->address_name,
             'road_no' => $this->road_no,
             'house_no' => $this->house_no,

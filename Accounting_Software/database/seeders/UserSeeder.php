@@ -31,29 +31,5 @@ class UserSeeder extends Seeder
             'role' => Roles::ADMIN,
             'password' => '01234567892',
         ]);
-        User::create([
-            'name' => 'محمد محمود',
-            'phone' => '01234567893',
-            'role' => Roles::EMPLOYEE,
-            'password' => '01234567893',
-        ]);
-        User::create([
-            'name' => 'احمد صادق',
-            'phone' => '01234567894',
-            'role' => Roles::EMPLOYEE,
-            'password' => '01234567894',
-        ]);
-        User::create([
-            'name' => 'عمر محمد',
-            'phone' => '01234567895',
-            'role' => Roles::EMPLOYEE,
-            'password' => '01234567895',
-        ]);
-        User::create([
-            'name' => 'عمر محمد',
-            'phone' => '01234567896',
-            'role' => Roles::EMPLOYEE,
-            'password' => '01234567896',
-        ]);
     }
 }

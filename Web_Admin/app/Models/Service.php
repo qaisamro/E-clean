@@ -37,6 +37,11 @@ class Service extends Model
         ');
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
 
 
     public function variants()
@@ -64,6 +69,11 @@ class Service extends Model
     public function scopeIsActive(Builder $builder)
     {
         return $builder->where('is_active', true);
+    }
+
+    public function scopeGlobal(Builder $builder): Builder
+    {
+        return $builder->whereNull('vendor_id');
     }
 
     public function scopeSearch(Builder $builder, $search)

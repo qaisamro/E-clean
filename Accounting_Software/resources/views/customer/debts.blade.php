@@ -1,9 +1,14 @@
 <div>
-    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-4">
-        <h4 class="fw-bold py-3 mb-0">
-            <span class="text-muted fw-light"><a href="{{ route('customers.index') }}">العملاء</a> /</span>
-            الديون المستحقة
-        </h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-credit-card"></i> العملاء</div>
+                <h1 class="ec-section-title">الديون المستحقة</h1>
+            </div>
+            <a href="{{ route('customers.index') }}" class="btn btn-outline-secondary">
+                <i class="bx bx-arrow-back me-1"></i> قائمة العملاء
+            </a>
+        </div>
     </div>
 
     @if(session('debt-success'))
@@ -66,12 +71,9 @@
                                     {{ number_format($customer->orders_sum_remaining_money ?? 0, 2) }} ₪
                                 </td>
                                 <td class="text-center">
-                                    <button
-                                        wire:click="openPaymentModal({{ $customer->id }})"
-                                        class="btn btn-sm btn-success"
-                                    >
+                                    <a href="{{ route('customer-payments.create', ['customer' => $customer->id]) }}" class="btn btn-sm btn-success">
                                         <i class="bx bx-money me-1"></i> تحصيل دفعة
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
@@ -116,7 +118,7 @@
                                     wire:model="paymentAmount"
                                     type="number"
                                     step="0.01"
-                                    min="1"
+                                    min="0.01"
                                     class="form-control @error('paymentAmount') is-invalid @enderror"
                                     placeholder="0.00"
                                     autofocus

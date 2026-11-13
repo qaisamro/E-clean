@@ -1,93 +1,46 @@
 <?php
+
 namespace App\Services;
 
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\Messaging\AndroidConfig;
-use Kreait\Firebase\Messaging\ApnsConfig;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
-
+/**
+ * Backwards-compatible facade used by older controllers.
+ * New code should depend on FirebaseMessagingService directly.
+ */
 class NotificationServices
 {
-    private $firebaseMessaging;
-    private $credentialPath = 'firebase_credentials.json';
-
-/**
- * Construct the NotificationServices object.
- *
- * Instantiates the Firebase Messaging Factory and provides the path to the
- * service account credentials.
- *
- * The service account credentials are expected to be in a JSON file located
- * at `public/firebase_credentials.json`.
- */
-public function __construct()
-{
-    $this->firebaseMessaging = (new Factory)
-        ->withServiceAccount(public_path($this->credentialPath))
-        ->createMessaging();
-}
-
-/**
- * Build a CloudMessage with Android config for instant, high-importance
- * delivery that shows on the lock screen with sound.
- */
-private function buildMessage(string $title, string $message): CloudMessage
-{
-    $androidConfig = AndroidConfig::fromArray([
-        'priority' => 'high',
-        'notification' => [
-            'sound' => 'default',
-            'channel_id' => 'high_importance_channel',
-            'notification_priority' => 'PRIORITY_HIGH',
-            'visibility' => 'PUBLIC',
-            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        ],
-    ]);
-
-    return CloudMessage::new()
-        ->withNotification(Notification::create($title, $message))
-        ->withAndroidConfig($androidConfig)
-        ->withApnsConfig(ApnsConfig::fromArray([
-            'payload' => [
-                'aps' => [
-                    'sound' => 'default',
-                ],
-            ],
-        ]));
-}
-
-/**
- * Send a single notification.
- *
- * @param string $deviceToken device token from where notification will be sent.
- * @param string $title title of the notification.
- * @param string $message message of the notification.
- * @return void
- */
-public function send(string $deviceToken, string $title, string $message): void
-{
-    $message = $this->buildMessage($title, $message);
-
-    $this->firebaseMessaging->send($message->withChangedTarget('token', $deviceToken));
-}
-
-/**
- * Send multiple notifications.
- *
- * @param array $deviceTokens device tokens from where notifications will be sent.
- * @param string $title title of the notification.
- * @param string $message message of the notification.
- * @return void
- */
-public function sendNotification(string $message, array $deviceTokens, string $title): void
-{
-    if (!empty($deviceTokens)) {
-        $message = $this->buildMessage($title, $message);
-
-        $this->firebaseMessaging->sendMulticast($message, $deviceTokens);
+    public function __construct()
+    {
     }
-}
 
+    public function send(string $deviceToken, string $title, string $message): void
+    {
+        try {
+            app(FirebaseMessagingService::class)->send($deviceToken, $title, $message);
+        } catch (\Throwable $e) {
+            app(MessageLogger::class)->safeLog('warning', 'Push notification failed', ['exception' => get_class($e)]);
+        }
+    }
 
+    /**
+     * Send a push notification to many devices.
+     *
+     * Returns the delivery result from FirebaseMessagingService so callers can
+     * tell the admin exactly what happened (sent / failed / skipped / reason).
+     */
+    public function sendNotification(string $message, array $deviceTokens, string $title): array
+    {
+        try {
+            return app(FirebaseMessagingService::class)->sendMany($deviceTokens, $title, $message);
+        } catch (\Throwable $e) {
+            app(MessageLogger::class)->safeLog('warning', 'Push notification failed', ['exception' => get_class($e)]);
+
+            return [
+                'status' => 'error',
+                'message' => 'Push notification failed: ' . $e->getMessage(),
+                'provider_id' => null,
+                'success' => 0,
+                'failed' => count($deviceTokens),
+            ];
+        }
+    }
 }

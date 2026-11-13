@@ -1,3 +1,8 @@
+{{-- The hidden field tells AdminController::setPermission exactly which
+     permission this row controls. It is always submitted, even when the
+     "No" radio (an empty value) is selected, so a revoke can never be
+     derived from the mangled field name. --}}
+<input type="hidden" name="permissions[]" value="{{ $permission }}">
 <div class="row">
     <div class="col-6">
         {{ __($title) }}:

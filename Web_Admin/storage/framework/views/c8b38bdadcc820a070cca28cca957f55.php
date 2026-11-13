@@ -1,0 +1,2 @@
+<button type="submit" class="btn common-btn"><?php echo e(__($name)); ?></button>
+<?php /**PATH C:\Users\Lenovo\OneDrive\Desktop\E_Clean\Web_Admin\resources\views\components\common-button.blade.php ENDPATH**/ ?>

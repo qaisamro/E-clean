@@ -54,7 +54,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="text-neutral-700 text-base font-medium">{{ __('Road No') }}</label>
-                        <input type="text" name="road_no" placeholder="Main Road"
+                        <input type="text" name="road_no" placeholder="{{ __('Road') }} {{ __('main road example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="mb-4">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="text-neutral-700 text-base font-medium">{{ __('Address Line') }}</label>
-                        <input type="text" name="address_line" placeholder="123 Main Road, Apt 6B"
+                        <input type="text" name="address_line" placeholder="{{ __('Address example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="mb-4">
@@ -124,7 +124,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="text-neutral-700 text-base font-medium">{{ __('Road No') }}</label>
-                        <input type="text" name="road_no" id="edit_road_no" placeholder="Main Road"
+                        <input type="text" name="road_no" id="edit_road_no" placeholder="{{ __('Road') }} {{ __('main road example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="mb-4">
@@ -139,7 +139,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="text-neutral-700 text-base font-medium">{{ __('Address Line') }}</label>
-                        <input type="text" name="address_line" id="edit_address_line" placeholder="123 Main Road, Apt 6B"
+                        <input type="text" name="address_line" id="edit_address_line" placeholder="{{ __('Address example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="mb-4">

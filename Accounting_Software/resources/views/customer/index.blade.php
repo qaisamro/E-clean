@@ -1,5 +1,17 @@
 <div>
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">العملاء /</span> قائمة العملاء</h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-group"></i> العملاء</div>
+                <h1 class="ec-section-title">قائمة العملاء</h1>
+            </div>
+            @if(auth()->user()->hasPermission('customers.manage'))
+                <a href="{{ route('customers.create') }}" class="btn btn-primary">
+                    <i class="bx bx-user-plus me-1"></i> إضافة عميل جديد
+                </a>
+            @endif
+        </div>
+    </div>
 
     <div class="card">
         {{-- title table --}}
@@ -39,18 +51,15 @@
                             <td>{{ $customer->phone }}</td>
                             <td>{{ $customer->created_at->diffForHumans() }}</td>
                             <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('customers.edit', $customer) }}">
-                                            <i class="bx bx-edit-alt me-1"></i>تعديل
+                                <div class="d-flex gap-1">
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('customers.statement', $customer) }}" title="كشف حساب مفصل">
+                                        <i class="bx bx-file"></i> كشف الحساب
+                                    </a>
+                                    @if(auth()->user()->hasPermission('customers.manage'))
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('customers.edit', $customer) }}" title="تعديل العميل">
+                                            <i class="bx bx-edit-alt"></i>
                                         </a>
-                                        {{-- زر استعادة كلمة المرور محذوف لشركة النخبة --}}
-                                    </div>
-
+                                    @endif
                                 </div>
                             </td>
                         </tr>

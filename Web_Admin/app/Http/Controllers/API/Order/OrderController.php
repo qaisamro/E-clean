@@ -18,6 +18,7 @@ use App\Repositories\ScheduleRepository;
 use App\Repositories\TransationRepository;
 use App\Models\PaymentGateway;
 use App\Repositories\PaymentRepository;
+use App\Support\OrderVendorOwnership;
 
 class OrderController extends Controller
 {
@@ -27,7 +28,7 @@ class OrderController extends Controller
         $pageNo = $request->page ?? null;
         $perPage = $request->per_page ?? null;
 
-        $orders = (new OrderRepository())->orderListByStatus($status, $pageNo, $perPage);
+        $orders = (new OrderRepository())->orderListByStatus($pageNo, $perPage, $status);
 
         return $this->json('customer order list', [
             'orders' => OrderResource::collection($orders),
@@ -38,19 +39,22 @@ class OrderController extends Controller
 
     public function store(OrderRequest $request)
     {
+        // Ownership is derived from the selected product/service relations;
+        // vendor_id supplied by a client is only a consistency check.
+        $vendorId = OrderVendorOwnership::resolveProductVendor(
+            collect($request->products)->pluck('id')->all(),
+            $request->filled('vendor_id') ? (int) $request->vendor_id : null
+        );
 
-        $pickTime = (new OrderRepository())->setPickOrDeliveryTime($request->pick_date, $request->pick_hour);
+        $appointmentsEnabled = $vendorId && app(\App\Services\VendorAppointments::class)->settings($vendorId)['enabled'];
+        $pickTime = $appointmentsEnabled ? true : (new OrderRepository())->setPickOrDeliveryTime($request->pick_date, $request->pick_hour);
 
-        $deliveryTime = (new OrderRepository())->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery');
+        $deliveryTime = $appointmentsEnabled ? true : (new OrderRepository())->setPickOrDeliveryTime($request->delivery_date, $request->delivery_hour, 'delivery');
 
-        if ($pickTime != null && $deliveryTime != null) {
+        if ($appointmentsEnabled || ($pickTime != null && $deliveryTime != null)) {
 
             $order = (new OrderRepository())->storeByRequest($request);
             $transaction = (new TransationRepository())->storeForOrder($order);
-
-            if ($request->has('additional_service_id')) {
-                $order->additionals()->sync($request->additional_service_id);
-            }
 
             try{
                 $message  = 'New order add from ' . $order->customer->name;
@@ -94,10 +98,106 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = (new OrderRepository())->findById($id);
+        $customerId = auth()->user()->customer?->id;
+        abort_unless($customerId, 403);
+
+        $order = Order::query()
+            ->where('customer_id', $customerId)
+            ->findOrFail($id);
+
         return $this->json('order details', [
             'order' => new OrderResource($order)
         ]);
+    }
+
+    /**
+     * Cancel own order while it is still awaiting confirmation.
+     * The window closes as soon as the store accepts the order.
+     */
+    public function cancel(Request $request, Order $order)
+    {
+        $customerId = auth()->user()->customer?->id;
+        abort_unless($customerId, 403);
+        abort_unless((int) $order->customer_id === (int) $customerId, 404);
+
+        $status = strtolower(trim((string) $order->order_status));
+        if ($status !== 'pending') {
+            return $this->json('لا يمكن إلغاء الطلب بعد تأكيد المتجر له', [], Response::HTTP_FORBIDDEN);
+        }
+
+        $order->update(['order_status' => 'Cancelled']);
+
+        return $this->json('Order cancelled', [
+            'message' => 'تم إلغاء الطلب بنجاح',
+            'order_status' => 'Cancelled',
+        ]);
+    }
+
+    /**
+     * Edit delivery details (address / date / hour / instruction) while
+     * the order is still pending confirmation. Changing the product list
+     * is handled by PUT /orders/{order} (products only).
+     */
+    public function customerEdit(Request $request, Order $order)
+    {
+        $customerId = auth()->user()->customer?->id;
+        abort_unless($customerId, 403);
+        abort_unless((int) $order->customer_id === (int) $customerId, 404);
+
+        $status = strtolower(trim((string) $order->order_status));
+        if ($status !== 'pending') {
+            return $this->json('لا يمكن تعديل الطلب بعد تأكيد المتجر له', [], Response::HTTP_FORBIDDEN);
+        }
+
+        $validated = $request->validate([
+            'address_id' => 'nullable|integer|exists:addresses,id',
+            'delivery_date' => 'nullable|date_format:Y-m-d',
+            'delivery_hour' => 'nullable|string|max:10',
+            'instruction' => 'nullable|string|max:500',
+        ]);
+
+        if (!empty($validated['address_id'])) {
+            $address = \App\Models\Address::withTrashed()
+                ->whereKey($validated['address_id'])
+                ->where('customer_id', $customerId)
+                ->first();
+            abort_unless($address, 403, 'Address does not belong to you');
+            // A trashed address may still own legacy orders, but it must not
+            // be re-selected as the delivery target.
+            if (method_exists($address, 'trashed') && $address->trashed()) {
+                return $this->json('لا يمكن اختيار عنوان محذوف — أضف عنواناً جديداً.', [], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }
+
+        $hour = null;
+        if (!empty($validated['delivery_hour'])) {
+            $hour = $this->normalizeHour($validated['delivery_hour']);
+        }
+
+        $order->update(array_filter([
+            'address_id' => $validated['address_id'] ?? null,
+            'delivery_date' => $validated['delivery_date'] ?? null,
+            'delivery_hour' => $hour,
+            'instruction' => $validated['instruction'] ?? null,
+        ], fn ($value) => $value !== null));
+
+        return $this->json('Order updated', [
+            'message' => 'تم تحديث بيانات الطلب بنجاح',
+            'order' => new OrderResource($order->fresh()),
+        ]);
+    }
+
+    /**
+     * Accept "H:i" or "H:i:s" and return "H:i:s".
+     */
+    private function normalizeHour(string $hour): string
+    {
+        $hour = trim($hour);
+        if (preg_match('/^([01]\d|2[0-3]):([0-5]\d)/', $hour, $m)) {
+            return $m[1] . ':' . $m[2] . ':00';
+        }
+
+        return $hour;
     }
 
     /**
@@ -126,6 +226,9 @@ class OrderController extends Controller
 
     public function pickSchedule($date)
     {
+        if (request()->filled('vendor_id')) {
+            return $this->vendorSchedule($date, 'pickup');
+        }
         $date = $this->normalizeScheduleDate($date);
         if (!$date) {
             return $this->json('Invalid date', ['schedules' => []], 422);
@@ -182,6 +285,9 @@ class OrderController extends Controller
 
     public function deliverySchedule($date)
     {
+        if (request()->filled('vendor_id')) {
+            return $this->vendorSchedule($date, 'delivery');
+        }
         $date = $this->normalizeScheduleDate($date);
         if (!$date) {
             return $this->json('Invalid date', ['schedules' => []], 422);
@@ -228,13 +334,44 @@ $hours = collect($hours);
         ]);
     }
 
+    private function vendorSchedule($date, string $type)
+    {
+        request()->validate(['vendor_id' => 'required|integer|exists:vendors,id',
+            'pick_date' => 'nullable|required_with:pick_hour|date_format:Y-m-d',
+            'pick_hour' => 'nullable|required_with:pick_date|date_format:H:i']);
+        $vendor = \App\Models\Vendor::findOrFail(request('vendor_id'));
+        abort_unless($vendor->is_active, 404);
+        $service = app(\App\Services\VendorAppointments::class);
+        if (!$service->settings($vendor->id)['enabled']) {
+            // Preserve the pre-existing global API when the store has not opted in.
+            request()->query->remove('vendor_id');
+            request()->request->remove('vendor_id');
+            return $type === 'pickup' ? $this->pickSchedule($date) : $this->deliverySchedule($date);
+        }
+        $date = $this->normalizeScheduleDate($date);
+        if (!$date) return $this->json('Invalid date', ['schedules' => []], 422);
+        $data = $service->availability($vendor->id, $date, request('pick_date'), request('pick_hour'));
+        return $this->json('Store schedules', ['schedules' => $data['days'][0][$type], 'timezone' => $data['timezone']]);
+    }
+
     public function update(Request $request, Order $order)
     {
+        $customerId = $request->user()->customer?->id;
+        abort_unless($customerId, 403);
+
+        abort_unless((int) $order->customer_id === (int) $customerId, 404);
+
         $request->validate([
-            'products' => 'required|array'
+            'products' => 'required|array|min:1',
+            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.quantity' => 'required|integer|min:1',
         ]);
 
         if ($order->order_status == 'Pending') {
+            OrderVendorOwnership::assertProductsMatchOrder(
+                $order,
+                collect($request->products)->pluck('id')->all()
+            );
             (new OrderRepository())->updateByRequest($request, $order);
             return $this->json('Order is edited successful.');
         }
@@ -244,7 +381,20 @@ $hours = collect($hours);
 
     public function newOrder()
     {
-        $orders = (new OrderRepository())->query()->where('is_show', false)->latest('id')->get();
+        $orders = (new OrderRepository())->query()->where('is_show', false)
+            ->with('products.service');
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $vendorId = \App\Support\VendorAccount::idFor(auth()->user());
+            $vendorId
+                ? $orders->where('vendor_id', $vendorId)
+                : $orders->whereRaw('1 = 0');
+        }
+        $orders = $orders->latest('id')->get();
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $orders = $orders
+                ->filter(fn (Order $order) => OrderVendorOwnership::productsMatchOrder($order))
+                ->values();
+        }
         return $this->json('New Order', [
             'orders' => OrderResource::collection($orders)
         ]);

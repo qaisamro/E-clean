@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\App;
 
 class OrderResource extends JsonResource
 {
+    private function appointmentLabel(string $type): string
+    {
+        $start = Carbon::parse($this->appointment->{$type.'_start'}, 'UTC')->setTimezone(\App\Services\VendorAppointments::ZONE);
+        $end = Carbon::parse($this->appointment->{$type.'_end'}, 'UTC')->setTimezone(\App\Services\VendorAppointments::ZONE);
+        return $start->format('H:i').' - '.$end->format('H:i');
+    }
     /**
      * Transform the resource into an array.
      *
@@ -35,7 +41,7 @@ class OrderResource extends JsonResource
             $payment_url = (new PaymentRepository())->stripePaymentURL([
                 'currency' => 'usd',
                 'amount' => $this->total_amount,
-                'product_data' => "Order #{$this->order_code}",
+                'product_data' => "Order {$this->order_code}",
             ], $this->id);
         }
 
@@ -44,6 +50,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_code' => $this->order_code,
+            'vendor_id' => $this->vendor_id,
             'driver_status' => $this->pivot ? $this->pivot->status : null,
             'drivers' => $hasDriver,
             'customer' => (new CustomerResource($this->customer)),
@@ -58,13 +65,15 @@ class OrderResource extends JsonResource
             'payment_type' => $this->payment_type,
             'payment_type_bn' => __($this->payment_type),
             'pick_date' => $this->pick_date ? Carbon::parse($this->pick_date)->format('d F, Y') : null,
-            'pick_hour' => $this->pick_hour ? $this->getTime(substr($this->pick_hour, 0, 2)) : null,
+            'pick_hour' => $this->appointment ? $this->appointmentLabel('pickup') : ($this->pick_hour ? $this->getTime(substr($this->pick_hour, 0, 2)) : null),
             'delivery_date' => $this->delivery_date ? Carbon::parse($this->delivery_date)->format('d F, Y') : null,
-            'delivery_hour' => $this->delivery_hour ? $this->getTime(substr($this->delivery_hour, 0, 2)) : null,
+            'delivery_hour' => $this->appointment ? $this->appointmentLabel('delivery') : ($this->delivery_hour ? $this->getTime(substr($this->delivery_hour, 0, 2)) : null),
+            'delivery_hour_raw' => $this->delivery_hour ?: null,
+            'instruction' => $this->instruction,
             'ordered_at' => $this->created_at->format('Y-m-d h:i a'),
             'rating' => $this->rating ? $this->rating->rating : null,
             'item' => $this->products->count(),
-            'address' => (new AddressResource($this->address)),
+            'address' => $this->address ? (new AddressResource($this->address)) : null,
             'products' => ProductResource::collection($this->products),
             'quantity' => $quantity,
             'payment' => $this->payment ? (new PaymentResource($this->payment)) : null,

@@ -15,7 +15,7 @@ class Service extends Model
 
     public function items(): BelongsToMany
     {
-        return $this->belongsToMany(Item::class)
+        return $this->belongsToMany(Product::class, 'item_service', 'service_id', 'item_id')
             ->as('details')
             ->withPivot(['price', 'note']);
     }

@@ -1,0 +1,2 @@
+<span class="list-title <?php echo e($class); ?>"><?php echo e(__($title)); ?></span>
+<?php /**PATH C:\Users\Lenovo\OneDrive\Desktop\E_Clean\Web_Admin\resources\views\components\section-header.blade.php ENDPATH**/ ?>

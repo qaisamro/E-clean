@@ -1,4 +1,4 @@
-﻿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     $premiumServiceSetting = $webSettings->firstWhere('key', 'premium_services');
     $premiumService = $premiumServiceSetting ? $premiumServiceSetting->value : null;
@@ -74,7 +74,7 @@
                     </div>
 
                     {{-- Footer --}}
-                    <div class="flex justify-between border-t pt-5 mt-auto" style="border-color:#E2E8F0;">
+                    <div class="border-t pt-5 mt-auto" style="border-color:#E2E8F0;">
                         <div class="w-full">
                             <p class="text-[10px] font-medium" style="color:#5B6B7A;">
                                 {{ __('Starts From') }}
@@ -88,22 +88,6 @@
 
                             </p>
                         </div>
-
-                        <a href="{{ route('web.cart', ['service_id' => $service->id]) }}"
-                            class="w-full flex justify-center items-center gap-2 px-3 py-2 rounded-lg
-             transition-all duration-150 border-[1.5px] border-gray-100
-             group hover:bg-gradient-to-t from-mint-200 to-mint-700" style="background:linear-gradient(135deg,#028090,#00A896);border-radius:14px;border:1px solid transparent;">
-
-                            <span class="text-xs font-semibold transition" style="color:#fff;">
-                                {{ __('Book Service') }}
-                            </span>
-
-                            <img src="{{ asset('website/assets/icons/arrow-left-green.svg') }}"
-                                class="w-[10px] h-[10px] group-hover:hidden transition">
-
-                            <img src="{{ asset('website/assets/icons/arrow-left.svg') }}"
-                                class="w-[10px] h-[10px] hidden group-hover:block transition">
-                        </a>
                     </div>
 
                 </div>

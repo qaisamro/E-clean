@@ -1,4 +1,4 @@
-﻿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     $howItWork = $webSettings->firstWhere('key', 'how_it_works');
     $howItWorkValue = $howItWork?->value ?? [];
@@ -13,9 +13,9 @@
                 <span style="display:inline-flex;align-items:center;background:#EAF6F8;color:#028090;border:1px solid #E2E8F0;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;">{{ __('How It Works') }}</span>
             </div>
             <div class="text-center md:text-start text-3xl font-semibold" style="color:#0B1E2E;font-family:Cairo,sans-serif;">
-                {!! !empty($howItWorkValue['title'])
+                {{ !empty($howItWorkValue['title'])
                     ? $howItWorkValue['title']
-                    : __('Dry Cleaning Done in 4 Simple Steps - Fast, Easy & Convenient') !!}
+                    : __('Dry Cleaning Done in 4 Simple Steps - Fast, Easy & Convenient') }}
             </div>
 
 

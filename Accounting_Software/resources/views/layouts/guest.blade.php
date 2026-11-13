@@ -8,14 +8,11 @@
     <title>{{ $title ?? config('app.name') }}</title>
 
     <!-- Icons -->
-    <link rel="icon" type="image/x-icon" href="{{ $logo ?? asset('assets/img/favicon/favicon.ico') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}?v=20261112"/>
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}"/>
 
 
-    <!-- Favicon -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css"/>
@@ -29,6 +26,7 @@
     <!-- Page CSS -->
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/ec-theme.css') }}?v=ec10"/>
 
     <!-- Helpers -->
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
@@ -40,7 +38,7 @@
     @stack('css')
 
 </head>
-<body>
+<body class="ec-auth-shell">
 
 
 <!-- Content -->

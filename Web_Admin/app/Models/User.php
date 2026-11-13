@@ -38,6 +38,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'mobile_verified_at' => 'datetime',
+        'phone_verification_required' => 'boolean',
+        'vendor_notifications_enabled' => 'boolean',
     ];
 
     public function addresses()

@@ -10,7 +10,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        $offers = (new OfferRepository())->getActive();
+        $offers = (new OfferRepository())->getActive(\App\Support\CatalogCityFilter::selected(request()));
 
         return $this->json('offer list', [
             'offers' => OfferResource::collection($offers)

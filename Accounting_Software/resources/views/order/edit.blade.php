@@ -1,13 +1,10 @@
 <div>
     <!-- Search Input -->
-    <!-- Search Input will be teleported to navbar inside dive #searchInputPlace -->
-    @teleport('#searchInputPlace')
-    <div class="nav-item d-flex align-items-center">
+    <div class="nav-item d-flex align-items-center mb-3 mt-1">
         <i class="bx bx-search fs-4 lh-0"></i>
         <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="بحث عن العميل..."
                aria-label="بحث عن العميل..." wire:model.live.debounce.500ms="customerForm.search"/>
     </div>
-    @endteleport
     <!-- / Search Input -->
 
     <div>
@@ -118,7 +115,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header pt-2 pb-3">
-                        <span class="fs-5 text-black">الاصناف</span>
+                        <span class="fs-5 text-black">المنتجات</span>
                         <i class='ms-2 bx bx-loader-circle bx-spin' wire:loading
                            wire:target="orderForm.service_id"></i>
                     </div>
@@ -221,7 +218,7 @@
             <div class="col-md-7">
                 <div class="card">
                     <div class="card-header pt-3 pb-1">
-                        <h5>الاوردر</h5>
+                        <h5>الطلب</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
@@ -229,7 +226,7 @@
                                 <thead>
                                 <tr class="text-nowrap">
                                     <th class="text-center px-2">#</th>
-                                    <th class="text-center px-2">الصنف</th>
+                                    <th class="text-center px-2">المنتج</th>
                                     <th class="text-center px-2">الخدمه</th>
                                     <th class="text-center px-2">العدد</th>
                                     <th class="text-center px-2">السعر</th>
@@ -281,7 +278,7 @@
                                     </button>
                                     <label class="col-3" wire:key="{{ rand() }}">
                                         <span>العدد </span>
-                                        <input type="number" class="form-control" min="1"
+                                        <input type="number" step="0.01" class="form-control" min="0.01"
                                                wire:model="orderForm.orders.{{ $selectedOrder }}.quantity"
                                                wire:input.debounce="applyChanges">
                                     </label>
@@ -291,7 +288,7 @@
                                         @if( isset($orderForm->orders[$selectedOrder]['note']) )
                                             <span>( {{ $orderForm->orders[$selectedOrder]['note'] }} )</span>
                                         @endif
-                                        <input type="number" class="form-control" min="1"
+                                        <input type="number" step="0.01" class="form-control" min="0.01"
                                                wire:model="orderForm.orders.{{ $selectedOrder }}.price"
                                                wire:input.debounce="applyChanges">
                                     </label>
@@ -323,48 +320,29 @@
 
         <!-- Payment & Submit -->
         <div class="row gy-3">
-            <!-- Payment Type -->
+            <!-- Financial summary: payments are recorded only through the payment ledger. -->
             <div class="col-md-6 order-md-last">
                 <div class="card">
                     <div class="card-header text-center">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_type" id="cash" value="1"
-                                   wire:model.live="payment_type">
-                            <label class="form-check-label h5" for="cash">دفع كاش</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_type" id="deferred" value="2"
-                                   wire:model.live="payment_type">
-                            <label class="form-check-label h5" for="deferred">دفع آجل</label>
-                        </div>
+                        <h5 class="mb-0">الملخص المالي</h5>
                     </div>
                     <div class="card-body text-center">
                         <div class="row justify-content-center">
-                            <div class="col-md-3 d-flex justify-content-center flex-column">
+                            <div class="col-md-4 d-flex justify-content-center flex-column">
                                 <h5>المطلوب</h5>
                                 <span class="fs-5">{{ $total_price }}</span>
                             </div>
-                            @if($payment_type == 2)
-                                <hr class="d-md-none">
-                                <div class="col-md-3">
-                                    <label for="paid_money">
-                                        المدفوع
-                                        <input class="form-control" type="number" id="paid_money" min="0"
-                                               wire:model.live.debounce="paid_money">
-                                        <x-input-error key="paid_money"/>
-                                    </label>
-                                </div>
-                            @endif
-                        </div>
-
-                        @if($payment_type == 2)
-                            <hr>
-                            <div class="row justify-content-center">
-                                <div class="col-md-3 d-flex justify-content-center flex-column">
-                                    <h5>المتبقي</h5>
-                                    <span class="fs-5">{{ $remaining_money }}</span>
-                                </div>
+                            <div class="col-md-4 d-flex justify-content-center flex-column">
+                                <h5>المدفوع</h5>
+                                <span class="fs-5">{{ $paid_money }}</span>
                             </div>
+                            <div class="col-md-4 d-flex justify-content-center flex-column">
+                                <h5>المتبقي</h5>
+                                <span class="fs-5">{{ $remaining_money }}</span>
+                            </div>
+                        </div>
+                        @if($remaining_money > 0)
+                            <a class="btn btn-outline-primary btn-sm mt-3" href="{{ route('customer-payments.create', ['customer' => $customerForm->id, 'order' => $order->id]) }}">تسجيل دفعة</a>
                         @endif
                     </div>
                 </div>

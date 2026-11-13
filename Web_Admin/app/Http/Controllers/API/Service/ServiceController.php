@@ -19,23 +19,14 @@ class ServiceController extends Controller
         $request->validate([
             'vendor_id' => 'nullable|integer|exists:vendors,id',
         ]);
-
-        $vendorId = $request->input('vendor_id');
+        // Keep the shared city contract strict even though the fixed service
+        // catalogue itself is identical in every city.
+        \App\Support\CatalogCityFilter::selected($request);
 
         $query = Service::where('is_active', 1)
-            // Only show services created by a store-owner (vendor) account.
-            ->whereNotNull('vendor_id')
+            ->whereNull('vendor_id')
             ->with('thumbnail');
-        if ($vendorId) {
-            $query->where('vendor_id', $vendorId);
-        }
         $services = $query->get();
-
-        // When listing globally (no vendor filter), dedupe by name since each
-        // store has its own copy of the same service.
-        if (!$vendorId) {
-            $services = $services->unique('name')->values();
-        }
 
         return $this->json('service list', [
             'services' => ServiceResource::collection($services)

@@ -22,9 +22,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Title'). ' ' . __('Arabic') }}</th>
+                                    <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Description') }}</th>
-                                    <th scope="col">{{ __('Description'). ' ' . __('Arabic') }}</th>
+                                    <th scope="col">{{ __('Description') }}</th>
                                     <th scope="col">{{ __('Price') }}</th>
                                     @can('additional.status.toggle')
                                     <th scope="col">{{ __('Status') }}</th>

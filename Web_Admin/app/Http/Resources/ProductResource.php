@@ -33,7 +33,9 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'image_path' => $this->thumbnailPath,
             'discount_percentage' => (float)$discount,
-            'sub_products' => SubProductResource::collection($this->subProducts),
+            // Preserve the response key for installed clients while retiring
+            // the sub-product feature from every current interface.
+            'sub_products' => [],
             'service' => (new ServiceResource($this->service)),
             'variant' => (new VariantResource($this->variant))
         ];

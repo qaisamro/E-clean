@@ -19,6 +19,11 @@
                    </div>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle"></i>
+                        هذا الكوبون <strong>خاص بمتجرك</strong> ويُطبَّق على منتجاتك فقط.
+                        الكوبونات العامة (كل المتاجر) ينشئها مدير النظام من لوحة التحكم.
+                    </div>
                     <div class="col-8 m-auto">
                         <form @can('coupon.store') @role('root|admin|vendor_admin') action="{{ route('coupon.store') }}" @endrole @endcan method="POST"> @csrf
                             <div class="row">

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Product;
 use App\Enum\OrderStatus;
 use App\Repositories\OrderRepository;
-use App\Repositories\ProductRepository;
 use App\Repositories\ServiceRepository;
 use Carbon\Carbon;
 
@@ -20,18 +20,19 @@ class DashboardController extends Controller
             return redirect()->route('driver.account');
         }
 
-        // Store owners have their own separate dashboard; the main
-        // dashboard below is for the super admin only.
-        if (auth()->user()->hasRole('vendor_admin')) {
+        // Store owners (and child accounts with dashboard permission) go to
+        // the store dashboard; the main dashboard is for the super admin.
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $staff = auth()->user();
+            if ($staff->hasRole('vendor_sub') && !$staff->can('vendor.dashboard')) {
+                return redirect()->route('profile.index');
+            }
             return redirect()->route('vendor.dashboard');
         }
 
-        $customers = Customer::all();
+        $customers = Customer::with('user')->get();
         $services = (new ServiceRepository())->getAll();
-        $products = (new ProductRepository())->getAll();
-        $income = (new OrderRepository())->getIncome();
-
-        $revenues = (new OrderRepository())->getRevenueReport();
+        $products = Product::with('service')->get();
 
         $confirmOrder = (new OrderRepository())->getByStatus(OrderStatus::CONFIRM)->count();
         $completeOrder = (new OrderRepository())->getByStatus(OrderStatus::DELIVERED)->count();
@@ -48,8 +49,6 @@ class DashboardController extends Controller
             'customers',
             'services',
             'products',
-            'revenues',
-            'income',
             'confirmOrder',
             'completeOrder',
             'pendingOrder',

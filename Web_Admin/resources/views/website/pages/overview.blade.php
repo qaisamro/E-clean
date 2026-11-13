@@ -108,10 +108,10 @@
 
             <div class="w-full">
                 <p class="text-2xl md:text-4xl font-semibold text-left text-gray-700">
-                    My {{ __('Dashboard') }}
+                    {{ __('My Dashboard') }}
                 </p>
                 <p class="text-base md:text-xl text-left text-gray-500">
-                    Manage your orders, addresses, and preferences
+                    {{ __('Manage your orders, addresses, and preferences') }}
                 </p>
             </div>
 
@@ -164,7 +164,7 @@
                                     <p
                                         class="text-base font-medium transition-all duration-150
                       {{ $isActive ? 'text-white' : 'text-neutral-700 group-hover:text-white' }}">
-                                        {{ $item['label'] }}
+                                        {{ __($item['label']) }}
                                     </p>
                                 </a>
                             @endforeach
@@ -180,7 +180,7 @@
 
                                     <p
                                         class="text-base font-medium text-neutral-700 group-hover:text-white transition-all duration-150">
-                                        Sign Out
+                                        {{ __('Sign Out') }}
                                     </p>
                                 </button>
                             </form>
@@ -244,7 +244,7 @@
                     <div class="rounded-[20px] p-6 bg-white shadow-[0_6px_14px_rgba(11,30,46,0.06)] flex flex-col gap-[15px]">
                         <div class="flex justify-between items-center">
                             <p class="text-base font-semibold text-left text-neutral-700">
-                                Recent Orders
+                                {{ __('Recent Orders') }}
                             </p>
                             <a href="{{ route('web.my.orders') }}">
                                 <p class="text-sm font-medium text-left text-neutral-700">{{ __('View All') }}</p>
@@ -272,10 +272,10 @@
                                             <div
                                                 class="flex justify-center items-center px-2.5 py-[5px] rounded-[20px] bg-[#0099df]">
                                                 <p class="text-[8px] sm:text-[10px] text-left text-white">
-                                                    {{ $order->order_status ?? 'In Progress' }}</p>
+                                                    {{ __($order->order_status ?? 'In Progress') }}</p>
                                             </div>
                                             <p class="text-[10px] sm:text-xs font-medium text-right text-neutral-500">
-                                                {{ $order->created_at->format('M d, Y') }}</p>
+                                                {{ $order->created_at->locale(app()->getLocale())->translatedFormat('M d, Y') }}</p>
                                             <p class="text-xs sm:text-sm font-semibold text-right text-gray-900">
                                                 {{ currencyPosition($order->total_amount ?? 0, 2) }}</p>
                                         </div>
@@ -283,19 +283,19 @@
 
                                     </div>
                                     <p class="text-sm font-medium  text-neutral-900">
-                                        #{{ $order->order_code ?? $order->id }}
+                                        {{ $order->order_code ?? $order->id }}
                                     </p>
                                     <p class="text-sm  text-neutral-500">
                                         @if ($order->address)
-                                            {{ $order->address->address_name ?? ($order->address->address_line ?? 'Order') }}
+                                        {{ $order->address->address_name ?? ($order->address->address_line ?? __('Order')) }}
                                         @else
-                                            Order
+                                            {{ __('Order') }}
                                         @endif
                                     </p>
                                     <p class="text-xs font-medium  text-neutral-700">
                                         {{ currencyPosition($order->total_amount ?? 0, 2) }} <span
                                             class="text-xs text-left text-neutral-500">{{ $order->products->count() ?? 0 }}
-                                            Items</span> </p>
+                                            {{ __('Items') }}</span> </p>
                                 </div>
                                 <div class="hidden sm:block">
                                     <div
@@ -305,19 +305,19 @@
                                         @elseif($order->order_status == 'On Going') bg-[#fbbc04]
                                         @else bg-[#0099df] @endif">
                                         <p class="text-[10px] text-left text-white">
-                                            {{ $order->order_status ?? 'In Progress' }}
+                                            {{ __($order->order_status ?? 'In Progress') }}
                                         </p>
                                     </div>
                                     <p class="text-xs font-medium text-right text-neutral-500">
-                                        {{ $order->created_at->format('M d, Y') }}</p>
+                                        {{ $order->created_at->locale(app()->getLocale())->translatedFormat('M d, Y') }}</p>
                                     <p class="text-sm font-semibold text-right text-gray-900">
                                         {{ currencyPosition($order->total_amount ?? 0, 2) }}</p>
                                 </div>
                             </div>
                         @empty
                             <div class="p-6 text-center text-neutral-500">
-                                <p>No orders yet. <a href="{{ route('web.service') }}"
-                                        class="text-[#028090] font-medium">Book your first order</a></p>
+                                <p>{{ __('No orders yet.') }} <a href="{{ route('web.service') }}"
+                                        class="text-[#028090] font-medium">{{ __('Book your first order') }}</a></p>
                             </div>
                         @endforelse
                     </div>
@@ -327,7 +327,7 @@
                     <div class="rounded-[20px] p-6 bg-white shadow-[0_6px_14px_rgba(11,30,46,0.06)] flex flex-col gap-[15px]">
                         <div class="flex justify-between items-center">
                             <p class="text-base font-semibold text-left text-neutral-700">
-                                Saved {{ __('Addresses') }}
+                                {{ __('Saved Addresses') }}
                             </p>
                             <a href="{{ route('web.addresses') }}">
                                 <p class="text-sm font-medium text-left text-neutral-700">{{ __('View All') }}</p>
@@ -353,7 +353,7 @@
                                             <span
                                                 class="inline-flex justify-start items-center gap-2 bg-[#E6F4F1] px-2 py-1 rounded-full">
                                                 <img src="{{ asset('website/assets/icons/star.svg') }}" alt="">
-                                                <p class="text-xs text-left text-[#028090]">Default</p>
+                                                <p class="text-xs text-left text-[#028090]">{{ __('Default') }}</p>
 
                                             </span>
                                         @endif
@@ -367,7 +367,7 @@
                                             <span
                                                 class="hidden sm:inline-flex justify-start items-center gap-2 bg-[#E6F4F1] px-2 py-1 rounded-full">
                                                 <img src="{{ asset('website/assets/icons/star.svg') }}" alt="">
-                                                <p class="text-xs text-left text-[#028090]">Default</p>
+                                                <p class="text-xs text-left text-[#028090]">{{ __('Default') }}</p>
 
                                             </span>
                                         @endif
@@ -381,10 +381,10 @@
 
                                             $fields = [
                                                 'address_line' => null,
-                                                'road_no' => 'Road: ',
-                                                'house_no' => 'House: ',
-                                                'flat_no' => 'Flat: ',
-                                                'block' => 'Block: ',
+                                                'road_no' => __('Road') . ': ',
+                                                'house_no' => __('House') . ': ',
+                                                'flat_no' => __('Flat') . ': ',
+                                                'block' => __('Block') . ': ',
                                                 'area' => null,
                                                 'post_code' => null,
                                             ];
@@ -408,8 +408,8 @@
                             </div>
                         @empty
                             <div class="p-6 text-center text-neutral-500">
-                                <p>No addresses saved. <a href="{{ route('web.addresses') }}"
-                                        class="text-[#028090] font-medium">Add an address</a></p>
+                                <p>{{ __('No addresses saved.') }} <a href="{{ route('web.addresses') }}"
+                                        class="text-[#028090] font-medium">{{ __('Add an address') }}</a></p>
                             </div>
                         @endforelse
                     </div>
@@ -430,10 +430,10 @@
                 class="max-w-2lg mx-auto py-[60px] px-4 xl:1:px-0 flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-6 lg:gap-0">
                 <div class="flex-1">
                     <p class="text-[32px] font-semibold text-center lg:text-left text-white ">
-                        Ready to Get Started?
+                        {{ __('Ready to Get Started?') }}
                     </p>
                     <p class="text-lg text-center lg:text-left text-neutral-50">
-                        Book your first order and experience hassle-free dry cleaning service
+                        {{ __('Book your first order and experience hassle-free dry cleaning service') }}
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-4">

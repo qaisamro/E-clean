@@ -44,7 +44,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="value" class="form-label">قيمه المصروف</label>
-                                <input class="form-control" type="number" min="1" id="value" name="value" required
+                                <input class="form-control" type="number" step="0.01" min="0.01" id="value" name="value" required
                                        value="{{ old('value', $expense->value) }}"/>
                                 <x-input-error key="value"/>
                             </div>

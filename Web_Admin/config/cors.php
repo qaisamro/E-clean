@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'https://elitecleanps.com',
+        'https://www.elitecleanps.com',
+    ],
 
     'allowed_origins_patterns' => [],
 

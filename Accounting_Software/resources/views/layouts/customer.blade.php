@@ -13,7 +13,7 @@
     <meta name="description" content=""/>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ $logo ?? asset('assets/img/favicon/favicon.ico') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}?v=20261112"/>
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}"/>
 
@@ -43,6 +43,7 @@
 </head>
 
 <body>
+<a class="ec-skip-link" href="#main-content">الانتقال إلى المحتوى</a>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -54,7 +55,7 @@
 
 
             <!-- Content wrapper -->
-            <div class="content-wrapper">
+            <div class="content-wrapper" id="main-content">
                 <div class="container-xxl flex-grow-1 container-p-y">
                     {{ $slot }}
                 </div>

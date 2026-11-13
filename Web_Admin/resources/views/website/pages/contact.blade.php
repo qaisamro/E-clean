@@ -1,4 +1,4 @@
-﻿@php
+@php
     $webSettings = $webSettings ?? app(\App\Repositories\WebsiteSettingsRepository::class)->index();
     $footer = $webSettings->get('footer')?->value ?? [];
     $contact = $footer['contact_us'] ?? [];

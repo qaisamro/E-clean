@@ -1,0 +1,1185 @@
+/* E Clean admin identity overlay (super admin + store owner dashboards).
+   Additive overrides only — Argon files untouched. Palette matches the app:
+   primary #028090, accent #00A896, dark #156172, deep #083744. */
+:root {
+  --ec-primary: #028090;
+  --ec-accent: #00A896;
+  --ec-dark: #156172;
+  --ec-deep: #083744;
+  --ec-bg: #FAF7F2;
+  --ec-tint: #EAF6F8;
+  --ec-border: #E2E8F0;
+  --ec-text: #0B1E2E;
+  --ec-red: #E63946;
+  --ec-gold: #F59E0B;
+}
+
+body {
+  background-color: var(--ec-bg) !important;
+  font-family: 'Tajawal', 'Open Sans', sans-serif !important;
+}
+
+/* Header gradient */
+.header.bg-gradient-primary,
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--ec-deep) 0%, var(--ec-dark) 55%, var(--ec-primary) 100%) !important;
+}
+.bg-primary {
+  background-color: var(--ec-primary) !important;
+}
+
+/* Primary buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  border-color: var(--ec-primary) !important;
+  border-radius: 12px !important;
+}
+.btn-primary:hover {
+  filter: brightness(1.07);
+}
+.btn-info {
+  background-color: var(--ec-primary) !important;
+  border-color: var(--ec-primary) !important;
+}
+
+/* Sidebar active link */
+.navbar-vertical .navbar-nav .nav-link.active {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.navbar-vertical .navbar-nav .nav-link.active .nav-link-text,
+.navbar-vertical .navbar-nav .nav-link.active i {
+  color: #fff !important;
+}
+
+/* Links and accents */
+a, .text-primary {
+  color: var(--ec-primary) !important;
+}
+a:hover {
+  color: var(--ec-dark) !important;
+}
+.text-info {
+  color: var(--ec-primary) !important;
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--ec-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 6px 14px rgba(11, 30, 46, 0.06) !important;
+}
+.card-header {
+  border-bottom: 1px solid var(--ec-border) !important;
+}
+.card-header h1, .card-header h2, .card-header h3 {
+  color: var(--ec-text) !important;
+}
+
+/* Badges */
+.badge-primary, .badge-info {
+  background-color: var(--ec-primary) !important;
+}
+.badge-success {
+  background-color: var(--ec-accent) !important;
+}
+.badge-warning {
+  background-color: var(--ec-gold) !important;
+}
+.badge-danger {
+  background-color: var(--ec-red) !important;
+}
+
+/* Tables */
+.table thead th {
+  color: var(--ec-text) !important;
+}
+.table tbody tr:hover {
+  background-color: var(--ec-tint) !important;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+  background-color: var(--ec-primary) !important;
+  border-color: var(--ec-primary) !important;
+}
+
+/* Forms focus */
+.form-control:focus {
+  border-color: var(--ec-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(2, 128, 144, 0.15) !important;
+}
+
+/* ============================================================
+   Modern sidebar (dashboards identity) — visual only.
+   All collapse/route/role logic untouched.
+   ============================================================ */
+.ec-sidebar.navbar-vertical {
+  background: linear-gradient(180deg, #083744 0%, #0b2e38 55%, #071e25 100%) !important;
+  border: none !important;
+  box-shadow: -8px 0 30px rgba(3, 20, 26, 0.35) !important;
+}
+
+/* Brand chip keeps the teal logo readable on the dark sidebar */
+.ec-sidebar .ec-brand {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 8px 12px !important;
+  margin: 14px 16px 6px !important;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+.ec-sidebar .ec-brand .navbar-brand-img {
+  max-height: 2.6rem !important;
+}
+
+/* Section label */
+.ec-sidebar .ec-section-label {
+  list-style: none;
+  padding: 14px 26px 6px !important;
+}
+.ec-sidebar .ec-section-label span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+/* Links */
+.ec-sidebar .navbar-nav .nav-item {
+  margin: 1px 0;
+}
+.ec-sidebar .navbar-nav .nav-link {
+  margin: 2px 12px !important;
+  padding: 10px 14px !important;
+  border-radius: 12px !important;
+  color: #eef7f8 !important;
+  font-weight: 600;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  position: relative;
+}
+.ec-sidebar .navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  transform: translateX(-2px);
+}
+.ec-sidebar .navbar-nav .nav-link.active {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(0, 168, 150, 0.35);
+}
+.ec-sidebar .navbar-nav .nav-link.active .nav-link-text {
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
+/* Collapsible chevron (pure CSS, follows Bootstrap aria-expanded) */
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"] {
+  padding-inline-end: 34px !important;
+}
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"]::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-inline-end: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: 0.7;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+[dir="rtl"] .ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"]::after {
+  transform: translateY(-70%) rotate(45deg) scaleX(-1);
+}
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"][aria-expanded="true"]::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+[dir="rtl"] .ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"][aria-expanded="true"]::after {
+  transform: translateY(-30%) rotate(225deg) scaleX(-1);
+}
+
+/* Sub menus: inset panel + dot markers */
+.ec-sidebar .navbar-nav .collapse .nav {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  margin: 2px 12px !important;
+  padding: 6px 4px !important;
+}
+.ec-sidebar .navbar-nav a.nav-link.sub-menu {
+  font-size: 0.86rem;
+  padding: 8px 14px 8px 30px !important;
+}
+[dir="rtl"] .ec-sidebar .navbar-nav a.nav-link.sub-menu {
+  padding: 8px 30px 8px 14px !important;
+}
+.ec-sidebar .navbar-nav a.nav-link.sub-menu::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 16px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-50%);
+}
+.ec-sidebar .navbar-nav a.nav-link.sub-menu.active::before {
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+/* Top user card */
+.ec-sidebar .ec-user-top {
+  padding: 2px 16px 12px !important;
+}
+.ec-sidebar .ec-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px !important;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent));
+  box-shadow: 0 10px 22px rgba(0, 168, 150, 0.35);
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+.ec-sidebar .ec-user-card::before {
+  content: "";
+  position: absolute;
+  inset-inline-end: -34px;
+  top: -34px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+}
+.ec-sidebar .ec-user-card::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 22px;
+  bottom: -42px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+}
+.ec-sidebar .ec-user-card .ec-avatar {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.ec-sidebar .ec-user-card .ec-avatar img {
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  object-fit: cover;
+  width: 46px !important;
+  height: 46px !important;
+}
+.ec-sidebar .ec-user-card .ec-online {
+  position: absolute;
+  bottom: 2px;
+  inset-inline-end: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #fff;
+}
+.ec-sidebar .ec-user-card .ec-who {
+  min-width: 0;
+  z-index: 1;
+}
+.ec-sidebar .ec-user-card .name {
+  color: #ffffff !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.ec-sidebar .ec-user-card .email {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+  direction: ltr;
+  text-align: end;
+}
+
+/* Slim scrollbar */
+.ec-sidebar .navbar-collapse::-webkit-scrollbar {
+  width: 5px;
+}
+.ec-sidebar .navbar-collapse::-webkit-scrollbar-thumb {
+  background: rgba(0, 168, 150, 0.5);
+  border-radius: 4px;
+}
+.ec-sidebar .navbar-collapse {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 168, 150, 0.5) transparent;
+}
+
+/* ============================================================
+   White text on ALL buttons, action icons and pagination.
+   ============================================================ */
+.btn, .btn span, .btn i, .btn p, .btn small,
+a.btn, button.btn, input.btn,
+.page-link {
+  color: #ffffff !important;
+}
+/* Light variants also get the identity background so white stays readable */
+.btn-secondary, .btn-light {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  border-color: var(--ec-primary) !important;
+}
+.btn-outline-primary, .btn-outline-info, .btn-outline-success,
+.btn-outline-warning, .btn-outline-danger, .btn-outline-secondary {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  border-color: var(--ec-primary) !important;
+  color: #ffffff !important;
+}
+/* Pagination pills */
+.page-link {
+  background-color: var(--ec-primary) !important;
+  border-color: var(--ec-primary) !important;
+  border-radius: 10px !important;
+  margin: 0 2px;
+}
+.page-item.disabled .page-link {
+  opacity: 0.55;
+}
+
+/* ============================================================
+   Inner pages coordination — buttons, text, tables, forms.
+   Visual only; no markup or logic touched.
+   ============================================================ */
+
+/* All button variants follow the identity */
+.btn-secondary {
+  background-color: #ffffff !important;
+  border-color: var(--ec-border) !important;
+  color: var(--ec-text) !important;
+  border-radius: 12px !important;
+}
+.btn-success {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  border-color: var(--ec-primary) !important;
+  border-radius: 12px !important;
+}
+.btn-warning {
+  background-color: var(--ec-gold) !important;
+  border-color: var(--ec-gold) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.btn-danger {
+  background-color: var(--ec-red) !important;
+  border-color: var(--ec-red) !important;
+  border-radius: 12px !important;
+}
+.btn-default {
+  background-color: var(--ec-dark) !important;
+  border-color: var(--ec-dark) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.btn-light {
+  background-color: var(--ec-tint) !important;
+  border-color: var(--ec-border) !important;
+  color: var(--ec-text) !important;
+  border-radius: 12px !important;
+}
+.btn-outline-primary {
+  border-color: var(--ec-primary) !important;
+  color: var(--ec-primary) !important;
+  border-radius: 12px !important;
+}
+
+/* Ensure outline-dark keeps readable dark text (overrides the global white rule) */
+.btn-outline-dark {
+  border-color: var(--ec-text) !important;
+  color: var(--ec-text) !important;
+  border-radius: 12px !important;
+  background-color: #ffffff !important;
+}
+.btn-outline-dark:hover {
+  background-color: var(--ec-text) !important;
+  color: #ffffff !important;
+}
+
+/* Nav pills: readable inactive + active text */
+.nav-pills .nav-link {
+  color: var(--ec-text) !important;
+  background-color: #ffffff !important;
+  border: 1px solid var(--ec-border) !important;
+  border-radius: 10px !important;
+}
+.nav-pills .nav-link.active {
+  color: #0B1E2E !important;
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  border-color: var(--ec-primary) !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--ec-primary) !important;
+  color: #fff !important;
+}
+/* Custom print/download buttons used across reports */
+.btn.print-same-page,
+.btn[class*="print"] {
+  background: linear-gradient(135deg, var(--ec-dark), var(--ec-primary)) !important;
+  border-color: var(--ec-dark) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.btn-sm {
+  border-radius: 10px !important;
+}
+
+/* Headings + labels */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.card-title {
+  color: var(--ec-text) !important;
+}
+label, .col-form-label, .form-group label {
+  color: var(--ec-text) !important;
+  font-weight: 600;
+}
+.text-muted {
+  color: #64748b !important;
+}
+.breadcrumb-item, .breadcrumb-item a {
+  color: var(--ec-primary) !important;
+}
+.breadcrumb-item.active {
+  color: #64748b !important;
+}
+
+/* Alerts */
+.alert-success {
+  background-color: #e6f7f1 !important;
+  border-color: #bfe9dc !important;
+  color: #0a5c4c !important;
+  border-radius: 14px !important;
+}
+.alert-danger {
+  background-color: #fdecec !important;
+  border-color: #f6caca !important;
+  color: #8f1824 !important;
+  border-radius: 14px !important;
+}
+.alert-warning {
+  background-color: #fff8e6 !important;
+  border-color: #f5e3ae !important;
+  color: #7a5200 !important;
+  border-radius: 14px !important;
+}
+.alert-info {
+  background-color: var(--ec-tint) !important;
+  border-color: #bfe3e8 !important;
+  color: var(--ec-dark) !important;
+  border-radius: 14px !important;
+}
+
+/* Tables */
+.table {
+  color: var(--ec-text) !important;
+}
+.table thead th {
+  background-color: var(--ec-tint) !important;
+  color: var(--ec-dark) !important;
+  border-color: var(--ec-border) !important;
+  font-weight: 800;
+}
+.table td, .table th {
+  border-color: var(--ec-border) !important;
+  vertical-align: middle !important;
+}
+
+/* Dropdowns + modals */
+.dropdown-menu {
+  border: 1px solid var(--ec-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 26px rgba(11, 30, 46, 0.12) !important;
+}
+.dropdown-item {
+  color: var(--ec-text) !important;
+  border-radius: 8px !important;
+}
+.dropdown-item:hover {
+  background-color: var(--ec-tint) !important;
+  color: var(--ec-dark) !important;
+}
+.modal-content {
+  border: 1px solid var(--ec-border) !important;
+  border-radius: 20px !important;
+}
+.modal-header {
+  border-bottom: 1px solid var(--ec-border) !important;
+}
+.modal-title {
+  color: var(--ec-text) !important;
+  font-weight: 800;
+}
+
+/* Pills / tabs */
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  box-shadow: 0 6px 14px rgba(0, 168, 150, 0.35);
+}
+
+/* Dashboard overview stat icons (modern tiles, replace legacy svg imgs) */
+.ec-stat-ic {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ic, var(--ec-primary));
+  box-shadow: 0 6px 14px rgba(11, 30, 46, 0.18);
+}
+.ec-stat-ic i {
+  color: #ffffff !important;
+  font-size: 20px;
+}
+.ec-overview {
+  overflow: hidden;
+}
+
+/* ============================================================
+   Statuses, pills and badges — always white text.
+   ============================================================ */
+.badge, .badge span, .badge i, .label,
+span[class*="status"], .statusOn, .statusOff,
+.pill, .tag {
+  color: #ffffff !important;
+}
+/* Light badges join the identity so white stays readable */
+.badge-light {
+  background: linear-gradient(135deg, var(--ec-dark), var(--ec-primary)) !important;
+  border-color: var(--ec-dark) !important;
+}
+.statusOn {
+  background-color: var(--ec-accent) !important;
+  border-radius: 10px;
+  padding: 2px 10px;
+}
+.statusOff {
+  background-color: #94a3b8 !important;
+  border-radius: 10px;
+  padding: 2px 10px;
+}
+
+/* ============================================================
+   Mobile responsiveness — smooth on phones. Visual only:
+   no markup, layout or behavior touched.
+   ============================================================ */
+@media (max-width: 767.98px) {
+  /* The RTL stylesheet pins a 272px content margin on ALL screens —
+     release it on phones so content uses the full width. */
+  html[dir="rtl"] .navbar-vertical.navbar-expand-md.fixed-left + .main-content,
+  html[dir="rtl"] .main-content {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+  .container-fluid, .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  /* Match Bootstrap row gutters to the padding so rows never overflow */
+  .row {
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+  }
+  [class*="col-"] {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .card-body {
+    padding: 1rem !important;
+  }
+  /* Top bar wraps instead of overflowing */
+  .navbar-top .navbar-collapse {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  /* Wide tables scroll inside their card instead of breaking layout */
+  .card .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table td, .table th {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 575.98px) {
+  .table {
+    font-size: 0.78rem;
+  }
+  .display-3, .display-4 {
+    font-size: 1.5rem !important;
+  }
+  h1, .h1 {
+    font-size: 1.35rem !important;
+  }
+  h2, .h2 {
+    font-size: 1.15rem !important;
+  }
+  .btn {
+    padding: 0.5rem 0.9rem !important;
+    font-size: 0.8rem !important;
+  }
+  .card-stats {
+    margin-bottom: 0.75rem !important;
+  }
+  /* Long texts (names, emails) never break the layout */
+  .ec-sidebar .ec-user-card .name,
+  .profile .name {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ================================================================
+   SIDEBAR — professional redesign (all roles, RTL + LTR)
+   * No horizontal scroll anywhere, even with long Arabic labels
+   * Fixed 272px with proper box-sizing, flex-column layout
+   * Inner vertical-only scroll, thin custom scrollbar
+   * Uniform link/button rhythm: gaps, radii, icon column, active state
+   ================================================================ */
+
+/* 1) Root sidebar — hard clip, flex column, explicit width */
+.navbar-vertical.ec-sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  inset-inline-start: 0 !important;
+  width: 272px !important;
+  min-width: 272px !important;
+  max-width: 272px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;   /* kill Paper Kit space distribution */
+  align-items: stretch !important;          /* kill .navbar align-items:center shrink */
+  padding-right: 0 !important;              /* kill Paper Kit 1.5rem side gutters ≥768px */
+  padding-left: 0 !important;
+  overflow: hidden !important;
+  overscroll-behavior: contain;
+}
+[dir="rtl"] .navbar-vertical.ec-sidebar {
+  right: 0;
+  left: auto;
+  border-width: 0 0 0 1px;
+  border-left: 1px solid #e9ecef;
+}
+
+/* 2) Inner pane — ONLY vertical scroll, thin styled scrollbar.
+   Paper Kit leaves `.navbar > .container-fluid` as
+   display:flex; flex-direction:column; justify-content:space-between;
+   and `.navbar` itself as align-items:center — together they pinned the
+   user card to the middle and crushed the brand/avatar (flex-shrink:1).
+   Use normal block flow: natural heights, full width, top aligned. */
+.navbar-vertical.ec-sidebar .ec-sidebar-inner {
+  display: block !important;    /* block flow: children never flex-shrink to zero */
+  width: 100% !important;       /* kill any cross-axis centering shrink */
+  flex: 1 1 auto;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  padding: 10px 0 18px;
+  overscroll-behavior: contain;
+}
+.navbar-vertical.ec-sidebar .ec-sidebar-inner::-webkit-scrollbar { width: 5px; height: 0; }
+.navbar-vertical.ec-sidebar .ec-sidebar-inner::-webkit-scrollbar-track { background: transparent; }
+.navbar-vertical.ec-sidebar .ec-sidebar-inner::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+}
+.navbar-vertical.ec-sidebar .ec-sidebar-inner::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+.navbar-vertical.ec-sidebar .collapse,
+.navbar-vertical.ec-sidebar .collapsing { overflow: hidden !important; }
+
+/* 3) Brand + user card */
+.ec-sidebar .ec-brand {
+  margin: 8px 14px 6px !important;
+  padding: 9px 14px !important;
+  border-radius: 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28) !important;
+}
+.ec-sidebar .ec-brand .navbar-brand-img {
+  max-height: 2.25rem !important;
+  max-width: 100%;
+  object-fit: contain;
+}
+.ec-sidebar .ec-user-top { padding: 2px 12px 12px !important; }
+.ec-sidebar .ec-user-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 12px !important;
+  border-radius: 18px !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ec-sidebar .ec-avatar { position: relative; flex: 0 0 auto; }
+.ec-sidebar .ec-avatar img {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: block;
+}
+.ec-sidebar .ec-online {
+  position: absolute;
+  bottom: -1px;
+  inset-inline-end: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #34d399;
+  border: 2px solid #ffffff;
+}
+.ec-sidebar .ec-who { min-width: 0; flex: 1 1 auto; }
+.ec-sidebar .ec-who .name,
+.ec-sidebar .ec-who .email {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.ec-sidebar .ec-who .name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+}
+.ec-sidebar .ec-who .email {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.82);
+  direction: ltr;
+  text-align: start;
+  margin-top: 2px !important;
+}
+
+/* 4) Section label */
+.ec-sidebar .ec-section-label {
+  list-style: none;
+  padding: 14px 20px 6px !important;
+  margin: 0;
+}
+.ec-sidebar .ec-section-label span {
+  font-size: 10px !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800 !important;
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+/* 5) Main list — every row exactly the same rhythm */
+.ec-sidebar .navbar-nav {
+  margin: 0 !important; /* kill bootstrap -1rem pullbacks */
+  padding: 0 !important;
+}
+.ec-sidebar .navbar-nav > .nav-item { margin: 2px 0; position: relative; }
+.ec-sidebar .navbar-nav .nav-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  box-sizing: border-box !important;
+  width: calc(100% - 20px) !important;
+  margin: 2px 10px !important;
+  min-height: 42px;
+  padding: 9px 12px !important;
+  border-radius: 13px !important;
+  color: #eef7f8 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.2;
+  text-decoration: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.ec-sidebar .navbar-nav .nav-link > i,
+.ec-sidebar .navbar-nav .nav-link i {
+  flex: 0 0 20px !important;
+  width: 20px;
+  text-align: center;
+  font-size: 15px !important;
+  color: inherit !important;
+  opacity: 0.95;
+  margin: 0 !important;
+}
+.ec-sidebar .navbar-nav .nav-link .nav-link-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.ec-sidebar .navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #ffffff !important;
+  transform: translateX(-2px);
+}
+.ec-sidebar .navbar-nav .nav-link.active {
+  background: linear-gradient(135deg, var(--ec-primary), var(--ec-accent)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(0, 168, 150, 0.32) !important;
+}
+.ec-sidebar .navbar-nav .nav-link.active .nav-link-text,
+.ec-sidebar .navbar-nav .nav-link.active i { color: #ffffff !important; }
+
+/* 6) Collapse (expandable groups) — chevron pinned to trailing edge */
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"] {
+  padding-inline-end: 36px !important;
+  position: relative;
+}
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"]::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 13px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  border-color: currentColor;
+  opacity: 0.65;
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform 0.22s ease;
+}
+.ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"][aria-expanded="true"]::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+[dir="rtl"] .ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"]::after { transform: translateY(-65%) rotate(45deg) scaleX(-1); }
+[dir="rtl"] .ec-sidebar .navbar-nav a.nav-link[data-toggle="collapse"][aria-expanded="true"]::after { transform: translateY(-30%) rotate(225deg) scaleX(-1); }
+
+/* 7) Sub menus — recessed panel, dot markers, identical rhythm */
+.ec-sidebar .collapse .nav,
+.ec-sidebar .collapsing .nav {
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: 5px 6px !important;
+  margin: 3px 10px 6px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  width: auto !important;
+  margin: 0 !important;
+  min-height: 34px;
+  padding: 7px 12px 7px 34px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  color: #d6eaed !important;
+  position: relative;
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 14px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.30);
+  transform: translateY(-50%);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+[dir="rtl"] .ec-sidebar .navbar-nav .nav-link.sub-menu {
+  padding: 7px 34px 7px 12px !important;
+}
+[dir="rtl"] .ec-sidebar .navbar-nav .nav-link.sub-menu::before {
+  inset-inline-start: auto;
+  inset-inline-end: 14px;
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu:hover::before {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu.active {
+  background: rgba(0, 168, 150, 0.14) !important;
+  color: #ffffff !important;
+}
+.ec-sidebar .navbar-nav .nav-link.sub-menu.active::before {
+  background: var(--ec-accent, #00a896);
+  box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.25);
+  transform: translateY(-50%) scale(1.35);
+}
+
+/* 8) Logout row */
+.ec-sidebar .navbar-nav .nav-link[onclick] {
+  color: #f0b0aa !important;
+}
+.ec-sidebar .navbar-nav .nav-link[onclick]:hover {
+  background: rgba(230, 57, 70, 0.15) !important;
+  color: #ffd4cf !important;
+}
+
+/* 9) Never horizontal, anywhere inside */
+.ec-sidebar,
+.ec-sidebar * {
+  box-sizing: border-box;
+}
+.ec-sidebar {
+  overflow-x: hidden !important;
+}
+.ec-sidebar .ec-sidebar-inner,
+.ec-sidebar .navbar-nav,
+.ec-sidebar .collapse,
+.ec-sidebar .collapsing,
+.ec-sidebar .nav-link,
+.ec-sidebar .ec-section-label,
+.ec-sidebar .ec-user-top,
+.ec-sidebar .ec-brand {
+  overflow-x: hidden !important;
+}
+
+/* ============================================================
+   10) Solid identity badges — Paper Kit renders badges as translucent
+   pills with colored text; the identity forces white text, which makes
+   them unreadable on white/tint backgrounds. Force solid fills.
+   ============================================================ */
+.badge-success { background: #16A34A !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-info { background: #028090 !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-warning { background: #F59E0B !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-danger { background: #DC2626 !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-primary { background: var(--ec-primary) !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-secondary { background: #64748B !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+.badge-light { background: linear-gradient(135deg, var(--ec-dark), var(--ec-primary)) !important; color: #ffffff !important; }
+.badge-light { background: linear-gradient(135deg, var(--ec-dark), var(--ec-primary)) !important; color: #ffffff !important; }
+
+.badge.bg-secondary { background: #64748B !important; background-image: none !important; color: #ffffff !important; border: none !important; }
+
+/* ============================================================
+   Phone sidebar safety
+   The desktop sidebar is intentionally unchanged. On phones the sidebar
+   must stay above page cards/modals and its expanded navigation must scroll
+   as one continuous pane instead of clipping the lower actions.
+   ============================================================ */
+@media (max-width: 767.98px) {
+  .navbar-vertical.ec-sidebar {
+    z-index: 1060 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  .navbar-vertical.ec-sidebar .ec-sidebar-inner {
+    height: 100%;
+    max-height: 100dvh;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .navbar-vertical.ec-sidebar .navbar-collapse,
+  .navbar-vertical.ec-sidebar .navbar-collapse.collapse.show {
+    width: 100%;
+    min-width: 0;
+    height: auto !important;
+  }
+
+  .navbar-vertical.ec-sidebar .navbar-collapse.collapse.show {
+    display: block !important;
+  }
+
+  .navbar-vertical.ec-sidebar .navbar-nav {
+    padding-bottom: 18px;
+  }
+
+  .main-content {
+    z-index: 0;
+  }
+}
+
+/* ============================================================
+   12) Mobile drawer — phones & small tablets only (desktop untouched).
+   Sidebar becomes an off-canvas panel that slides in from the side;
+   a floating menu button toggles it; a backdrop closes it on tap.
+   ============================================================ */
+
+/* Floating menu button — phone/tablet only */
+.ec-mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 10px;
+  inset-inline-start: 12px;
+  z-index: 1062;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ec-border);
+  border-radius: 13px;
+  background: #ffffff;
+  color: var(--ec-primary);
+  font-size: 18px;
+  box-shadow: 0 8px 24px rgba(2, 128, 144, .18);
+  cursor: pointer;
+  outline: none;
+}
+.ec-mobile-menu-btn:focus-visible {
+  outline: 3px solid #028090;
+  outline-offset: 2px;
+}
+.ec-mobile-menu-btn:active { transform: scale(.95); }
+
+/* Backdrop that closes the drawer on tap */
+.ec-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1056;
+  background: rgba(11, 30, 46, .55);
+  backdrop-filter: blur(2px);
+}
+
+@media (max-width: 991.98px) {
+  html, body { overflow-x: hidden; }
+
+  /* Content never reserves a sidebar column */
+  .main-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .container-fluid { padding-left: 12px !important; padding-right: 12px !important; }
+  .row { margin-left: -12px !important; margin-right: -12px !important; }
+  [class*="col-"] { padding-left: 12px !important; padding-right: 12px !important; }
+
+  /* Show floating button + backdrop when drawer open */
+  .ec-mobile-menu-btn { display: inline-flex; }
+  body.ec-sidebar-open .ec-sidebar-backdrop { display: block; }
+
+  /* Off-canvas drawer */
+  .navbar-vertical.ec-sidebar {
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+    z-index: 1058 !important;
+    transform: translateX(-115%);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+    overflow-y: auto !important;
+    box-shadow: 0 0 30px rgba(11, 30, 46, .4) !important;
+  }
+  html[dir="rtl"] .navbar-vertical.ec-sidebar {
+    transform: translateX(115%);
+  }
+  body.ec-sidebar-open .navbar-vertical.ec-sidebar {
+    transform: translateX(0) !important;
+  }
+
+  /* Inner pane fills the drawer and scrolls; brand/user compact */
+  .navbar-vertical.ec-sidebar .ec-sidebar-inner {
+    min-height: auto !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 8px 0 14px !important;
+  }
+  .navbar-vertical.ec-sidebar .ec-brand {
+    margin: 6px 10px 4px !important;
+    padding: 8px 10px !important;
+  }
+  .navbar-vertical.ec-sidebar .ec-brand .navbar-brand-img {
+    max-height: 2rem !important;
+  }
+  .navbar-vertical.ec-sidebar .ec-user-top {
+    padding: 6px 10px !important;
+  }
+  /* Paper Kit @media(max-width:767.98px) leaves .navbar-collapse as a floating
+     absolute panel with opacity:0 awaiting a .show class we never add — the
+     whole nav was invisible yet tappable. Neutralize it into a normal block. */
+  .navbar-vertical.ec-sidebar .collapse.navbar-collapse {
+    display: block !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    z-index: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    overflow: visible !important;
+  }
+  .navbar-vertical.ec-sidebar .navbar-nav { padding-bottom: 14px !important; }
+  .navbar-vertical.ec-sidebar .navbar-toggler {
+    display: none !important;
+  }
+
+  /* Top bar is visually hidden in mobile already; hide to be safe */
+  .main-header { display: none !important; }
+
+  /* The floating button toggles between bars (closed) and times (open) */
+  body.ec-sidebar-open .ec-mobile-menu-btn i::before {
+    content: "\f00d" !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .ec-mobile-menu-btn, .ec-sidebar-backdrop { display: none !important; }
+}
+
+/* ============================================================
+   13) Desktop — keep the fixed sidebar ABOVE page content.
+   On ≥992px the sidebar is position:fixed without a z-index,
+   while .main-content is position:relative and appears later in
+   the DOM, so content painted on top of the sidebar. Pin the
+   sidebar below modals (1040/1050) and above everything else.
+   Phones/tablets ≤991.98px keep their own drawer rules (sec. 12).
+   ============================================================ */
+@media (min-width: 992px) {
+  .navbar-vertical.ec-sidebar {
+    z-index: 1030 !important;
+  }
+}

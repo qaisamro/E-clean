@@ -41,6 +41,14 @@
                                     @enderror
                                 </div>
                                 <div class="col-12 col-md-6 mb-2">
+                                    <label for="">{{ __('Email') }}</label>
+                                    <input type="email" class="form-control" name="email"
+                                        value="{{ old('email') }}" placeholder="{{ __('Email') }}">
+                                    @error('email')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-12 col-md-6 mb-2">
                                     <label for="">{{ __('Password') }} <strong class="text-danger">*</strong></label>
                                     <div class="d-flex  align-items-center inputBox">
                                         <div class="input w-100 position-relative">

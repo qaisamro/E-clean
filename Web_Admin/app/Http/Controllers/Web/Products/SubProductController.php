@@ -29,7 +29,7 @@ class SubProductController extends Controller
     {
 
         $this->productRepo->create([
-            'name' => $request->name,
+            'name' => $request->name_bn,
             'name_bn' => $request->name_bn,
             'slug' => $request->slug,
             'service_id' => $request->service_id,

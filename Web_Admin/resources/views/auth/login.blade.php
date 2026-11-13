@@ -88,7 +88,7 @@
                         $demoMode = config('services.demo_mode');
                     @endphp
 
-                    <form role="form" class="pui-form" id="loginform" method="POST" action="{{ route('form-login', ['redirect' => $redirect ?? null]) }}">
+                    <form role="form" class="pui-form" id="loginform" method="POST" action="{{ route('login.submit', ['redirect' => $redirect ?? null]) }}">
                         @csrf
                         <div class="header text-center">
                             @php

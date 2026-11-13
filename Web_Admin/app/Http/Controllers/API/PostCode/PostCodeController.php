@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\PostCode;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PostCodeResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -11,43 +10,46 @@ class PostCodeController extends Controller
 {
     public function index()
     {
-        $request_postCode = request('postcode');
+        $postcode = request()->query('postcode');
+        if (!is_string($postcode) || strlen($postcode) > 64) {
+            return $this->json('Invalid postcode', [], Response::HTTP_BAD_REQUEST);
+        }
 
-        $twoDigitis = substr($request_postCode, 0, 2);
-        $threeDigitis = substr($request_postCode, 0, 3);
-        $fourDigitis = substr($request_postCode, 0, 4);
+        $postcode = trim($postcode);
+        if ($postcode === '' || !preg_match('/^[A-Za-z0-9][A-Za-z0-9 -]*$/', $postcode)) {
+            return $this->json('Invalid postcode', [], Response::HTTP_BAD_REQUEST);
+        }
 
-        $allAreCode = config('enums.post_code');
-        $postCode = '';
-
-        foreach ($allAreCode as $areCode) {
-            if ($areCode == $twoDigitis) {
-                $postCode = $twoDigitis;
+        $prefixes = (array) config('enums.post_code', []);
+        $matchedPrefix = '';
+        foreach ([substr($postcode, 0, 2), substr($postcode, 0, 3), substr($postcode, 0, 4)] as $prefix) {
+            if (in_array($prefix, $prefixes, true)) {
+                $matchedPrefix = $prefix;
             }
         }
 
-        foreach ($allAreCode as $areCode) {
-            if ($areCode == $threeDigitis) {
-                $postCode = $threeDigitis;
-            }
+        if ($matchedPrefix === '') {
+            return $this->json('Invalid postcode', [], Response::HTTP_BAD_REQUEST);
         }
 
-        foreach ($allAreCode as $areCode) {
-            if ($areCode == $fourDigitis) {
-                $postCode = $fourDigitis;
-            }
+        $apiKey = config('services.ideal_postcodes.api_key');
+        if (!is_string($apiKey) || trim($apiKey) === '') {
+            return $this->json('Postcode lookup is unavailable', [], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        if ($postCode) {
-            $response = Http::get('https://api.ideal-postcodes.co.uk/v1/postcodes/' . $request_postCode . '?api_key=ak_l4xvqpl2ipEKJoSvhXlnIMhDyPZa7');
-            if ($response->status() == 200) {
-                $result = $response->json();
-                return $this->json('Post Code List', [
-                    $result
-                ]);
-            }
-            return $this->json('Post code not found', [], Response::HTTP_BAD_REQUEST);
+        try {
+            $response = Http::timeout(8)->get(
+                'https://api.ideal-postcodes.co.uk/v1/postcodes/' . rawurlencode($postcode),
+                ['api_key' => $apiKey]
+            );
+        } catch (\Throwable $exception) {
+            return $this->json('Postcode lookup is unavailable', [], Response::HTTP_BAD_GATEWAY);
         }
-        return $this->json('You are currently outside of our service area', [], Response::HTTP_BAD_REQUEST);
+
+        if ($response->successful()) {
+            return $this->json('Post Code List', [$response->json()]);
+        }
+
+        return $this->json('Postcode lookup failed', [], Response::HTTP_BAD_GATEWAY);
     }
 }

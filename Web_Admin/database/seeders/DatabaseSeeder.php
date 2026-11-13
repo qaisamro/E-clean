@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(RolePermissionSeeder::class);
         $this->call(VendorOfferPermissionSeeder::class);
+        $this->call(VendorPosPermissionSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(ScheduleSeeder::class);
         $this->call(NotificationManageSeeder::class);

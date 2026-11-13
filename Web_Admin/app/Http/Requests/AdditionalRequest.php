@@ -24,8 +24,8 @@ class AdditionalRequest extends FormRequest
     public function rules()
     {
         return [
-            "title" => "required|string|max:256",
-            "title_bn" => "nullable|string|max:256",
+            "title" => "nullable|string|max:256",
+            "title_bn" => "required|string|max:256",
             "price" => "required",
             "description" => "nullable",
             "description_bn" => "nullable",

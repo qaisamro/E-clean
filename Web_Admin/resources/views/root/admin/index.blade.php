@@ -33,16 +33,23 @@
                             <td>{{ $admin->gender ?? '--' }}</td>
                             <td>{{ $admin->created_at->format('M d, Y') }}</td>
                             <td>
-                                <label class="switch">
-                                    <a @role('visitor') class="visitorMessage" @else href="{{ route('admin.status-update', $admin->id) }}" @endrole>
-                                        <input type="checkbox" {{ $admin->is_active ? 'checked' : '' }}>
+                                <form action="{{ route('admin.status-update', $admin->id) }}" method="POST" style="display:inline">
+                                    @csrf
+                                    <label class="switch">
+                                        <input type="checkbox" {{ $admin->is_active ? 'checked' : '' }} onchange="this.form.submit()">
                                         <span class="slider round"></span>
-                                    </a>
-                                </label>
+                                    </label>
+                                </form>
                             </td>
                             <td>
                                 <a href="{{ route('admin.edit', $admin->id) }}" class="btn btn-danger py-1 px-2">{{ __('Edit') }}</a>
-                                <a href="{{ route('admin.show', $admin->id) }}" class="btn btn-primary py-1 px-2">{{ __('Permissions') }}</a>
+                                @if (auth()->id() !== $admin->id && !$admin->hasRole('root'))
+                                <form action="{{ route('admin.destroy', $admin->id) }}" method="POST" style="display:inline" onsubmit="return confirm('هل أنت متأكد من حذف هذا المدير؟')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-dark py-1 px-2"><i class="fa fa-trash"></i></button>
+                                </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

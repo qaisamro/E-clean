@@ -39,10 +39,8 @@
                         <table class="table table-bordered table-striped {{ session()->get('local') }}" id="myTable">
                             <thead>
                                 <tr>
-                                    <th scope="col">{{ __('Name').' '.__('of'). ' '. __('English') }}</th>
-                                    <th scope="col">{{ __('Name').' '.__('of'). ' '. __('Arabic') }}</th>
+                                    <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Thumbnail') }}</th>
-                                    <th scope="col">{{ __('Variant') }}</th>
                                     <th scope="col">{{ __('Discount').' '.__('Price') }}</th>
                                     <th scope="col">{{ __('Price') }}</th>
                                     <th scope="col">{{ __('Description') }}</th>
@@ -57,12 +55,10 @@
                             <tbody>
                                 @foreach ($products as $product)
                                 <tr>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->name_bn ?? 'N\A' }}</td>
+                                    <td>{{ $product->name_bn ?? $product->name }}</td>
                                     <td>
                                         <img width="100" src="{{ $product->thumbnailPath }}" alt="">
                                     </td>
-                                    <td>{{  session()->get('local') == 'ar' ? $product->variant->name_bn ??$product->variant->name : $product->variant->name }}</td>
                                     <td>
                                         @if ($product->discount_price)
                                         {{ currencyPosition($product->discount_price) }}
@@ -95,10 +91,6 @@
                                     <td>
                                         <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary">
                                             <i class="far fa-edit"></i>
-                                        </a>
-
-                                        <a href="{{ route('product.subproduct.index', $product->id) }}" class="btn btn-sm btn-primary">
-                                           {{__('Sub Products')}}
                                         </a>
 
                                         <form action="{{ route('product.delete', $product->id) }}" method="POST" style="display:inline">

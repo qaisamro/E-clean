@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\Order\OrderController as ApiOrderController;
 use App\Http\Controllers\API\PaymentGatewayController as ApiPaymentGatewayController;
-use App\Http\Controllers\CreateSuperAdmin;
 use App\Http\Controllers\FCMController;
 use App\Http\Controllers\NotificationManageController;
 use App\Http\Controllers\Web\AreaController;
@@ -29,20 +28,17 @@ use App\Http\Controllers\Web\PosController;
 use App\Http\Controllers\Web\Products\CouponController;
 use App\Http\Controllers\Web\Products\OrderController;
 use App\Http\Controllers\Web\Products\ProductController;
-use App\Http\Controllers\Web\Products\SubProductController;
 use App\Http\Controllers\Web\Profile\ProfileController;
-use App\Http\Controllers\Web\Revenues\RevenueController;
 use App\Http\Controllers\Web\Root\AdminController;
-use App\Http\Controllers\Web\Services\AdditionalServiceController;
+use App\Http\Controllers\Web\Root\CustomerJoinRequestController;
 use App\Http\Controllers\Web\Services\ServiceController;
 use App\Http\Controllers\Web\Setting\SettingController;
 use App\Http\Controllers\Web\SMSGatewaySetupController;
 use App\Http\Controllers\Web\Social\SocialController;
 use App\Http\Controllers\Web\StripeKeyUpateController;
 use App\Http\Controllers\Web\StripePaymentController;
-use App\Http\Controllers\Web\Variants\VariantController;
 use App\Http\Controllers\Web\WebFaqCategoryController;
-use App\Http\Controllers\Web\WebSettingController;
+use App\Http\Controllers\Web\WebNotificationController;
 use App\Http\Controllers\Website\Auth\AuthController as WebsiteAuthController;
 use App\Http\Controllers\Website\CheckoutController;
 use App\Http\Controllers\Website\ContactController as WebsiteContactController;
@@ -60,37 +56,19 @@ use App\Http\Controllers\Website\WebsiteController;
 |--------------------------------------------------------------------------
 */
 
-// Language change
-Route::get('/change-local', function (Request $request) {
-    if ($request->filled('ln')) {
-        session(['local' => $request->ln]);
-    }
-
-    return back();
-})->name('change.local');
-
 // Auth
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-Route::post('/form-login', [LoginController::class, 'login'])->name('form-login');
+Route::post('/login', [LoginController::class, 'login'])
+    ->middleware('throttle:5,1')
+    ->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Super admin (first run)
-Route::get('/create-superadmin', [CreateSuperAdmin::class, 'index'])->name('create.superadmin.form');
-Route::post('/create-superadmin', [CreateSuperAdmin::class, 'store'])->name('create.superadmin');
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'permission_check'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('root');
 
     // Notifications (ajax polling in layout)
-    Route::get('/orders/new', [ApiOrderController::class, 'newOrder'])->name('new.orders');
-
-    // Areas
-    Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
-    Route::post('/areas', [AreaController::class, 'store'])->name('areas.store');
-    Route::post('/areas/{area}', [AreaController::class, 'update'])->name('areas.update');
-    Route::post('/areas/{area}/toggle', [AreaController::class, 'toggle'])->name('areas.toggle');
-    Route::delete('/areas/{area}', [AreaController::class, 'delete'])->name('areas.delete');
+    Route::get('/web-notifications/feed', [WebNotificationController::class, 'feed'])->name('web-notifications.feed');
 
     // Services
     Route::get('/services', [ServiceController::class, 'index'])->name('service.index');
@@ -99,23 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('service.edit');
     Route::post('/services/{service}', [ServiceController::class, 'update'])->name('service.update');
     Route::match(['get', 'post'], '/services/{service}/status', [ServiceController::class, 'toggleActivationStatus'])->name('service.status.toggle');
-    Route::get('/services/{service}/variants', [ServiceController::class, 'getVariant'])->name('service.get.variant');
     Route::delete('/services/{service}', [ServiceController::class, 'delete'])->name('service.delete');
-
-    // Additional services
-    Route::get('/additional-services', [AdditionalServiceController::class, 'index'])->name('additional.index');
-    Route::get('/additional-services/create', [AdditionalServiceController::class, 'create'])->name('additional.create');
-    Route::post('/additional-services', [AdditionalServiceController::class, 'store'])->name('additional.store');
-    Route::get('/additional-services/{additional}/edit', [AdditionalServiceController::class, 'edit'])->name('additional.edit');
-    Route::post('/additional-services/{additional}', [AdditionalServiceController::class, 'update'])->name('additional.update');
-    Route::match(['get', 'post'], '/additional-services/{additional}/status', [AdditionalServiceController::class, 'toggleActivationStatus'])->name('additional.status.toggle');
-
-    // Variants
-    Route::get('/variants', [VariantController::class, 'index'])->name('variant.index');
-    Route::post('/variants', [VariantController::class, 'store'])->name('variant.store');
-    Route::post('/variants/{variant}', [VariantController::class, 'update'])->name('variant.update');
-    Route::get('/variants/{variant}/products', [VariantController::class, 'productsVariant'])->name('variant.products');
-    Route::delete('/variants/{variant}', [VariantController::class, 'delete'])->name('variant.delete');
 
     // Products
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
@@ -127,20 +89,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/update-order', [ProductController::class, 'orderUpdate'])->name('product.update.order');
     Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('product.delete');
 
-    // Sub products
-    Route::get('/products/{product}/subproducts', [SubProductController::class, 'index'])->name('product.subproduct.index');
-    Route::get('/products/{product}/subproducts/create', [SubProductController::class, 'create'])->name('product.subproduct.create');
-    Route::post('/products/{product}/subproducts', [SubProductController::class, 'store'])->name('product.subproduct.store');
-    Route::get('/sub-product/{product}/edit', [SubProductController::class, 'edit'])->name('product.subproduct.edit');
-    Route::post('/sub-product/{product}', [SubProductController::class, 'update'])->name('product.subproduct.update');
-    Route::delete('/sub-product/{product}', [SubProductController::class, 'destroy'])->name('product.subproduct.delete');
-
     // Coupons
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupon.index');
     Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupon.create');
     Route::post('/coupons', [CouponController::class, 'store'])->name('coupon.store');
     Route::get('/coupons/{coupon}/edit', [CouponController::class, 'edit'])->name('coupon.edit');
     Route::post('/coupons/{coupon}', [CouponController::class, 'update'])->name('coupon.update');
+Route::post('/coupons/{coupon}/destroy', [CouponController::class, 'destroy'])->name('coupon.destroy');
+
+// Super Admin: GLOBAL coupons (apply to every store). Separate from /coupons,
+// which stays the vendor-only interface for a store's own coupons.
+Route::prefix('admin')->name('coupon.admin.')->group(function () {
+    Route::get('/coupons', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'index'])->name('index');
+    Route::get('/coupons/create', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'create'])->name('create');
+    Route::post('/coupons', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'store'])->name('store');
+    Route::get('/coupons/{coupon}/edit', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'edit'])->name('edit');
+    Route::post('/coupons/{coupon}', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'update'])->name('update');
+    Route::post('/coupons/{coupon}/destroy', [\App\Http\Controllers\Web\Root\CouponAdminController::class, 'destroy'])->name('destroy');
+});
 
     // Customers
     Route::get('/customers', [CustomerController::class, 'index'])->name('customer.index');
@@ -161,8 +127,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/vendors/{vendor}', [\App\Http\Controllers\Web\VendorController::class, 'update'])->name('vendors.update');
     Route::delete('/vendors/{vendor}', [\App\Http\Controllers\Web\VendorController::class, 'destroy'])->name('vendors.destroy');
     Route::post('/vendors/{vendor}/toggle', [\App\Http\Controllers\Web\VendorController::class, 'toggleStatus'])->name('vendors.toggle');
-    Route::get('/vendors/{vendor}/orders', [\App\Http\Controllers\Web\VendorController::class, 'orders'])->name('vendors.orders');
-    Route::get('/vendors/{vendor}/account', [\App\Http\Controllers\Web\VendorController::class, 'account'])->name('vendors.account');
+    Route::post('/vendors/{vendor}/toggle-partner', [\App\Http\Controllers\Web\VendorController::class, 'togglePartner'])->name('vendors.togglePartner');
 
     // Drivers
     Route::get('/drivers', [DriverController::class, 'index'])->name('driver.index');
@@ -183,11 +148,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/admins', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admins/create', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/admins', [AdminController::class, 'store'])->name('admin.store');
-    Route::get('/admins/{user}', [AdminController::class, 'show'])->name('admin.show');
     Route::get('/admins/{user}/edit', [AdminController::class, 'edit'])->name('admin.edit');
     Route::post('/admins/{user}', [AdminController::class, 'update'])->name('admin.update');
-    Route::post('/admins/{user}/set-permission', [AdminController::class, 'setPermission'])->name('admin.set-permission');
     Route::post('/admins/{user}/status-update', [AdminController::class, 'toggleStatusUpdate'])->name('admin.status-update');
+Route::delete('/admins/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
+
+    // Customer Join Requests (Super Admin only)
+    Route::get('/customer-join-requests', [CustomerJoinRequestController::class, 'index'])->name('customer-join-requests.index');
+    Route::get('/customer-join-requests/{joinRequest}', [CustomerJoinRequestController::class, 'show'])->name('customer-join-requests.show');
+    Route::post('/customer-join-requests/{joinRequest}/approve', [CustomerJoinRequestController::class, 'approve'])->name('customer-join-requests.approve');
+    Route::post('/customer-join-requests/{joinRequest}/reject', [CustomerJoinRequestController::class, 'reject'])->name('customer-join-requests.reject');
+    Route::post('/customer-join-requests/{joinRequest}/review', [CustomerJoinRequestController::class, 'review'])->name('customer-join-requests.review');
+    Route::post('/customer-join-requests/{joinRequest}/revoke-tracking-token', [CustomerJoinRequestController::class, 'revokeTrackingToken'])->name('customer-join-requests.revoke-tracking-token')->middleware('throttle:10,1');
+    Route::post('/customer-join-requests/{joinRequest}/review-again', [CustomerJoinRequestController::class, 'reviewAgain'])->name('customer-join-requests.review-again');
 
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
@@ -219,14 +192,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/offers/{offer}/destroy', [\App\Http\Controllers\Web\Offers\OfferController::class, 'destroy'])->name('offer.destroy');
     Route::match(['get', 'post'], '/offers/{offer}/status', [\App\Http\Controllers\Web\Offers\OfferController::class, 'toggleActivationStatus'])->name('offer.status.toggle');
 
-    // Contacts
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contact');
-
-    // Revenue / reports
-    Route::get('/revenues', [RevenueController::class, 'index'])->name('revenue.index');
-    Route::get('/revenues/pdf', [RevenueController::class, 'generatePDF'])->name('revenue.generate.pdf');
-    Route::get('/reports/pdf', [RevenueController::class, 'generateInvoicePDF'])->name('report.generate.pdf');
-
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -239,38 +204,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/{slug}/edit', [SettingController::class, 'edit'])->name('setting.edit');
     Route::post('/settings/{setting}', [SettingController::class, 'update'])->name('setting.update');
 
-    // Delivery cost / mobile app / social links / web settings
-    Route::get('/delivery-cost', [DeliveryCostController::class, 'index'])->name('deliveryCost');
-    Route::post('/delivery-cost', [DeliveryCostController::class, 'updateOrCreate'])->name('deliveryCost.store');
-    Route::get('/mobile-app', [MobileAppUrlController::class, 'index'])->name('mobileApp');
-    Route::post('/mobile-app', [MobileAppUrlController::class, 'updateOrCreate'])->name('mobileApp.store');
-
-    Route::get('/social-links', [SocialController::class, 'index'])->name('socialLink.index');
-    Route::post('/social-links', [SocialController::class, 'store'])->name('socialLink.store');
-    Route::post('/social-links/{socialLink}', [SocialController::class, 'update'])->name('socialLink.update');
-    Route::delete('/social-links/{socialLink}', [SocialController::class, 'delete'])->name('socialLink.delete');
-
-    Route::get('/web-setting', [WebSettingController::class, 'index'])->name('webSetting.index');
-    Route::post('/web-setting/{webSetting}', [WebSettingController::class, 'update'])->name('webSetting.update');
-
-    // SMS gateway / mail config / fcm / stripe key
-    Route::get('/sms-gateway', [SMSGatewaySetupController::class, 'index'])->name('sms-gateway.index');
-    Route::post('/sms-gateway', [SMSGatewaySetupController::class, 'update'])->name('sms-gateway.update');
-    Route::get('/mail-config', [MailConfigurationController::class, 'index'])->name('mail-config.index');
-    Route::post('/mail-config', [MailConfigurationController::class, 'update'])->name('mail-config.update');
-    Route::get('/fcm', [FCMController::class, 'index'])->name('fcm.index');
-    Route::post('/fcm', [FCMController::class, 'update'])->name('fcm.update');
-    Route::get('/stripe-key', [StripeKeyUpateController::class, 'index'])->name('stripeKey.index');
-    Route::post('/stripe-key', [StripeKeyUpateController::class, 'update'])->name('stripeKey.update');
-
-    // Payment gateways (admin)
-    Route::get('/payment-gateway', [PaymentGatewayController::class, 'index'])->name('payment-gateway.index');
-    Route::post('/payment-gateway/{paymentGateway}', [PaymentGatewayController::class, 'update'])->name('payment-gateway.update');
-    Route::get('/payment-gateway/{paymentGateway}/toggle', [PaymentGatewayController::class, 'toggle'])->name('payment-gateway.toggle');
-
-    // Invoice manage
-    Route::get('/invoice-manage', [InvoiceManageController::class, 'index'])->name('invoiceManage.index');
-    Route::post('/invoice-manage/{invoiceManage}', [InvoiceManageController::class, 'update'])->name('invoiceManage.update');
 
     // Schedules
     Route::get('/{type}/scheduls', [OrderScheduleController::class, 'index'])->name('schedule.index')->where('type', 'pickup|delivery');
@@ -283,64 +216,82 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/manage', [NotificationManageController::class, 'index'])->name('notification.manage');
     Route::post('/notifications/manage/{notificationManage}', [NotificationManageController::class, 'update'])->name('notification.manage.update');
 
-    // Languages
-    Route::get('/languages', [LanguageController::class, 'index'])->name('language.index');
-    Route::get('/languages/create', [LanguageController::class, 'create'])->name('language.create');
-    Route::post('/languages', [LanguageController::class, 'store'])->name('language.store');
-    Route::get('/languages/{language}/edit', [LanguageController::class, 'edit'])->name('language.edit');
-    Route::post('/languages/{language}', [LanguageController::class, 'update'])->name('language.update');
-    Route::delete('/languages/{language}', [LanguageController::class, 'delete'])->name('language.delete');
-
-    // Website FAQ (admin CRUD)
-    Route::get('/faqs', [FaqController::class, 'index'])->name('web.faq.list');
-    Route::get('/faqs/create', [FaqController::class, 'create'])->name('web.faq.create');
-    Route::post('/faqs', [FaqController::class, 'store'])->name('web.faq.store');
-    Route::get('/faqs/{slug}/edit', [FaqController::class, 'edit'])->name('web.faq.edit');
-    Route::post('/faqs/{slug}', [FaqController::class, 'update'])->name('web.faq.update');
-    Route::post('/faqs/{slug}/delete', [FaqController::class, 'delete'])->name('web.faq.delete');
-    Route::post('/faqs/{id}/status', [FaqController::class, 'toggleStatus'])->name('web.faq.status.toggle');
-
-    // Website FAQ categories (admin CRUD)
-    Route::get('/faq-categories', [WebFaqCategoryController::class, 'index'])->name('web.faq.category.index');
-    Route::get('/faq-categories/create', [WebFaqCategoryController::class, 'create'])->name('web.faq.category.create');
-    Route::post('/faq-categories', [WebFaqCategoryController::class, 'store'])->name('web.faq.category.store');
-    Route::get('/faq-categories/{id}/edit', [WebFaqCategoryController::class, 'edit'])->name('web.faq.category.edit');
-    Route::post('/faq-categories/{id}', [WebFaqCategoryController::class, 'update'])->name('web.faq.category.update');
-    Route::post('/faq-categories/{id}/delete', [WebFaqCategoryController::class, 'delete'])->name('web.faq.category.delete');
-    Route::post('/faq-categories/{id}/status', [WebFaqCategoryController::class, 'toggleStatus'])->name('web.faq.category.status.toggle');
 
     // Website settings editor (admin)
     Route::get('/website-settings', [WebsiteController::class, 'index'])->name('web.setting');
     Route::post('/website-settings/{type}', [WebsiteController::class, 'update'])->name('web.settingUpdate');
 
     // POS
+    Route::get('/vendor/appointments', [\App\Http\Controllers\Web\VendorAppointmentController::class, 'edit'])->name('vendor.appointments.edit');
+    Route::post('/vendor/appointments', [\App\Http\Controllers\Web\VendorAppointmentController::class, 'update'])->name('vendor.appointments.update');
+    Route::post('/vendor/appointments/orders/{order}', [\App\Http\Controllers\Web\VendorAppointmentController::class, 'reschedule'])->name('vendor.appointments.reschedule');
+    Route::get('/vendor/invoice-template', [\App\Http\Controllers\Web\VendorInvoiceTemplateController::class, 'edit'])->name('vendor.invoice-template.edit');
+    Route::post('/vendor/invoice-template', [\App\Http\Controllers\Web\VendorInvoiceTemplateController::class, 'update'])->name('vendor.invoice-template.update');
+    Route::delete('/vendor/invoice-template', [\App\Http\Controllers\Web\VendorInvoiceTemplateController::class, 'reset'])->name('vendor.invoice-template.reset');
+    Route::get('/vendor/invoice-template/preview', [\App\Http\Controllers\Web\VendorInvoiceTemplateController::class, 'preview'])->name('vendor.invoice-template.preview');
+    Route::get('/orders/{order}/pos-invoice', [\App\Http\Controllers\Web\VendorInvoiceTemplateController::class, 'print'])->name('order.pos-invoice');
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::get('/pos/sales', [PosController::class, 'sales'])->name('pos.sales');
     Route::post('/pos/store', [PosController::class, 'store'])->name('pos.store');
     Route::get('/pos/payment', [PosController::class, 'payment'])->name('pos.payment');
     Route::post('/pos/customer-store', [PosController::class, 'storeCustomer'])->name('pos.customerStore');
     Route::post('/pos/address-store', [PosController::class, 'storeAddress'])->name('pos.addressStore');
-    Route::get('/pos/fetch/variants', [PosController::class, 'fetchVariants'])->name('pos.fetch.variants');
     Route::get('/pos/fetch/products', [PosController::class, 'fetchProducts'])->name('pos.fetch.products');
 
-    // Payment (web checkout / POS)
-    Route::get('/web/test', [PaymentController::class, 'testIndex'])->name('web.test');
-    Route::get('/payment/{enryptedOrderId}/{enryptCardId}', [PaymentController::class, 'payment'])->name('payment');
-    Route::get('/payment/intent/{customer}/{card}/{amount}/{order}', [PaymentController::class, 'intent'])->name('payment.intent');
-    Route::post('/payment/{id}/update', [PaymentController::class, 'updatePayment'])->name('payment.update');
-    Route::post('/payment/process/{order}', [PaymentGatewayController::class, 'process'])->name('payment.process');
-    Route::post('/payment/process-order/{order}', [ApiPaymentGatewayController::class, 'processOrder'])->name('payment.process.order');
-    Route::get('/payment/success', [ApiPaymentGatewayController::class, 'success'])->name('payment.success');
-
-    // Stripe (web payment page)
-    Route::get('/stripe/payment', [StripePaymentController::class, 'index'])->name('stripe.payment');
-    Route::get('/stripe/charge', [StripePaymentController::class, 'charge'])->name('charge');
 
     // Vendor dashboard (separate standalone dashboard for each store owner)
     Route::get('/vendor/dashboard', [\App\Http\Controllers\Web\VendorController::class, 'dashboard'])->name('vendor.dashboard');
     // Vendor settings (store owner private settings — separate from global web settings)
     Route::get('/vendor/settings', [\App\Http\Controllers\Web\VendorController::class, 'settings'])->name('vendor.settings');
     Route::post('/vendor/settings', [\App\Http\Controllers\Web\VendorController::class, 'updateSettings'])->name('vendor.settings.update');
+
+    // Vendor store customers and notifications (derived from Delivered orders only)
+    Route::get('/vendor/customers', [\App\Http\Controllers\Web\Vendor\VendorStoreCustomerController::class, 'index'])->name('vendor.customers.index');
+    Route::get('/vendor/customers/{customer}/edit', [\App\Http\Controllers\Web\Vendor\VendorStoreCustomerController::class, 'edit'])->name('vendor.customers.edit');
+    Route::post('/vendor/customers/{customer}', [\App\Http\Controllers\Web\Vendor\VendorStoreCustomerController::class, 'update'])->name('vendor.customers.update');
+    Route::get('/vendor/notifications', [\App\Http\Controllers\Web\Vendor\VendorNotificationController::class, 'index'])->name('vendor.notifications.index');
+    Route::post('/vendor/notifications', [\App\Http\Controllers\Web\Vendor\VendorNotificationController::class, 'send'])->name('vendor.notifications.send');
+
+    // Sub (child) vendor accounts — managed ONLY by the store owner
+    Route::get('/vendor/subs', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'index'])->name('vendor.subs.index');
+    Route::get('/vendor/subs/create', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'create'])->name('vendor.subs.create');
+    Route::post('/vendor/subs', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'store'])->name('vendor.subs.store');
+    Route::get('/vendor/subs/{sub}', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'show'])->name('vendor.subs.show');
+    Route::get('/vendor/subs/{sub}/edit', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'edit'])->name('vendor.subs.edit');
+    Route::post('/vendor/subs/{sub}', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'update'])->name('vendor.subs.update');
+    Route::post('/vendor/subs/{sub}/toggle', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'toggleStatus'])->name('vendor.subs.toggle');
+    Route::post('/vendor/subs/{sub}/destroy', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'destroy'])->name('vendor.subs.destroy');
+    Route::post('/vendor/subs/{sub}/set-permission', [\App\Http\Controllers\Web\Vendor\VendorSubController::class, 'setPermission'])->name('vendor.subs.set-permission');
+
+    // Maps reverse geocoding (uses Google Maps when configured, OSM fallback)
+    Route::get('/maps/reverse-geocode', [\App\Http\Controllers\Web\MapController::class, 'reverseGeocode'])->name('maps.reverse-geocode');
+
+    // Integration Center (Super Admin)
+    Route::get('/integrations', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'index'])->name('integrations.index');
+    Route::post('/integrations/{group}', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'update'])->name('integrations.update');
+    Route::post('/integrations/{group}/test', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'test'])->name('integrations.test');
+    Route::get('/integrations/tools/reverse-geocode', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'reverseGeocode'])->name('integrations.reverse-geocode');
+    Route::get('/integrations/templates/list', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'templates'])->name('integrations.templates');
+    Route::post('/integrations/templates/store', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'storeTemplate'])->name('integrations.templates.store');
+    Route::post('/integrations/templates/{template}/update', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'updateTemplate'])->name('integrations.templates.update');
+    Route::delete('/integrations/templates/{template}', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'destroyTemplate'])->name('integrations.templates.destroy');
+    Route::get('/integrations/message-logs', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'messageLogs'])->name('integrations.message-logs');
+    Route::get('/integrations/webhooks/list', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'webhooks'])->name('integrations.webhooks');
+    Route::post('/integrations/webhooks/store', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'storeWebhook'])->name('integrations.webhooks.store');
+    Route::post('/integrations/webhooks/{endpoint}/update', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'updateWebhook'])->name('integrations.webhooks.update');
+    Route::delete('/integrations/webhooks/{endpoint}', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'deleteWebhook'])->name('integrations.webhooks.destroy');
+    Route::post('/integrations/webhooks/{endpoint}/test', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'testWebhook'])->name('integrations.webhooks.test');
+    Route::post('/integrations/webhooks/deliveries/{delivery}/retry', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'retryWebhook'])->name('integrations.webhooks.retry');
+    Route::get('/integrations/api-keys/list', [\App\Http\Controllers\Web\ApiKeyController::class, 'index'])->name('integrations.api-keys');
+    Route::post('/integrations/api-keys/store', [\App\Http\Controllers\Web\ApiKeyController::class, 'store'])->name('integrations.api-keys.store');
+    Route::post('/integrations/api-keys/{apiKey}/revoke', [\App\Http\Controllers\Web\ApiKeyController::class, 'revoke'])->name('integrations.api-keys.revoke');
+    Route::delete('/integrations/api-keys/{apiKey}', [\App\Http\Controllers\Web\ApiKeyController::class, 'destroy'])->name('integrations.api-keys.destroy');
+    Route::get('/integrations/audit-logs', [\App\Http\Controllers\Web\AuditLogController::class, 'index'])->name('integrations.audit-logs');
+
+    // Firebase credential management (Super Admin only, rate-limited).
+    Route::post('/integrations/firebase/credentials/upload', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'uploadFirebaseCredentials'])->name('integrations.firebase.credentials.upload')->middleware('throttle:5,1');
+    Route::post('/integrations/firebase/credentials/rollback', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'rollbackFirebaseCredentials'])->name('integrations.firebase.credentials.rollback')->middleware('throttle:5,1');
+    Route::post('/integrations/firebase/android-config/upload', [\App\Http\Controllers\Web\IntegrationCenterController::class, 'uploadFirebaseAndroidConfig'])->name('integrations.firebase.android-config.upload')->middleware('throttle:5,1');
 });
 
 // Website (frontend) public routes - /home removed as requested
@@ -348,48 +299,4 @@ Route::middleware('auth')->group(function () {
 // Keep the route NAME so breadcrumbs and auth redirects resolve to the
 // site root instead of throwing "Route [web.home] not defined" (500).
 Route::get('/home', function () { return redirect('/'); })->name('web.home');
-Route::get('/website/services', [WebsiteServiceController::class, 'index'])->name('web.services');
-Route::get('/website/service', [WebsiteServiceController::class, 'index'])->name('web.service');
-Route::get('/store/{vendor}', [WebsiteServiceController::class, 'vendorStore'])->name('web.vendor.store');
-// Route::get('/stores', function(){ return redirect()->route('web.home'); })->name('web.stores');
-Route::get('/faq', [WebsiteFaqController::class, 'website'])->name('web.faq');
-Route::get('/website/contact', [WebsiteContactController::class, 'index'])->name('web.contact');
-Route::post('/website/contact', [WebsiteContactController::class, 'submit'])->name('web.contact.submit');
-Route::get('/cart', [CheckoutController::class, 'cart'])->name('web.cart');
-Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('web.checkout');
-Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
-Route::post('/cart/{id}/update', [CheckoutController::class, 'update'])->name('cart.update');
-Route::post('/cart/{id}/remove', [CheckoutController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('cart.applyCoupon');
-Route::get('/order-success/{id}', [CheckoutController::class, 'orderSuccess'])->name('order.success');
-Route::get('/order-details/{id}', [CheckoutController::class, 'orderDetails'])->name('order.details');
 
-Route::get('/terms', [policyController::class, 'terms'])->name('web.terms');
-Route::get('/privacy', [policyController::class, 'privacy'])->name('web.privacy');
-
-Route::get('/sign-in', [WebsiteAuthController::class, 'showLogin'])->name('web.showLogin');
-Route::get('/sign-up', [WebsiteAuthController::class, 'showRegister'])->name('web.showRegister');
-Route::post('/sign-in', [WebsiteAuthController::class, 'login'])->name('web.login');
-Route::post('/sign-up', [WebsiteAuthController::class, 'register'])->name('web.register');
-Route::post('/sign-out', [WebsiteAuthController::class, 'logout'])->name('web.logout');
-
-// Stripe callbacks
-Route::get('/stripe/success/{order}', [StripeController::class, 'stripeSuccess'])->name('stripe.success');
-Route::get('/stripe/cancel/{order}', [StripeController::class, 'stripeCancel'])->name('stripe.cancel');
-Route::get('/stripe/failure/{order}', [StripeController::class, 'orderFailure'])->name('stripe.failure');
-
-// Website customer account
-Route::middleware('auth')->group(function () {
-    Route::get('/account', [WebsiteSettingsController::class, 'index'])->name('web.settings');
-    Route::post('/account', [WebsiteSettingsController::class, 'update'])->name('web.settings.update');
-    Route::get('/account/overview', [WebsiteSettingsController::class, 'overview'])->name('web.overview');
-    Route::get('/account/my-orders', [WebsiteSettingsController::class, 'myOrders'])->name('web.my.orders');
-    Route::get('/account/orders/{orderId}', [WebsiteSettingsController::class, 'orders'])->name('web.orders');
-    Route::get('/account/orders/{orderId}/payment', [WebsiteSettingsController::class, 'payOrder'])->name('web.order.payment');
-    Route::get('/account/addresses', [WebsiteSettingsController::class, 'addresses'])->name('web.addresses');
-    Route::post('/account/addresses', [WebsiteSettingsController::class, 'storeAddress'])->name('web.addresses.store');
-    Route::get('/account/addresses/list', [WebsiteSettingsController::class, 'getAddresses'])->name('web.addresses.list');
-    Route::post('/account/addresses/{id}/destroy', [WebsiteSettingsController::class, 'destroyAddress'])->name('web.addresses.destroy');
-    Route::post('/account/addresses/{id}/default', [WebsiteSettingsController::class, 'setDefaultAddress'])->name('web.addresses.setDefault');
-    Route::get('/account/favourite', [WebsiteSettingsController::class, 'favourite'])->name('web.favourite');
-});

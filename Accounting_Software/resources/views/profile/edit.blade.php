@@ -1,8 +1,12 @@
 <x-app-layout :title=" config('app.name') . ' | ' . 'تعديل حسابي' ">
-    <h4 class="fw-bold py-3 mb-4">
-        <span
-            class="text-muted fw-light"> حسابي / </span> بيانات حسابي
-    </h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-user"></i> حسابي</div>
+                <h1 class="ec-section-title">بيانات حسابي</h1>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-12">

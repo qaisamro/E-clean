@@ -25,10 +25,10 @@ class OfferRequest extends FormRequest
     {
         $imgRule = request()->isMethod('put') ? 'nullable' : 'nullable';
 
-        // Store owners are auto-scoped to their vendor; others must choose one
-        // so the offer is visible in the app.
-        $isVendorAdmin = auth()->check() && auth()->user()->hasRole('vendor_admin');
-        $vendorRule = $isVendorAdmin
+        // Store staff (owner or child account) are auto-scoped to their store;
+        // others must choose one so the offer is visible in the app.
+        $isStoreStaff = \App\Support\VendorAccount::isStoreStaff(auth()->user());
+        $vendorRule = $isStoreStaff
             ? 'nullable|integer|exists:vendors,id'
             : 'required|integer|exists:vendors,id';
 
@@ -37,7 +37,7 @@ class OfferRequest extends FormRequest
             'description' => ['nullable'],
             'discount_type' => ['required', 'in:percentage,fixed'],
             'discount_value' => ['required', 'numeric', 'min:0'],
-            'image' => [$imgRule, 'image', 'mimes:jpg,jpeg,png,svg'],
+            'image' => [$imgRule, 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'product_id' => ['nullable', 'integer', 'exists:products,id'],
             'vendor_id' => [$vendorRule],
         ];

@@ -9,7 +9,7 @@ class IsSuperAdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        abort_unless(auth()->user()->isSuperAdmin(), 401);
+        abort_unless(auth()->user()->isSuperAdmin(), 403);
 
         return $next($request);
     }

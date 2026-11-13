@@ -18,6 +18,10 @@ class Payment extends Model
         'notes'
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

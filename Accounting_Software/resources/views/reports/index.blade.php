@@ -1,10 +1,15 @@
 <x-app-layout :title="config('app.name') . ' | التقارير المالية'">
 
-    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-4">
-        <h4 class="fw-bold py-3 mb-0">
-            <i class="bx bx-bar-chart-alt-2 text-primary me-2"></i>
-            التقارير المالية الشاملة
-        </h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-bar-chart-alt-2"></i> التقارير المالية</div>
+                <h1 class="ec-section-title">التقارير المالية الشاملة</h1>
+            </div>
+            <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="bx bx-printer me-1"></i> طباعة
+            </button>
+        </div>
     </div>
 
     {{-- Date Filter --}}
@@ -67,11 +72,11 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100" style="border-right: 4px solid #6610f2 !important;">
+            <div class="card border-0 shadow-sm h-100" style="border-right: 4px solid #0d9488 !important;">
                 <div class="card-body text-center py-4">
-                    <div class="mb-2"><i class="bx bx-credit-card text-purple" style="font-size:2.5rem; color:#6610f2"></i></div>
+                    <div class="mb-2"><i class="bx bx-credit-card text-teal" style="font-size:2.5rem; color:#0d9488"></i></div>
                     <h6 class="text-muted mb-1">إيرادات فيزا</h6>
-                    <h3 class="fw-bold mb-0" style="color:#6610f2">{{ number_format($visa_revenue, 2) }} ₪</h3>
+                    <h3 class="fw-bold mb-0" style="color:#0d9488">{{ number_format($visa_revenue, 2) }} ₪</h3>
                     <small class="text-muted">دفعات الفيزا فقط</small>
                 </div>
             </div>

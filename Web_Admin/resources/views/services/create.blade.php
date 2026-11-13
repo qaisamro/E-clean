@@ -14,18 +14,8 @@
                 </div>
                 <div class="card-body">
                     <x-form route="service.store" type="Submit">
-                        <label>{{ __('Name').' '.__('of'). ' '. __('English') }}</label>
-                        <x-input name="name" type='text' placeholder="{{ __('Service').' '.__('Name'). ' '. __('English') }}" required="true"/>
-
-                        <label>{{ __('Name').' '.__('of'). ' '. __('Arabic') }}</label>
-                        <x-input name="name_bn" type='text' placeholder="{{ __('Service').' '.__('Name'). ' '. __('Arabic') }}"/>
-
-                        <label>{{ __('Select').' '.__('Variants') }}</label>
-                        <x-select :multi="true" name="variant_ids[]" required="true">
-                            @foreach ($variants as $variant)
-                                <option value="{{ $variant->id }}">{{ session()->get('local') == 'ar' ? ($variant->name_bn ??$variant->name) : $variant->name}}</option>
-                            @endforeach
-                        </x-select>
+                        <label>{{ __('Name') }}</label>
+                        <x-input name="name_bn" type='text' placeholder="{{ __('Service').' '.__('Name') }}" required="true"/>
 
                         <label>{{ __('Service').' '.__('Photo') }}</label>
                         <x-input-file name="image" type="file" required="true"/>

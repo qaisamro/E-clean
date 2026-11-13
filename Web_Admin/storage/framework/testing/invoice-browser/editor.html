@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="ar"  dir="rtl" >
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="qhwQbfYnLny6Zh3uq0vBQ3ZYh3P49Rqqdag94RIr" />
+        <link rel="icon" type="image/png" href="http://127.0.0.1:8000/web/favIcon.png?v=2">
+    <title>Elite Cleaning</title>
+    <!-- Fonts -->
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/all.min.css" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/select2.min.css" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/style.css?v=2" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/custom.css" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/datatables.min.css" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/toastr.min.css" type="text/css">
+            <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+            rel="stylesheet">
+        <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/rtl.css?v=8" type="text/css">
+        
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/admin-identity.css?v=9" type="text/css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/web/css/invoice-builder.css">
+
+</head>
+
+<style>
+    .nav-profile-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .language-image {
+        background: #29aae130;
+        padding: 8px 8px 4px 8px;
+        border-radius: 4px;
+    }
+
+    .language-image div {
+        margin-top: 2px;
+        font-weight: 400;
+    }
+
+    .language-image a img {
+        width: 28px;
+    }
+
+    .nav-profile-box.dropdown-toggle::after {
+        display: none;
+    }
+
+    .badgeButtonBox .dropdown-toggle::after {
+        display: none;
+    }
+
+    .dropdown-toggle {
+        white-space: nowrap;
+    }
+</style>
+
+<body>
+
+    
+
+    <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white ec-sidebar" id="sidenav-main">
+    <div class="container-fluid ec-sidebar-inner" style="min-height:0">
+
+                <!-- Brand -->
+        <a class="navbar-brand ec-brand" href="http://127.0.0.1:8000">
+            <img src="http://127.0.0.1:8000/web/logo.jpg?v=2" class="navbar-brand-img"
+                alt="Admin Logo">
+        </a>
+
+        <!-- User card (top) -->
+        <div class="ec-user-top">
+            <div class="ec-user-card">
+                <div class="ec-avatar">
+                    <img src="http://127.0.0.1:8000/images/dummy/dummy-user.png?v=2"
+                        alt="" width="50" height="50">
+                    <span class="ec-online" title="متصل"></span>
+                </div>
+                <div class="ec-who">
+                    <h3 class="name m-0">owner Test</h3>
+                    <p class="email m-0" dir="ltr">owner-mobile</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerGoldStar"
+            aria-controls="navbarTogglerGoldStar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarTogglerGoldStar">
+            
+            <ul class="navbar-nav">
+                <div class="position-absolute top-0 right-0 d-md-none navbarCloseBtn" data-toggle="collapse"
+                    data-target="#navbarTogglerGoldStar">
+                    <i class="fas fa-angle-left"></i>
+                </div>
+
+                <li class="ec-section-label" aria-hidden="true"><span>القائمة الرئيسية</span></li>
+
+                                                    <li class="nav-item">
+                        <a class="nav-link " href="http://127.0.0.1:8000/vendor/dashboard">
+                            
+                            <span class="nav-link-text">لوحة التحكم</span>
+                        </a>
+                    </li>
+                
+                                    <li class="nav-item">
+                        <a class="nav-link "
+                            href="http://127.0.0.1:8000/vendor/customers">
+                            <span class="nav-link-text">عملاء المتجر</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link "
+                            href="http://127.0.0.1:8000/vendor/notifications">
+                            <span class="nav-link-text">إرسال إشعار</span>
+                        </a>
+                    </li>
+                
+                                                    
+                                                    
+                                    <li class="nav-item">
+                        <a class="nav-link  active" href="#posManage"
+                            data-toggle="collapse" aria-expanded="false" role="button" aria-controls="navbar-examples">
+                            
+                            <span class="nav-link-text">إدارة نقطة البيع</span>
+                        </a>
+                        <div class="collapse show" id="posManage">
+                            <ul class="nav nav-sm flex-column">
+                                <a class="nav-link sub-menu "
+                                    href="http://127.0.0.1:8000/pos">
+                                    
+                                    <span class="nav-link-text">نقطة البيع</span>
+                                </a>
+                                <a class="nav-link sub-menu "
+                                    href="http://127.0.0.1:8000/pos/sales">
+                                    
+                                    <span class="nav-link-text">مبيعات نقطة البيع</span>
+                                </a>
+                                <a class="nav-link sub-menu active" href="http://127.0.0.1:8000/vendor/invoice-template">
+                                    <i class="fas fa-file-invoice" aria-hidden="true"></i><span class="nav-link-text">تصميم قالب الفاتورة</span>
+                                </a>
+                            </ul>
+                        </div>
+                    </li>
+                                
+                
+                
+                
+                                                    
+                
+                                    <li class="nav-item">
+                        <a class="nav-link "
+                            href="http://127.0.0.1:8000/drivers">
+                            
+                            <span class="nav-link-text">السائقون</span>
+                        </a>
+                    </li>
+                
+                
+                
+                                
+                
+                
+                
+                                                                                
+                
+                
+                
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                        onclick="event.preventDefault(); if(confirm('هل أنت متأكد من تسجيل الخروج؟')){ document.getElementById('logout').submit(); }"
+                        href="#">
+                        
+                        <span class="nav-link-text">تسجيل الخروج</span>
+                    </a>
+                    <form id="logout" action="http://127.0.0.1:8000/logout" method="POST"> <input type="hidden" name="_token" value="qhwQbfYnLny6Zh3uq0vBQ3ZYh3P49Rqqdag94RIr" autocomplete="off"> </form>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
+
+
+    <div class="main-content">
+
+        
+        
+        <div class="mobile-lang-toggle" id="mobileLangToggle" style="display:none;">
+            <span class="lang-icon"><i class="fa fa-language"></i></span>
+            <img src="" alt="">
+            <span></span>
+        </div>
+        <div class="dropdown-menu profile-item" id="mobileLangDropdown" style="position:fixed;top:52px;right:12px;z-index:1001;min-width:140px;display:none;">
+                    </div>
+
+        <div class="main-header shadow-sm">
+
+            <div class="user-profile-box dropdown mx-3" style="display:none;">
+                <div class="nav-profile-box dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-image language-image d-flex gap-2">
+                        <a href="#">
+                            <img class="" src="" alt="">
+                        </a>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="dropdown-menu profile-item">
+                                    </div>
+            </div>
+            <div class="btn-group dropdown">
+                <button type="button" class="notificationBell dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell Icon"></i>
+                    <div id="total">0</div>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" id="notification">
+                    <a class="dropdown-item" href="#">
+                        <div class="message"></div>
+                        <div class="time"></div>
+                    </a>
+                </div>
+            </div>
+                            <div class="dropdown mx-3 ">
+                    <div class="nav-profile-box dropdown-toggle" data-toggle="dropdown">
+                        <div class="profile-image language-image d-flex gap-2">
+                            <img src="http://127.0.0.1:8000/images/dummy/dummy-user.png?v=2" width="28">
+                        </div>
+
+                    </div>
+
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="http://127.0.0.1:8000/profile" class="dropdown-item">
+                            <i class="fas fa-user me-2"></i> الملف الشخصي
+                        </a>
+
+                                                    <a href="http://127.0.0.1:8000/vendor/settings" class="dropdown-item">
+                                <i class="fas fa-cog me-2"></i> الإعدادات
+                            </a>
+                        
+                        <div class="dropdown-divider"></div>
+
+                        <a href="http://127.0.0.1:8000/logout" class="dropdown-item"
+                            onclick="event.preventDefault(); if(confirm('هل أنت متأكد من تسجيل الخروج؟')){ document.getElementById('logout-form').submit(); }">
+                            <i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج
+                        </a>
+
+                        <form id="logout-form" action="http://127.0.0.1:8000/logout" method="POST" style="display:none;">
+                            <input type="hidden" name="_token" value="qhwQbfYnLny6Zh3uq0vBQ3ZYh3P49Rqqdag94RIr" autocomplete="off">                        </form>
+                    </div>
+                </div>
+                    </div>
+
+        
+        <div class="invoice-builder" dir="rtl">
+    <header class="ib-header">
+        <div><span class="ib-kicker">نقطة البيع · متجر الاختبار</span><h1>تصميم قالب الفاتورة</h1>
+            <p>قالب واحد، وثلاث نسخ. خصّص المظهر وشاهد النتيجة مباشرة.</p></div>
+        <div class="ib-actions">
+            <button type="submit" form="invoice-builder-form" class="ib-primary" id="save-template">حفظ القالب</button>
+            <button type="button" id="reset-template">استعادة الافتراضي</button>
+            <button type="button" id="preview-print">معاينة الطباعة</button>
+        </div>
+    </header>
+    <div id="builder-status" role="status" aria-live="polite">القيم المالية للعرض فقط؛ لا يغيّر هذا المحرر الطلب أو إعدادات المتجر الأصلية.</div>
+    <div class="ib-layout">
+        <form id="invoice-builder-form" class="ib-settings" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="qhwQbfYnLny6Zh3uq0vBQ3ZYh3P49Rqqdag94RIr" autocomplete="off">            <details open><summary>المقاس واللغة والمظهر</summary><div class="ib-grid">
+                                    <label>المقاس<select data-setting="paper"><option value="A4">A4</option><option value="80mm">حراري 80mm</option><option value="58mm">حراري 58mm</option></select></label>
+                                    <label>اللغة<select data-setting="language"><option value="ar">العربية</option><option value="en">English</option></select></label>
+                                    <label>الاتجاه<select data-setting="direction"><option value="rtl">من اليمين لليسار</option><option value="ltr">من اليسار لليمين</option></select></label>
+                                    <label>الخط<select data-setting="font"><option value="system">Tahoma / Arial</option><option value="serif">Times / Georgia</option><option value="mono">Monospace</option></select></label>
+                                    <label>محاذاة النص<select data-setting="align"><option value="start">البداية</option><option value="center">الوسط</option><option value="end">النهاية</option></select></label>
+                                                    <label>حجم النص<input type="number" data-setting="font_size" min="9" max="24" required></label>
+                                    <label>حجم العنوان<input type="number" data-setting="heading_size" min="12" max="36" required></label>
+                                    <label>المسافة بين الأقسام (px)<input type="number" data-setting="spacing" min="0" max="24" required></label>
+                                    <label>الهامش الداخلي (mm)<input type="number" data-setting="padding" min="2" max="15" required></label>
+                                    <label>سمك الحدود (px)<input type="number" data-setting="border_width" min="0" max="3" required></label>
+                                                    <label>لون العناوين<input type="color" data-setting="accent"></label>
+                                    <label>لون النص<input type="color" data-setting="text_color"></label>
+                                    <label>لون الورق<input type="color" data-setting="background"></label>
+                                    <label>لون الحدود<input type="color" data-setting="border_color"></label>
+                            </div></details>
+            <details><summary>شعار المحل</summary><div class="ib-grid">
+                <label class="ib-full">رفع شعار<input type="file" id="invoice-logo" accept="image/png,image/jpeg,image/webp"><small>PNG / JPEG / WebP · حتى 1MB و2400×2400. لا يُقبل SVG.</small></label>
+                <label>حجم الشعار (px)<input type="number" data-setting="logo_size" min="24" max="160" required></label>
+                <label>محاذاة الشعار<select data-setting="logo_align"><option value="start">البداية</option><option value="center">الوسط</option><option value="end">النهاية</option></select></label>
+                <label class="ib-check ib-full"><input type="checkbox" id="remove-logo">حذف الشعار المخصص عند الحفظ (يعود شعار المتجر الأصلي إن توفر)</label>
+            </div></details>
+            <details open><summary>المعلومات والنصوص</summary><div class="ib-grid">
+                                    <label class="ib-full">اسم المحل المعروض (فارغ لاستخدام بيانات المتجر)<textarea data-text="store_name" rows="2" maxlength="1000" placeholder="فارغ لاستخدام بيانات المتجر"></textarea></label>
+                                    <label class="ib-full">العنوان المعروض<textarea data-text="address" rows="2" maxlength="1000" placeholder="فارغ لاستخدام بيانات المتجر"></textarea></label>
+                                    <label class="ib-full">الهاتف المعروض<textarea data-text="phone" rows="2" maxlength="1000" placeholder="فارغ لاستخدام بيانات المتجر"></textarea></label>
+                                    <label class="ib-full">البريد المعروض<textarea data-text="email" rows="2" maxlength="1000" placeholder="فارغ لاستخدام بيانات المتجر"></textarea></label>
+                                    <label class="ib-full">الرقم الضريبي<textarea data-text="tax_number" rows="2" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">معلومات تواصل إضافية<textarea data-text="contact" rows="2" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">عنوان الفاتورة<textarea data-text="title" rows="2" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">نص أعلى الفاتورة<textarea data-text="header" rows="3" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">نص أسفل الفاتورة<textarea data-text="footer" rows="3" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">رسالة الشكر<textarea data-text="thanks" rows="2" maxlength="1000" placeholder=""></textarea></label>
+                                    <label class="ib-full">ملاحظات ثابتة<textarea data-text="notes" rows="3" maxlength="1000" placeholder=""></textarea></label>
+                            </div></details>
+            <details><summary>إظهار الحقول وإخفاؤها</summary><div class="ib-grid">
+                                    <label class="ib-check"><input type="checkbox" data-visible="logo">شعار المحل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="store_name">اسم المحل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="address">عنوان المحل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="phone">هاتف المحل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="email">البريد الإلكتروني</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="tax_number">الرقم الضريبي</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="contact">معلومات التواصل الإضافية</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="invoice_number">رقم الفاتورة (رقم الطلب الحالي)</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="order_number">رقم الطلب</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="date">التاريخ</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="time">الوقت</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="customer_name">اسم العميل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="customer_phone">هاتف العميل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="cashier">اسم الكاشير إن توفر</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="item_name">اسم المنتج / الخدمة</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="quantity">الكمية</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="unit_price">سعر الوحدة</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="item_discount">خصم الصنف إن توفر</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="line_total">إجمالي الصنف</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="subtotal">المجموع الفرعي</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="discount">خصم الطلب</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="tax">الضريبة المحفوظة إن توفرت</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="delivery">رسوم التوصيل</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="total">الإجمالي النهائي</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="payment_method">طريقة الدفع</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="payment_status">حالة الدفع</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="order_notes">ملاحظات الطلب</label>
+                                    <label class="ib-check"><input type="checkbox" data-visible="barcode">باركود رقم الطلب</label>
+                                <p class="ib-help ib-full">تُخفى الضريبة والكاشير وخصم الصنف عند عدم وجود بيانات محفوظة لها. رقم الفاتورة يستخدم رقم الطلب الحالي؛ لا يتم إنشاء فاتورة محاسبية جديدة.</p>
+            </div></details>
+            <details><summary>ترتيب الأقسام</summary><p class="ib-help">استخدم الأسهم لتحريك القسم. النسخ الثلاث تستخدم الترتيب نفسه.</p><ol id="invoice-sections"></ol></details>
+        </form>
+        <aside class="ib-preview" aria-label="المعاينة المباشرة">
+            <div class="ib-preview-top"><div><strong>المعاينة المباشرة</strong><span id="preview-badge">مباشر</span></div><small>تعديلاتك تظهر فورًا قبل الحفظ</small></div>
+            <div class="ib-preview-selects">
+                <label>طلب حقيقي للمعاينة<select id="preview-order">
+                    <option value="1">INV-TEST-41</option>                </select></label>
+                <label>نوع النسخة<select id="preview-copy"><option value="normal">طباعة عادية</option><option value="customer">نسخة الزبون</option><option value="store">نسخة المحل</option></select></label>
+            </div>
+            <iframe id="invoice-preview" title="معاينة الفاتورة" src="http://127.0.0.1:8000/vendor/invoice-template/preview?order=1"></iframe>
+            <p class="ib-help">الحراري يستخدم أسطرًا مرنة بدل ضغط الجدول. اضبط مقاس الورق من تعريف الطابعة وأوقف رؤوس المتصفح. الألوان تعتمد على الطابعة.</p>
+        </aside>
+    </div>
+</div>
+<script>window.invoiceBuilder = JSON.parse('{\u0022settings\u0022:{\u0022paper\u0022:\u002280mm\u0022,\u0022language\u0022:\u0022ar\u0022,\u0022direction\u0022:\u0022rtl\u0022,\u0022font\u0022:\u0022system\u0022,\u0022font_size\u0022:12,\u0022heading_size\u0022:20,\u0022spacing\u0022:10,\u0022padding\u0022:5,\u0022border_width\u0022:1,\u0022align\u0022:\u0022start\u0022,\u0022logo_align\u0022:\u0022center\u0022,\u0022logo_size\u0022:70,\u0022accent\u0022:\u0022#0f766e\u0022,\u0022text_color\u0022:\u0022#172b4d\u0022,\u0022background\u0022:\u0022#ffffff\u0022,\u0022border_color\u0022:\u0022#cbd5e1\u0022,\u0022sections\u0022:[\u0022brand\u0022,\u0022header\u0022,\u0022details\u0022,\u0022items\u0022,\u0022totals\u0022,\u0022footer\u0022],\u0022visible\u0022:{\u0022logo\u0022:true,\u0022store_name\u0022:true,\u0022address\u0022:true,\u0022phone\u0022:true,\u0022email\u0022:true,\u0022tax_number\u0022:true,\u0022contact\u0022:true,\u0022invoice_number\u0022:true,\u0022order_number\u0022:true,\u0022date\u0022:true,\u0022time\u0022:true,\u0022customer_name\u0022:true,\u0022customer_phone\u0022:true,\u0022cashier\u0022:true,\u0022item_name\u0022:true,\u0022quantity\u0022:true,\u0022unit_price\u0022:true,\u0022item_discount\u0022:true,\u0022line_total\u0022:true,\u0022subtotal\u0022:true,\u0022discount\u0022:true,\u0022tax\u0022:true,\u0022delivery\u0022:true,\u0022total\u0022:true,\u0022payment_method\u0022:true,\u0022payment_status\u0022:true,\u0022order_notes\u0022:true,\u0022barcode\u0022:true},\u0022text\u0022:{\u0022store_name\u0022:\u0022\u0022,\u0022address\u0022:\u0022\u0022,\u0022phone\u0022:\u0022\u0022,\u0022email\u0022:\u0022\u0022,\u0022tax_number\u0022:\u0022\u0022,\u0022contact\u0022:\u0022\u0022,\u0022title\u0022:\u0022فاتورة مبيعات\u0022,\u0022header\u0022:\u0022\u0022,\u0022footer\u0022:\u0022\u0022,\u0022thanks\u0022:\u0022شكرًا لزيارتكم\u0022,\u0022notes\u0022:\u0022\u0022}},\u0022defaults\u0022:{\u0022paper\u0022:\u002280mm\u0022,\u0022language\u0022:\u0022ar\u0022,\u0022direction\u0022:\u0022rtl\u0022,\u0022font\u0022:\u0022system\u0022,\u0022font_size\u0022:12,\u0022heading_size\u0022:20,\u0022spacing\u0022:10,\u0022padding\u0022:5,\u0022border_width\u0022:1,\u0022align\u0022:\u0022start\u0022,\u0022logo_align\u0022:\u0022center\u0022,\u0022logo_size\u0022:70,\u0022accent\u0022:\u0022#0f766e\u0022,\u0022text_color\u0022:\u0022#172b4d\u0022,\u0022background\u0022:\u0022#ffffff\u0022,\u0022border_color\u0022:\u0022#cbd5e1\u0022,\u0022sections\u0022:[\u0022brand\u0022,\u0022header\u0022,\u0022details\u0022,\u0022items\u0022,\u0022totals\u0022,\u0022footer\u0022],\u0022visible\u0022:{\u0022logo\u0022:true,\u0022store_name\u0022:true,\u0022address\u0022:true,\u0022phone\u0022:true,\u0022email\u0022:true,\u0022tax_number\u0022:true,\u0022contact\u0022:true,\u0022invoice_number\u0022:true,\u0022order_number\u0022:true,\u0022date\u0022:true,\u0022time\u0022:true,\u0022customer_name\u0022:true,\u0022customer_phone\u0022:true,\u0022cashier\u0022:true,\u0022item_name\u0022:true,\u0022quantity\u0022:true,\u0022unit_price\u0022:true,\u0022item_discount\u0022:true,\u0022line_total\u0022:true,\u0022subtotal\u0022:true,\u0022discount\u0022:true,\u0022tax\u0022:true,\u0022delivery\u0022:true,\u0022total\u0022:true,\u0022payment_method\u0022:true,\u0022payment_status\u0022:true,\u0022order_notes\u0022:true,\u0022barcode\u0022:true},\u0022text\u0022:{\u0022store_name\u0022:\u0022\u0022,\u0022address\u0022:\u0022\u0022,\u0022phone\u0022:\u0022\u0022,\u0022email\u0022:\u0022\u0022,\u0022tax_number\u0022:\u0022\u0022,\u0022contact\u0022:\u0022\u0022,\u0022title\u0022:\u0022فاتورة مبيعات\u0022,\u0022header\u0022:\u0022\u0022,\u0022footer\u0022:\u0022\u0022,\u0022thanks\u0022:\u0022شكرًا لزيارتكم\u0022,\u0022notes\u0022:\u0022\u0022}},\u0022logo\u0022:null,\u0022saveUrl\u0022:\u0022http:\\\/\\\/127.0.0.1:8000\\\/vendor\\\/invoice-template\u0022,\u0022resetUrl\u0022:\u0022http:\\\/\\\/127.0.0.1:8000\\\/vendor\\\/invoice-template\u0022,\u0022previewUrl\u0022:\u0022http:\\\/\\\/127.0.0.1:8000\\\/vendor\\\/invoice-template\\\/preview\u0022}');</script>
+<script src="http://127.0.0.1:8000/web/js/invoice-builder.js" defer></script>
+
+    </div>
+
+    <script src="http://127.0.0.1:8000/web/js/jquery.min.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/popper.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/sweet-alert.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/bootstrap.min.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/select2.min.js"></script>
+
+    <script src="http://127.0.0.1:8000/web/js/argon.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/main.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/datatables.min.js"></script>
+    <script src="http://127.0.0.1:8000/web/js/toastr.min.js"></script>
+
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script>
+        var pusher = new Pusher("", {
+            cluster: "ap2"
+        });
+
+        var channel = pusher.subscribe('popup-channel');
+        channel.bind('order-notification', function(data) {
+            toastr.success(JSON.stringify(data.message))
+            showNotifications()
+        });
+    </script>
+
+    <script>
+        const showNotifications = function() {
+            var totalNumber = $('#total');
+
+            $.ajax({
+                type: 'GET',
+                url: "http://127.0.0.1:8000/orders/new",
+                dataType: 'json',
+                success: function(response) {
+                    $('#total').text(response.data.orders.length)
+                    $('#notification').empty()
+                    $.each(response.data.orders, function(key, value) {
+                        $('#notification').append(
+                            "<a class='dropdown-item' href='/orders/" + value.id +
+                            "'><div class='message'>طلب جديد من <strong>" + value.customer
+                            .user.name + "</strong> رقم الطلب: " + value.order_code +
+                            "</div> <div class='time'>" + value.ordered_at + "</div></a>"
+                        );
+                    })
+                },
+                error: function(e) {
+                    $('#notification').empty()
+                    $("#notification").html(e.responseText);
+                }
+            });
+        }
+        showNotifications()
+
+        $('.visitorMessage').click(function(e) {
+            e.preventDefault()
+            Swal.fire(
+                'صلاحية مرفوضة!',
+                "ليس لديك صلاحية للإنشاء أو التعديل أو الحذف لأنك مستخدم زائر.",
+                'warning'
+            )
+        })
+    </script>
+
+    
+    
+    
+    
+    <script>
+        $('#myTable').DataTable({
+            order: [],
+            language: {
+                'paginate': {
+                    'previous': '<i class="fas fa-angle-double-left"></i>',
+                    'next': '<i class="fas fa-angle-double-right"></i>'
+                },
+                "lengthMenu": "يعرض _MENU_ إدخالات",
+                "zeroRecords": "لم يتم العثور على سجلات مطابقة",
+                "info": "إظهار _START_ إلى _END_ من أصل _TOTAL_ إدخالات",
+                "infoEmpty": "لا توجد بيانات متوفرة في الجدول",
+                "infoFiltered": "(تمت تصفيته من إجمالي _MAX_ إدخالات)",
+                "search": "يبحث:",
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select One",
+            });
+        });
+
+        //delete confirm sweet alert
+        $(document).on('click', '.delete-confirm', function(e) {
+            e.preventDefault();
+            const $el = $(this);
+            const href = $el.attr('href');
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من التراجع عن هذا الإجراء!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#00B894',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، احذفه!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+                if (href) {
+                    $('<form>', { method: 'POST', action: href })
+                        .append($('<input>', { type: 'hidden', name: '_method', value: 'DELETE' }))
+                        .append($('<input>', { type: 'hidden', name: '_token', value: $('meta[name="csrf-token"]').attr('content') }))
+                        .appendTo('body')[0].submit();
+                } else {
+                    $el.closest('form')[0].submit();
+                }
+            })
+        });
+    </script>
+    <!-- Print handler: opens the invoice (HTML POS invoice or PDF) in a new tab.
+         The previous hidden 0x0 iframe approach failed silently, because browsers
+         do not load PDFs inside zero-sized frames, so the print page never opened.
+         Opening a new tab works everywhere; the POS invoice view auto-triggers window.print(). -->
+    <script>
+        document.addEventListener('click', function(e){
+            var link = e.target.closest('a.print-same-page');
+            if(link && link.href){
+                e.preventDefault();
+                window.open(link.href, '_blank');
+            }
+        });
+    </script>
+</body>
+
+</html>

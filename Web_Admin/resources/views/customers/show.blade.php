@@ -115,7 +115,7 @@
                                 </tr>
                                 @endif
 
-                                @if (!$customer->orders->isEmpty())
+                                @if (!auth()->user()?->hasRole('root') && !$customer->orders->isEmpty())
                                 <tr>
                                     <th>{{ __('Orders') }}</th>
                                     <td>

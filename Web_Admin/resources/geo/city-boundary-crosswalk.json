@@ -1,0 +1,674 @@
+[
+  {
+    "locality_code": "11010030",
+    "name_ar": "الجلمة",
+    "name_en": "Al Jalama",
+    "governorate_code": "1101",
+    "city_id": "city_86b577931915e49559ec"
+  },
+  {
+    "locality_code": "11010180",
+    "name_ar": "جنين",
+    "name_en": "Jenin",
+    "governorate_code": "1101",
+    "city_id": "city_9ed452f62dbeb826a834"
+  },
+  {
+    "locality_code": "11010215",
+    "name_ar": "دير ابو ضعيف",
+    "name_en": "Deir Abu Da'if",
+    "governorate_code": "1101",
+    "city_id": "city_95ca51dfca64f30955ae"
+  },
+  {
+    "locality_code": "11010220",
+    "name_ar": "برقين",
+    "name_en": "Birqin",
+    "governorate_code": "1101",
+    "city_id": "city_89f9f9e74ce2b2dbb24e"
+  },
+  {
+    "locality_code": "11010340",
+    "name_ar": "قباطية",
+    "name_en": "Qabatiya",
+    "governorate_code": "1101",
+    "city_id": "city_66cadffe37f477c300cf"
+  },
+  {
+    "locality_code": "11010370",
+    "name_ar": "عرابة",
+    "name_en": "Arraba",
+    "governorate_code": "1101",
+    "city_id": "city_10593f6d2b2733ae98de"
+  },
+  {
+    "locality_code": "11010435",
+    "name_ar": "الزبابدة",
+    "name_en": "Az Zababida",
+    "governorate_code": "1101",
+    "city_id": "city_bbc861a8d81e00f325ab"
+  },
+  {
+    "locality_code": "11050610",
+    "name_ar": "طوباس",
+    "name_en": "Tubas",
+    "governorate_code": "1105",
+    "city_id": "city_f65541d0100199927132"
+  },
+  {
+    "locality_code": "11050755",
+    "name_ar": "طمون",
+    "name_en": "Tammun",
+    "governorate_code": "1105",
+    "city_id": "city_a062eb93e1efb69eb551"
+  },
+  {
+    "locality_code": "11150765",
+    "name_ar": "سبسطية",
+    "name_en": "Sabastiya",
+    "governorate_code": "1115",
+    "city_id": "city_c64f8683fd5eebd53bdd"
+  },
+  {
+    "locality_code": "11150810",
+    "name_ar": "دير شرف",
+    "name_en": "Deir Sharaf",
+    "governorate_code": "1115",
+    "city_id": "city_9c6850bdcfd3743b089c"
+  },
+  {
+    "locality_code": "11150820",
+    "name_ar": "عصيرة الشمالية",
+    "name_en": "'Asira ash Shamaliya",
+    "governorate_code": "1115",
+    "city_id": "city_d38df05825ce2794357e"
+  },
+  {
+    "locality_code": "11150835",
+    "name_ar": "زواتا",
+    "name_en": "Zawata",
+    "governorate_code": "1115",
+    "city_id": "city_c3569cdf1797c09d3b76"
+  },
+  {
+    "locality_code": "11150860",
+    "name_ar": "بيت إيبا",
+    "name_en": "Beit Iba",
+    "governorate_code": "1115",
+    "city_id": "city_023a68e2f5a2c2683e15"
+  },
+  {
+    "locality_code": "11150920",
+    "name_ar": "نابلس",
+    "name_en": "Nablus",
+    "governorate_code": "1115",
+    "city_id": "city_298a1dc86c31d06331eb"
+  },
+  {
+    "locality_code": "11150935",
+    "name_ar": "دير الحطب",
+    "name_en": "Deir al Hatab",
+    "governorate_code": "1115",
+    "city_id": "city_931206d948625c6e296d"
+  },
+  {
+    "locality_code": "11150990",
+    "name_ar": "تل",
+    "name_en": "Tell",
+    "governorate_code": "1115",
+    "city_id": "city_407a5796ee206c9a7e64"
+  },
+  {
+    "locality_code": "11151000",
+    "name_ar": "بيت دجن",
+    "name_en": "Beit Dajan",
+    "governorate_code": "1115",
+    "city_id": "city_a3f1053cb42880ab7c8e"
+  },
+  {
+    "locality_code": "11151010",
+    "name_ar": "روجيب",
+    "name_en": "Rujeib",
+    "governorate_code": "1115",
+    "city_id": "city_bce515aa76a0b7af8aad"
+  },
+  {
+    "locality_code": "11151025",
+    "name_ar": "كفر قليل",
+    "name_en": "Kafr Qallil",
+    "governorate_code": "1115",
+    "city_id": "city_82e186b7938d7f15d88e"
+  },
+  {
+    "locality_code": "11151050",
+    "name_ar": "مادما",
+    "name_en": "Madama",
+    "governorate_code": "1115",
+    "city_id": "city_07b150a487e7b83d4aa6"
+  },
+  {
+    "locality_code": "11151090",
+    "name_ar": "بيت فوريك",
+    "name_en": "Beit Furik",
+    "governorate_code": "1115",
+    "city_id": "city_c86a82dc8d5bf992defd"
+  },
+  {
+    "locality_code": "11151095",
+    "name_ar": "عصيرة القبلية",
+    "name_en": "'Asira al Qibliya",
+    "governorate_code": "1115",
+    "city_id": "city_ce58a7ac4fe4cf8254ba"
+  },
+  {
+    "locality_code": "11151185",
+    "name_ar": "حوارة",
+    "name_en": "Huwwara",
+    "governorate_code": "1115",
+    "city_id": "city_8bdef30e0c88a510e20a"
+  },
+  {
+    "locality_code": "11151215",
+    "name_ar": "بيتا",
+    "name_en": "Beita",
+    "governorate_code": "1115",
+    "city_id": "city_a66cdc70e7b794ac20d6"
+  },
+  {
+    "locality_code": "11151265",
+    "name_ar": "أوصرين",
+    "name_en": "Osarin",
+    "governorate_code": "1115",
+    "city_id": "city_15dec2a9d4d38dc6fe40"
+  },
+  {
+    "locality_code": "11151270",
+    "name_ar": "عقربا",
+    "name_en": "Aqraba",
+    "governorate_code": "1115",
+    "city_id": "city_de8dfc726016d9fb04db"
+  },
+  {
+    "locality_code": "11201040",
+    "name_ar": "قلقيلية",
+    "name_en": "Qalqiliya",
+    "governorate_code": "1120",
+    "city_id": "city_7bbac4d7dc8f43b01fb6"
+  },
+  {
+    "locality_code": "11201100",
+    "name_ar": "عزون",
+    "name_en": "'Azzun",
+    "governorate_code": "1120",
+    "city_id": "city_4395f6ee5e66810dcae7"
+  },
+  {
+    "locality_code": "11201125",
+    "name_ar": "حبلة",
+    "name_en": "Habla",
+    "governorate_code": "1120",
+    "city_id": "city_5aeeea6c8d37007a7f57"
+  },
+  {
+    "locality_code": "11201175",
+    "name_ar": "كفر ثلث",
+    "name_en": "Kafr Thulth",
+    "governorate_code": "1120",
+    "city_id": "city_36f6755f93d4bd9a176c"
+  },
+  {
+    "locality_code": "11251275",
+    "name_ar": "قراوة بني حسان",
+    "name_en": "Qarawat Bani Hassan",
+    "governorate_code": "1125",
+    "city_id": "city_ead197ab395e3d7f7833"
+  },
+  {
+    "locality_code": "11251295",
+    "name_ar": "كفل حارس",
+    "name_en": "Kifl Haris",
+    "governorate_code": "1125",
+    "city_id": "city_807e2a9446069e5d6029"
+  },
+  {
+    "locality_code": "11251300",
+    "name_ar": "مردا",
+    "name_en": "Marda",
+    "governorate_code": "1125",
+    "city_id": "city_e18e7db707e2980f74e4"
+  },
+  {
+    "locality_code": "11251320",
+    "name_ar": "مسحة",
+    "name_en": "Mas-ha",
+    "governorate_code": "1125",
+    "city_id": "city_2f55ae542823a252b1aa"
+  },
+  {
+    "locality_code": "11251370",
+    "name_ar": "سلفيت",
+    "name_en": "Salfit",
+    "governorate_code": "1125",
+    "city_id": "city_045edb3cadcba818815e"
+  },
+  {
+    "locality_code": "11251425",
+    "name_ar": "كفر الديك",
+    "name_en": "Kafr ad Dik",
+    "governorate_code": "1125",
+    "city_id": "city_96ab9515913d81e6bd25"
+  },
+  {
+    "locality_code": "11251430",
+    "name_ar": "دير بلوط",
+    "name_en": "Deir Ballut",
+    "governorate_code": "1125",
+    "city_id": "city_2df3bdfc728f60cedef3"
+  },
+  {
+    "locality_code": "12301470",
+    "name_ar": "كفر عين",
+    "name_en": "Kafr 'Ein",
+    "governorate_code": "1230",
+    "city_id": "city_6d4214aa0b3ba2cadc73"
+  },
+  {
+    "locality_code": "12301472",
+    "name_ar": "دير غسانة",
+    "name_en": "Deir Ghassana",
+    "governorate_code": "1230",
+    "city_id": "city_574736e3987bd9e0c711"
+  },
+  {
+    "locality_code": "12301515",
+    "name_ar": "رنتيس",
+    "name_en": "Rantis",
+    "governorate_code": "1230",
+    "city_id": "city_ee62f6b7404048f2b779"
+  },
+  {
+    "locality_code": "12301555",
+    "name_ar": "المزرعة الشرقية",
+    "name_en": "Al Mazra'a ash Sharqiya",
+    "governorate_code": "1230",
+    "city_id": "city_074ca33e0cf61de08230"
+  },
+  {
+    "locality_code": "12301560",
+    "name_ar": "دير نظام",
+    "name_en": "Deir Nidham",
+    "governorate_code": "1230",
+    "city_id": "city_9da49da202fe818bb676"
+  },
+  {
+    "locality_code": "12301590",
+    "name_ar": "كفر مالك",
+    "name_en": "Kafr Malik",
+    "governorate_code": "1230",
+    "city_id": "city_237c18030142d9d61b14"
+  },
+  {
+    "locality_code": "12301610",
+    "name_ar": "سلواد",
+    "name_en": "Silwad",
+    "governorate_code": "1230",
+    "city_id": "city_8c7e24c3b1274a25733c"
+  },
+  {
+    "locality_code": "12301640",
+    "name_ar": "عين سينيا",
+    "name_en": "'Ein Siniya",
+    "governorate_code": "1230",
+    "city_id": "city_7823f265ccbff1b7d358"
+  },
+  {
+    "locality_code": "12301650",
+    "name_ar": "دير جرير",
+    "name_en": "Deir Jarir",
+    "governorate_code": "1230",
+    "city_id": "city_64e1d8a5421e093ee715"
+  },
+  {
+    "locality_code": "12301670",
+    "name_ar": "ابو شخيدم",
+    "name_en": "Abu Shukheidim",
+    "governorate_code": "1230",
+    "city_id": "city_baff68216b28d6f34d58"
+  },
+  {
+    "locality_code": "12301675",
+    "name_ar": "جفنا",
+    "name_en": "Jifna",
+    "governorate_code": "1230",
+    "city_id": "city_7d6e86d76ddb41dd928b"
+  },
+  {
+    "locality_code": "12301695",
+    "name_ar": "المزرعة القبلية",
+    "name_en": "Al Mazra'a al Qibliya",
+    "governorate_code": "1230",
+    "city_id": "city_840f59e51e96b1df9073"
+  },
+  {
+    "locality_code": "12301710",
+    "name_ar": "دير قديس",
+    "name_en": "Deir Qaddis",
+    "governorate_code": "1230",
+    "city_id": "city_813c7e6dab2ea80899cf"
+  },
+  {
+    "locality_code": "12301715",
+    "name_ar": "نعلين",
+    "name_en": "Ni'lin",
+    "governorate_code": "1230",
+    "city_id": "city_bc728a0c5e6fe4cf2f32"
+  },
+  {
+    "locality_code": "12301720",
+    "name_ar": "عين يبرود",
+    "name_en": "'Ein Yabrud",
+    "governorate_code": "1230",
+    "city_id": "city_658ca5ad2eb5cfb8b703"
+  },
+  {
+    "locality_code": "12301755",
+    "name_ar": "كفر نعمة",
+    "name_en": "Kafr Ni'ma",
+    "governorate_code": "1230",
+    "city_id": "city_129d37d058590a15751d"
+  },
+  {
+    "locality_code": "12301760",
+    "name_ar": "بلعين",
+    "name_en": "Bil'in",
+    "governorate_code": "1230",
+    "city_id": "city_d74a548d71057758dd4b"
+  },
+  {
+    "locality_code": "12301785",
+    "name_ar": "دير دبوان",
+    "name_en": "Deir Dibwan",
+    "governorate_code": "1230",
+    "city_id": "city_abd0fde7f9e849915820"
+  },
+  {
+    "locality_code": "12301790",
+    "name_ar": "البيرة",
+    "name_en": "Al Bireh",
+    "governorate_code": "1230",
+    "city_id": "city_0509958f996226dbe0bb"
+  },
+  {
+    "locality_code": "12301810",
+    "name_ar": "رام الله",
+    "name_en": "Ramallah",
+    "governorate_code": "1230",
+    "city_id": "city_de68693732d60f4dfc14"
+  },
+  {
+    "locality_code": "12301820",
+    "name_ar": "بيت عور التحتا",
+    "name_en": "Beit 'Ur at Tahta",
+    "governorate_code": "1230",
+    "city_id": "city_0b1451e448cbf7237805"
+  },
+  {
+    "locality_code": "12301825",
+    "name_ar": "بيتونيا",
+    "name_en": "Beituniya",
+    "governorate_code": "1230",
+    "city_id": "city_ca09f8618553483d605f"
+  },
+  {
+    "locality_code": "12301850",
+    "name_ar": "بيت سيرا",
+    "name_en": "Beit Sira",
+    "governorate_code": "1230",
+    "city_id": "city_90cba38a4edb4c4ce34b"
+  },
+  {
+    "locality_code": "12301860",
+    "name_ar": "بيت عور الفوقا",
+    "name_en": "Beit 'Ur al Fauqa",
+    "governorate_code": "1230",
+    "city_id": "city_82a96fc830fa00b3b2ff"
+  },
+  {
+    "locality_code": "12301895",
+    "name_ar": "بيت لقيا",
+    "name_en": "Beit Liqya",
+    "governorate_code": "1230",
+    "city_id": "city_b5d830bdedb674f8fbc9"
+  },
+  {
+    "locality_code": "12351140",
+    "name_ar": "الجفتلك",
+    "name_en": "Al Jiftlik",
+    "governorate_code": "1235",
+    "city_id": "city_7eb5c2f37482942d5c26"
+  },
+  {
+    "locality_code": "12351920",
+    "name_ar": "أريحا",
+    "name_en": "Jericho (Ariha)",
+    "governorate_code": "1235",
+    "city_id": "city_62a96ec6943e7370493d"
+  },
+  {
+    "locality_code": "12401915",
+    "name_ar": "قلنديا",
+    "name_en": "Qalandiya",
+    "governorate_code": "1240",
+    "city_id": "city_03472859fc792aea060b"
+  },
+  {
+    "locality_code": "13452180",
+    "name_ar": "العبيدية",
+    "name_en": "Al 'Ubeidiya",
+    "governorate_code": "1345",
+    "city_id": "city_5d0341e8fea6edc5000b"
+  },
+  {
+    "locality_code": "13452210",
+    "name_ar": "بيت جالا",
+    "name_en": "Beit Jala",
+    "governorate_code": "1345",
+    "city_id": "city_cf397b8030e8047d06aa"
+  },
+  {
+    "locality_code": "13452235",
+    "name_ar": "وادي فوكين",
+    "name_en": "Wadi Fukin",
+    "governorate_code": "1345",
+    "city_id": "city_324bc9a26ca2f5e06306"
+  },
+  {
+    "locality_code": "13452240",
+    "name_ar": "بيت لحم",
+    "name_en": "Bethlehem (Beit Lahm)",
+    "governorate_code": "1345",
+    "city_id": "city_bc7489469b1e57590ad3"
+  },
+  {
+    "locality_code": "13452255",
+    "name_ar": "بيت ساحور",
+    "name_en": "Beit Sahur",
+    "governorate_code": "1345",
+    "city_id": "city_21463478ac62055c3134"
+  },
+  {
+    "locality_code": "13452270",
+    "name_ar": "الخضر",
+    "name_en": "Al Khadr",
+    "governorate_code": "1345",
+    "city_id": "city_39a0f0e480b8f903a263"
+  },
+  {
+    "locality_code": "13452285",
+    "name_ar": "الشواورة",
+    "name_en": "Ash Shawawra",
+    "governorate_code": "1345",
+    "city_id": "city_dceb4ce401247cbfca8c"
+  },
+  {
+    "locality_code": "13452300",
+    "name_ar": "إرطاس",
+    "name_en": "Artas",
+    "governorate_code": "1345",
+    "city_id": "city_6ae4ce1376e355f3c0b3"
+  },
+  {
+    "locality_code": "13452325",
+    "name_ar": "نحالين",
+    "name_en": "Nahhalin",
+    "governorate_code": "1345",
+    "city_id": "city_7e0817295e2c75ff6ac6"
+  },
+  {
+    "locality_code": "13452495",
+    "name_ar": "تقوع",
+    "name_en": "Tuqu'",
+    "governorate_code": "1345",
+    "city_id": "city_e6b776e38225140784be"
+  },
+  {
+    "locality_code": "13452525",
+    "name_ar": "بيت فجار",
+    "name_en": "Beit Fajjar",
+    "governorate_code": "1345",
+    "city_id": "city_8c569f9fa202ae8cb6e0"
+  },
+  {
+    "locality_code": "13502540",
+    "name_ar": "بيت أمر",
+    "name_en": "Beit Ummar",
+    "governorate_code": "1350",
+    "city_id": "city_01d1990b099697706c35"
+  },
+  {
+    "locality_code": "13502585",
+    "name_ar": "نوبا",
+    "name_en": "Nuba",
+    "governorate_code": "1350",
+    "city_id": "city_28b01a7dfbc0b17bdfb6"
+  },
+  {
+    "locality_code": "13502620",
+    "name_ar": "سعير",
+    "name_en": "Sa'ir",
+    "governorate_code": "1350",
+    "city_id": "city_affc9954365e315a95eb"
+  },
+  {
+    "locality_code": "13502630",
+    "name_ar": "حلحول",
+    "name_en": "Halhul",
+    "governorate_code": "1350",
+    "city_id": "city_5c5277226be360f13f9e"
+  },
+  {
+    "locality_code": "13502635",
+    "name_ar": "الشيوخ",
+    "name_en": "Ash Shuyukh",
+    "governorate_code": "1350",
+    "city_id": "city_d3d3023578fc9f961f51"
+  },
+  {
+    "locality_code": "13502640",
+    "name_ar": "ترقوميا",
+    "name_en": "Tarqumiya",
+    "governorate_code": "1350",
+    "city_id": "city_b9463a69bd22e0ecaae3"
+  },
+  {
+    "locality_code": "13502655",
+    "name_ar": "بيت كاحل",
+    "name_en": "Beit Kahil",
+    "governorate_code": "1350",
+    "city_id": "city_635863a6068c9055e9d3"
+  },
+  {
+    "locality_code": "13502750",
+    "name_ar": "تفوح",
+    "name_en": "Taffuh",
+    "governorate_code": "1350",
+    "city_id": "city_2ef3f203fda0166ab7d6"
+  },
+  {
+    "locality_code": "13502780",
+    "name_ar": "الخليل",
+    "name_en": "Hebron (Al Khalil)",
+    "governorate_code": "1350",
+    "city_id": "city_1c6f34298c435ef74349"
+  },
+  {
+    "locality_code": "13502810",
+    "name_ar": "دير سامت",
+    "name_en": "Deir Samit",
+    "governorate_code": "1350",
+    "city_id": "city_6dafb9fec2fa9f37b229"
+  },
+  {
+    "locality_code": "13502815",
+    "name_ar": "بني نعيم",
+    "name_en": "Bani Na'im",
+    "governorate_code": "1350",
+    "city_id": "city_71f5ca2119cf7128f5eb"
+  },
+  {
+    "locality_code": "13502835",
+    "name_ar": "بيت عوا",
+    "name_en": "Beit 'Awwa",
+    "governorate_code": "1350",
+    "city_id": "city_61c198a826d5903b9c51"
+  },
+  {
+    "locality_code": "13502840",
+    "name_ar": "دورا",
+    "name_en": "Dura",
+    "governorate_code": "1350",
+    "city_id": "city_1676f59bc3403916594c"
+  },
+  {
+    "locality_code": "13502895",
+    "name_ar": "خرسا",
+    "name_en": "Khursa",
+    "governorate_code": "1350",
+    "city_id": "city_5fd807f5ace890e4ca80"
+  },
+  {
+    "locality_code": "13502955",
+    "name_ar": "دير رازح",
+    "name_en": "Deir Razih",
+    "governorate_code": "1350",
+    "city_id": "city_f22efb8d295427661cce"
+  },
+  {
+    "locality_code": "13503120",
+    "name_ar": "يطا",
+    "name_en": "Yatta",
+    "governorate_code": "1350",
+    "city_id": "city_7c483e5b5d3ddc8dc67e"
+  },
+  {
+    "locality_code": "13503245",
+    "name_ar": "الظاهرية",
+    "name_en": "Adh Dhahiriya",
+    "governorate_code": "1350",
+    "city_id": "city_ad9c1507c9a4121a8f69"
+  },
+  {
+    "locality_code": "13503320",
+    "name_ar": "السموع",
+    "name_en": "As Samu'",
+    "governorate_code": "1350",
+    "city_id": "city_e289abddd669d85f761e"
+  },
+  {
+    "locality_code": "13503335",
+    "name_ar": "الرماضين",
+    "name_en": "Ar Ramadin",
+    "governorate_code": "1350",
+    "city_id": "city_dc7c5c677e76128d964e"
+  }
+]

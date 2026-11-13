@@ -109,10 +109,10 @@
 
             <div class="w-full">
                 <p class="text-2xl md:text-4xl font-semibold text-left text-gray-700">
-                    My Dashboard
+                    {{ __('My Dashboard') }}
                 </p>
-                <p class="text-base md:text-xl text-left text-gray-500">
-                    Manage your orders, addresses, and preferences
+                                    <p class="text-base md:text-xl text-left text-gray-500">
+                    {{ __('Manage your orders, addresses, and preferences') }}
                 </p>
             </div>
 
@@ -165,7 +165,7 @@
                                     <p
                                         class="text-base font-medium transition-all duration-150
                       {{ $isActive ? 'text-white' : 'text-neutral-700 group-hover:text-white' }}">
-                                        {{ $item['label'] }}
+                                        {{ __($item['label']) }}
                                     </p>
                                 </a>
                             @endforeach
@@ -181,7 +181,7 @@
 
                                     <p
                                         class="text-base font-medium text-neutral-700 group-hover:text-white transition-all duration-150">
-                                        Sign Out
+                                        {{ __('Sign Out') }}
                                     </p>
                                 </button>
                             </form>
@@ -195,7 +195,7 @@
 
                     <div class="p-6 rounded-[20px] flex flex-col justify-start w-full bg-white">
                         <p class="text-base font-semibold text-left text-gray-700">
-                            Favorite Stores
+                            {{ __('Favorite Stores') }}
                         </p>
 
                         <div>
@@ -209,28 +209,26 @@
                                     </div>
                                     <div class="flex-1">
                                         <p class="text-sm font-semibold text-left text-neutral-700">
-                                            {{ $favorite['store']->name ?? 'Store Name' }}
+                                            {{ $favorite['store']->name ?? __('Store Name') }}
                                         </p>
                                         <div class="flex justify-start my-1 gap-2">
                                             <p class="text-sm text-left text-neutral-500">{{ $favorite['order_count'] }}
-                                                Orders</p>
+                                                {{ __('Orders') }}</p>
                                             <p
                                                 class="text-sm text-left text-neutral-500 flex justify-start items-center gap-1">
                                                 <img src="{{ asset('website/assets/icons/star-gold.svg') }}" alt=""
                                                     class="inline">
                                                 {{ number_format($favorite['rating'], 1) }}
-                                                rating
+                                                {{ __('Rating') }}
                                             </p>
                                         </div>
 
 
                                         <button type="submit" onclick="window.location.href='{{ route('web.service') }}'"
-                                            class="block md:hidden w-full h-10 relative rounded-[14px] text-xs font-medium text-center text-neutral-500 border-[1.5px] border-[#E2E8F0]  px-4 py-2 capitalize transition-all duration-150 hover:bg-[linear-gradient(135deg,#028090,#00A896)] hover:text-white">book
-                                            Again</button>
+                                            class="block md:hidden w-full h-10 relative rounded-[14px] text-xs font-medium text-center text-neutral-500 border-[1.5px] border-[#E2E8F0]  px-4 py-2 capitalize transition-all duration-150 hover:bg-[linear-gradient(135deg,#028090,#00A896)] hover:text-white">{{ __('Book Again') }}</button>
                                     </div>
                                     <button type="submit" onclick="window.location.href='{{ route('web.service') }}'"
-                                        class="hidden md:block w-40 h-10 relative rounded-[14px] text-xs font-medium text-center text-neutral-500 border-[1.5px] border-[#E2E8F0]  px-4 py-2 capitalize transition-all duration-150 hover:bg-[linear-gradient(135deg,#028090,#00A896)] hover:text-white">book
-                                        Again</button>
+                                        class="hidden md:block w-40 h-10 relative rounded-[14px] text-xs font-medium text-center text-neutral-500 border-[1.5px] border-[#E2E8F0]  px-4 py-2 capitalize transition-all duration-150 hover:bg-[linear-gradient(135deg,#028090,#00A896)] hover:text-white">{{ __('Book Again') }}</button>
                                 </div>
                             @empty
                                 <div class="py-6 text-center text-neutral-500">
@@ -257,10 +255,10 @@
                 class="max-w-2lg mx-auto py-[60px] px-4 xl:1:px-0 flex flex-col lg:flex-row justify-center lg:justify-between items-center gap-6 lg:gap-0">
                 <div class="flex-1">
                     <p class="text-[32px] font-semibold text-center lg:text-left text-white ">
-                        Ready to Get Started?
+                        {{ __('Ready to Get Started?') }}
                     </p>
                     <p class="text-lg text-center lg:text-left text-neutral-50">
-                        {{ __('Book your first order') }} and experience hassle-free dry cleaning service
+                        {{ __('Book your first order and experience hassle-free dry cleaning service') }}
                     </p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center items-center gap-4">

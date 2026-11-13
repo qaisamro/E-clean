@@ -1,9 +1,0 @@
-4724,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638669953","type":171},
-{"params":{"bytes_copied":2620},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638669953","type":171},
-{"params":{"byte_count":2620},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638669953","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638669953","type":245},
-{"params":{"byte_count":1351},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638669997","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638669997","type":245},
-{"params":{"buf_len":1344,"index":1,"offset":2527344,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638669997","type":171},
-{"params":{"bytes_copied":1344},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638669997","type":171},
-{"params":{"byte_count":1344},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638669997

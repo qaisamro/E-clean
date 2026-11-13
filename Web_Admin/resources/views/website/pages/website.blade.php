@@ -70,6 +70,40 @@
                 <a href="#section-privacy" class="btn btn-outline-primary">سياسة الخصوصية</a>
                 <a href="#section-contact" class="btn btn-outline-primary">تواصل معنا</a>
                 <a href="#section-about" class="btn btn-outline-primary">المزيد عنا</a>
+                <a href="#section-app-partners" class="btn btn-outline-warning">إعدادات التطبيق — «شركاؤنا الموثوقون»</a>
+            </div>
+        </div>
+
+        {{-- إعدادات التطبيق — التحكم بظهور قسم شركاؤنا الموثوقون في التطبيق --}}
+        @php
+            $partners = $webSettings->firstWhere('key', 'app_partners_section');
+            $partnersEnabled = (bool) ($partners?->value['enabled'] ?? true);
+        @endphp
+        <div id="section-app-partners" class="mx-4 card mt-3 rounded-lg border-none site-page-card" style="scroll-margin-top: 90px;">
+            <div class="card-header py-2 bg-primary d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h2 class="text-white mb-0">إعدادات التطبيق — «شركاؤنا الموثوقون»</h2>
+                <span class="badge {{ $partnersEnabled ? 'badge-success' : 'badge-secondary' }}">
+                    {{ $partnersEnabled ? 'مفعّل في التطبيق' : 'مخفي في التطبيق' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('web.settingUpdate', 'app_partners') }}" method="POST">
+                    @csrf
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="partnersToggle"
+                            name="enabled" value="1" {{ $partnersEnabled ? 'checked' : '' }}>
+                        <label class="form-check-label font-weight-bold" for="partnersToggle">
+                            إظهار قسم «شركاؤنا الموثوقون» في تطبيق الأندرويد (الصفحة الرئيسية)
+                        </label>
+                    </div>
+                    <p class="small text-muted mt-2 mb-0">
+                        عند إلغاء التفعيل يختفي القسم بالكامل من التطبيق فور التحديث (كل أجهزة المستخدمين)،
+                        ولا يؤثر على ظهور المتاجر في باقي أقسام التطبيق. الوضع الافتراضي: مفعّل.
+                    </p>
+                    <div class="mt-3">
+                        <button class="btn btn-primary">{{ __('Update') }}</button>
+                    </div>
+                </form>
             </div>
         </div>
 

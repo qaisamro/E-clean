@@ -18,6 +18,7 @@ use App\Repositories\DriverRepository;
 use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Services\NotificationServices;
+use App\Support\StoreOrderAccess;
 
 class OrderController extends Controller
 {
@@ -36,24 +37,10 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        // لصاحب المحل: السماح فقط بطلبات محله
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $vendorId = auth()->user()->vendor->id;
-            if ($order->vendor_id && (int) $order->vendor_id !== (int) $vendorId) {
-                abort(403, 'غير مصرح لك بعرض هذا الطلب');
-            }
-        }
-        // للسائق: السماح فقط برؤية طلبه المعيّن
-        if (auth()->check() && auth()->user()->hasRole('driver')) {
-            $driver = auth()->user()->driver;
-            $allowedIds = collect();
-            if ($driver) {
-                $allowedIds = $driver->orders->pluck('id')->merge($driver->orderHistories->pluck('id'));
-            }
-            if (!$allowedIds->contains($order->id)) {
-                abort(403, 'غير مصرح لك بعرض هذا الطلب');
-            }
-        }
+        // Super Admin (root) must not view individual order details.
+        abort_if(auth()->check() && auth()->user()->hasRole('root'), 403);
+
+        StoreOrderAccess::assertCanView($order);
 
         $quantity = 0;
         foreach ($order->products as $product) {
@@ -61,10 +48,13 @@ class OrderController extends Controller
         }
 
         $drivers = (new DriverRepository())->getAll();
-        // Store owners can assign only their own store's drivers;
+        // Store staff (owner or child account) can assign only their own store's drivers;
         // other stores' orders only show drivers linked to that order's store.
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $drivers = $drivers->where('vendor_id', auth()->user()->vendor->id)->values();
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $staffVendorId = \App\Support\VendorAccount::idFor(auth()->user());
+            $drivers = $staffVendorId
+                ? $drivers->where('vendor_id', $staffVendorId)->values()
+                : collect();
         } elseif ($order->vendor_id) {
             $drivers = $drivers->filter(function ($driver) use ($order) {
                 return !$driver->vendor_id || (int) $driver->vendor_id === (int) $order->vendor_id;
@@ -78,13 +68,7 @@ class OrderController extends Controller
 
     public function statusUpdate(Request $request, Order $order)
     {
-        // Stores may only update their own store's orders
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $vendorId = auth()->user()->vendor->id;
-            if ($order->vendor_id && (int) $order->vendor_id !== (int) $vendorId) {
-                return back()->with('error', 'غير مصرح لك بتعديل هذا الطلب');
-            }
-        }
+        StoreOrderAccess::assertCanMutate($order);
         $status = config('enums.order_status.' . $request->status);
 
         if (!in_array($status, config('enums.order_status'))) {
@@ -103,6 +87,8 @@ class OrderController extends Controller
             'processing' => 'order_processing',
             'cancelled' => 'order_cancelled',
             'delivered' => 'order_delivered',
+            'ready_for_pickup' => 'order_ready_for_pickup',
+            'on_the_way' => 'order_on_the_way',
         ];
         $notificationOrder = NotificationManage::where('name', $manageMap[$request->status] ?? $request->status)->first();
 
@@ -135,6 +121,7 @@ class OrderController extends Controller
 
     public function orderPaid(Request $request, Order $order)
     {
+        StoreOrderAccess::assertCanMutate($order);
         $order->update([
             'payment_status' => config('enums.payment_status.paid')
         ]);
@@ -152,6 +139,7 @@ class OrderController extends Controller
 
     public function printLabels(Order $order)
     {
+        StoreOrderAccess::assertCanView($order);
         @ini_set('memory_limit', '512M');
         $productLabels = collect([]);
         $t = 1;
@@ -190,13 +178,7 @@ class OrderController extends Controller
     public function printInvioce(Order $order)
     {
         @ini_set('memory_limit', '512M');
-        // Stores may only print their own store's invoices
-        if (auth()->check() && auth()->user()->hasRole('vendor_admin') && auth()->user()->vendor) {
-            $vendorId = auth()->user()->vendor->id;
-            if ($order->vendor_id && (int) $order->vendor_id !== (int) $vendorId) {
-                abort(403, 'غير مصرح لك بعرض هذه الفاتورة');
-            }
-        }
+        StoreOrderAccess::assertCanView($order);
         $quantity = 0;
         foreach ($order->products as $product) {
             $quantity += $product->pivot->quantity;
@@ -207,7 +189,8 @@ class OrderController extends Controller
         $invoice = InvoiceManage::first();
 
         if (!$webSetting || !$webSetting->address) {
-            return redirect()->route('webSetting.index')->with('error', 'يرجى استكمال إعدادات الموقع');
+            // The web-settings page was removed; go back instead of a dead route.
+            return back()->with('error', 'يرجى استكمال إعدادات الموقع');
         }
 
         if ($invoice?->type == 'pos') {

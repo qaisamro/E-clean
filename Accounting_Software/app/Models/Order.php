@@ -37,7 +37,11 @@ class Order extends Model
         'created_at' => 'datetime',
         'status' => OrderStatus::class,
         'payment_status' => PaymentStatus::class,
-        'payment_type' => PaymentType::class
+        'payment_type' => PaymentType::class,
+        'total_price' => 'decimal:2',
+        'paid_money' => 'decimal:2',
+        'remaining_money' => 'decimal:2',
+        'discount' => 'decimal:2',
     ];
 
     protected static function booted()
@@ -81,6 +85,11 @@ class Order extends Model
     public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+
+    public function orderProducts(): HasMany
+    {
+        return $this->hasMany(OrderProduct::class, 'order_id');
     }
 
     public function payments(): HasMany

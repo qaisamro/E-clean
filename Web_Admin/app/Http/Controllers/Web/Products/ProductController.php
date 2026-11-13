@@ -8,6 +8,7 @@ use App\Http\Requests\ProductRequest;
 use App\Repositories\ProductRepository;
 use App\Repositories\ServiceRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -25,15 +26,17 @@ class ProductController extends Controller
 
     public function create()
     {
-        $services = (new ServiceRepository())->getAll();
-        // Pre-fill all variants so the dropdown is never empty before
-        // choosing a service (it gets refined by AJAX on service change).
-        $variants = \App\Models\Variant::orderBy('position', 'asc')->get();
-        return view('products.create', compact('services', 'variants'));
+        $services = \App\Models\Service::query()->global()->isActive()->orderBy('name')->get();
+        return view('products.create', compact('services'));
     }
 
     public function store(ProductRequest $request)
     {
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $service = \App\Models\Service::findOrFail($request->service_id);
+            $vendorId = \App\Support\VendorAccount::idFor(auth()->user());
+            abort_unless($vendorId && $service->vendor_id === null && $service->is_active, 404);
+        }
         if (($request->old_price != '') && ($request->old_price < $request->price)) {
             return back()->with('error', 'يجب أن يكون سعر الخصم أقل من سعر المنتج');
         }
@@ -44,18 +47,19 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $variants = $product->service->variants;
-        // Fallback to the full catalog when the service has no variants
-        // linked yet, so the dropdown is never empty.
-        if ($variants->isEmpty()) {
-            $variants = \App\Models\Variant::orderBy('position', 'asc')->get();
-        }
-        $services = (new ServiceRepository())->getAll();
-        return view('products.edit', compact('product', 'services', 'variants'));
+        $this->assertVendorOwns($product);
+        $services = \App\Models\Service::query()->global()->isActive()->orderBy('name')->get();
+        return view('products.edit', compact('product', 'services'));
     }
 
     public function update(ProductRequest $request, Product $product)
     {
+        $this->assertVendorOwns($product);
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $service = \App\Models\Service::findOrFail($request->service_id);
+            $vendorId = \App\Support\VendorAccount::idFor(auth()->user());
+            abort_unless($vendorId && $service->vendor_id === null && $service->is_active, 404);
+        }
         if (($request->old_price != '') && ($request->old_price < $request->price)) {
             return back()->with('error', 'يجب أن يكون سعر المنتج أكبر من سعر الخصم');
         }
@@ -65,6 +69,7 @@ class ProductController extends Controller
 
     public function toggleActivationStatus(Product $product)
     {
+        $this->assertVendorOwns($product);
         $this->productRepo->updateStatusById($product);
 
         return back()->with('success', 'تم تحديث حالة المنتج');
@@ -72,6 +77,7 @@ class ProductController extends Controller
 
     public function orderUpdate(Request $request, Product $product)
     {
+        $this->assertVendorOwns($product);
 
         $product->update([
             'order' => $request->position ?? 0
@@ -82,7 +88,28 @@ class ProductController extends Controller
 
     public function delete(Product $product)
     {
+        $this->assertVendorOwns($product);
+
+        // Products that are tied to past orders can never be hard-deleted:
+        // order_products.product_id is a restricting FK, and a raw delete
+        // crashes with a 500. Offer deactivation instead of a broken page.
+        $hasOrders = DB::table('order_products')
+            ->where('product_id', $product->id)
+            ->exists();
+
+        if ($hasOrders) {
+            return back()->with('error', 'هذا المنتج مرتبط بطلبات سابقة، لا يمكن حذفه. يمكنك تعطيله بدلًا من ذلك.');
+        }
+
         $this->productRepo->deleteProductById($product);
         return redirect()->route('product.index')->with('success', 'تم حذف المنتج بنجاح');
+    }
+
+    protected function assertVendorOwns(Product $product): void
+    {
+        if (\App\Support\VendorAccount::isStoreStaff(auth()->user())) {
+            $vendorId = \App\Support\VendorAccount::idFor(auth()->user());
+            abort_unless($vendorId && (int) $product->vendor_id === (int) $vendorId, 404);
+        }
     }
 }

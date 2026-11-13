@@ -1,6 +1,16 @@
 <x-app-layout :title="config('app.name') . ' | ' . 'الخدمات'">
 
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">الخدمات /</span> قائمة الخدمات</h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-briefcase-alt-2"></i> الخدمات</div>
+                <h1 class="ec-section-title">قائمة الخدمات</h1>
+            </div>
+            <a href="{{ route('services.create') }}" class="btn btn-primary">
+                <i class="bx bx-plus me-1"></i> إضافة خدمه
+            </a>
+        </div>
+    </div>
 
     <!-- Basic Bootstrap Table -->
     <div class="card">

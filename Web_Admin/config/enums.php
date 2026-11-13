@@ -33,6 +33,8 @@ return [
         'processing' => 'Processing',
         'cancelled' => 'Cancelled',
         'delivered' => 'Delivered',
+        'ready_for_pickup' => 'Ready for pickup',
+        'on_the_way' => 'On the way',
     ],
 
     'variants' => [

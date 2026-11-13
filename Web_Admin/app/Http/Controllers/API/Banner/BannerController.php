@@ -10,7 +10,7 @@ class BannerController extends Controller
 {
     public function getWideBanners()
     {
-        $banners = (new BannerRepository())->getActiveWide();
+        $banners = (new BannerRepository())->getActiveWide(\App\Support\CatalogCityFilter::selected(request()));
         return $this->json('wide banner list', [
             'banners' => BannerResource::collection($banners)
         ]);

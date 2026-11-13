@@ -9,7 +9,7 @@
                     <h3 class="card-title m-0 text-white">{{ __($setting->title) }}</h3>
                 </div>
                 <div class="card-body">
-                    {!! $setting->content !!}
+                    {{ $setting->content }}
                    <div class="mt-4 text-right">
                         <a href="{{ route('setting.edit', $setting->slug) }}" class="btn btn-primary">{{ __('Edit') }}</a>
                    </div>

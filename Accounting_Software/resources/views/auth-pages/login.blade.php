@@ -2,7 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" key="status"/>
 
-    <h4 class="mb-2" style="text-align:center">مرحبا بكم في {{ config('app.name') }}! 👋</h4>
+    <h4 class="mb-2" style="text-align:center">مرحبا بكم في {{ config('app.name') }}!</h4>
     <p class="mb-4" style="text-align:center">يرجى تسجيل الدخول </p>
 
     <form @submit="formSubmit = true" x-data="{formSubmit:false}" id="formAuthentication" class="mb-3" method="POST"

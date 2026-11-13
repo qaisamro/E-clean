@@ -1,5 +1,17 @@
 <div>
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">الطلبات /</span> قائمة الطلبات</h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-cart"></i> الطلبات</div>
+                <h1 class="ec-section-title">قائمة الطلبات</h1>
+            </div>
+            @if(auth()->user()->hasPermission('orders.create'))
+                <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                    <i class="bx bx-plus me-1"></i> إضافة طلب جديد
+                </a>
+            @endif
+        </div>
+    </div>
 
     @session('success-msg')
     <div
@@ -142,26 +154,18 @@
                                 </span>
 
                         </td>
-                        <td wire:key="{{ rand() }}" x-data="{ showBadge:true}" @click="showBadge = false"
-                            @click.outside="showBadge = true">
-
-                            <label x-show="!showBadge" x-cloak for="paymentStatus">
-                                <select id="paymentStatus" class="form-select"
-                                        @change="$wire.changePaymentStatus('{{ $order->id }}', $el.value )">
-                                    @foreach ( \App\Enums\PaymentStatus::cases() as $paymentStatus )
-                                        <option @selected($paymentStatus->value == $order->payment_status->value)  value="{{ $paymentStatus->value }}">
-                                            {{ $paymentStatus->label() }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </label>
-
-                            <span x-show="showBadge" x-cloak @class([
+                        <td>
+                            <span @class([
                                 'badge me-1',
                                 'bg-label-hover-success' => $order->payment_status ===  \App\Enums\PaymentStatus::PAID,
                                 'bg-label-hover-danger' => $order->payment_status === \App\Enums\PaymentStatus::UNPAID,
                                 'bg-label-hover-warning' => $order->payment_status === \App\Enums\PaymentStatus::PARTIALLY_PAID,
                             ])>{{  $order->payment_status->label() }}</span>
+                            @if($order->remaining_money > 0)
+                                <a class="d-block small mt-1" href="{{ route('customer-payments.create', ['customer' => $order->customer_id, 'order' => $order->id]) }}">
+                                    تسجيل دفعة
+                                </a>
+                            @endif
                         </td>
                         <td>{{  $order->total_price }} شيكل</td>
                         <td>

@@ -22,8 +22,8 @@
                         alt="" class=" w-auto h-14 md:w-auto md:h-[51.58px] object-contain">
                     </span>
                     <p class="site-footer-desc text-base text-left font-normal">
-                        {!! strip_tags($value['footer_title'] ?? '', '<br>') ?:
-                            __('Elevate Your Business with Innovative<br />Web, App, and Software Solutions. Partner for Excellence in Tech.') !!}
+                        {{ strip_tags($value['footer_title'] ?? '') ?:
+                            __('Elevate Your Business with Innovative Web, App, and Software Solutions. Partner for Excellence in Tech.') }}
                     </p>
                 </div>
 

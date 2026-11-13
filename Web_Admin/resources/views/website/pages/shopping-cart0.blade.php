@@ -21,7 +21,7 @@
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
                 </svg>
-                <p class="text-red-700 text-3xl">Failed to process your request: {{ session('error') }}</p>
+                <p class="text-red-700 text-3xl">{{ __('Failed to process your request:') }} {{ session('error') }}</p>
             </div>
         @endif
 
@@ -32,11 +32,11 @@
             <div class="rs-breadcrumb-content">
                 <h1
                     class="rs-breadcrumb-title mb-[5px] sm:mb-[10px] text-[26px] md:text-[30px] md:text-4xl text-white font-semibold leading-[140%]">
-                    Shopping Cart </h1>
+                    {{ __('Shopping Cart') }}</h1>
                 <div class="rs-breadcrumb-top-content">
                     <a href="/"
-                        class="text-base md:text-lg text-white font-normal hover:text-mint-200 transition">Home / </a>
-                    <span class="text-base md:text-lg text-mint-200 font-normal">Cart</span>
+                        class="text-base md:text-lg text-white font-normal hover:text-mint-200 transition">{{ __('Home / ') }}</a>
+                    <span class="text-base md:text-lg text-mint-200 font-normal">{{ __('Cart') }}</span>
                 </div>
             </div>
         </section>
@@ -53,15 +53,15 @@
                                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </div>
-                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
-                    <p class="text-gray-500 mb-8">Looks like you haven't added anything to your cart yet.</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ __('Your cart is empty') }}</h2>
+                    <p class="text-gray-500 mb-8">{{ __("Looks like you haven't added anything to your cart yet.") }}</p>
                     <a href="/"
                         class="inline-flex items-center gap-2 px-6 py-3 bg-[linear-gradient(135deg,#028090,#00A896)] text-white rounded-[14px] hover:bg-[#156172] transition font-medium">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                         </svg>
-                        Start Shopping
+                        {{ __('Start Shopping') }}
                     </a>
                 </div>
             </section>
@@ -71,23 +71,8 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div class="flex items-center gap-4">
                         <p class="text-sm sm:text-base font-semibold text-gray-700">
-                            <span id="item-count">{{ $products->count() }}</span> items in your cart
+                            <span id="item-count">{{ $products->count() }}</span> {{ __('items in your cart') }}
                         </p>
-                        @if ($service_id && $variants->count() > 0)
-                            <div class="flex items-center gap-2">
-                                <label for="variant-filter" class="text-sm text-gray-600">Variant:</label>
-                                <select id="variant-filter" onchange="filterByVariant(this.value)"
-                                    class="border border-[#E2E8F0] rounded-[12px] px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#028090]">
-                                    <option value="">All Variants</option>
-                                    @foreach ($variants as $variant)
-                                        <option value="{{ $variant->id }}"
-                                            {{ $variant_id == $variant->id ? 'selected' : '' }}>
-                                            {{ $variant->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endif
                     </div>
                     <div class="flex items-center gap-4">
                         <label class="custom-checkbox cursor-pointer flex items-center gap-2">
@@ -100,7 +85,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </span>
-                            <span class="text-sm text-gray-600">Select All</span>
+                            <span class="text-sm text-gray-600">{{ __('Select All') }}</span>
                         </label>
                         <a href="/"
                             class="text-sm text-[#028090] hover:text-[#156172] font-medium flex items-center gap-1">
@@ -108,7 +93,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                             </svg>
-                            Continue Shopping
+                            {{ __('Continue Shopping') }}
                         </a>
                     </div>
                 </div>
@@ -141,9 +126,8 @@
                                         <img src="{{ asset($service->thumbnailPath ?? 'website/assets/images/service/service.png') }}"
                                             class="w-12 h-12 rounded-[12px] object-cover">
                                         <div>
-                                            <p class="text-base font-semibold text-gray-900">{{ $service->name }}</p>
-                                            <p class="text-sm text-gray-500">{{ $serviceProducts->count() }}
-                                                item{{ $serviceProducts->count() > 1 ? 's' : '' }}</p>
+                                            <p class="text-base font-semibold text-gray-900">{{ $service->name_bn ?? $service->name }}</p>
+                                            <p class="text-sm text-gray-500">{{ $serviceProducts->count() }} {{ __('items') }}</p>
                                         </div>
                                     </div>
                                     <div class="text-left sm:text-right ml-8 sm:ml-0">
@@ -154,7 +138,7 @@
                                                 return $price * $qty;
                                             });
                                         @endphp
-                                        <p class="text-xs text-gray-500">Service Total</p>
+                                        <p class="text-xs text-gray-500 service-total-label">{{ __('Service Total') }}</p>
                                         <p class="text-sm sm:text-base font-semibold text-[#028090]">
                                             {{ currencyPosition(number_format($serviceTotal, 2)) }}
 
@@ -191,13 +175,9 @@
                                                 <div class="flex justify-between gap-2">
                                                     <div class="min-w-0">
                                                         <p class="text-sm font-medium text-gray-900 truncate">
-                                                            {{ $product->name }}</p>
-                                                        @if ($product->variant)
-                                                            <p class="text-xs text-[#028090] font-medium">
-                                                                {{ $product->variant->name }}</p>
-                                                        @endif
+                                                            {{ $product->name_bn ?? $product->name }}</p>
                                                         <p class="text-sm text-gray-500">{{ currencyPosition(number_format($price, 2)) }}
-                                                            each</p>
+                                                            {{ __('each') }}</p>
                                                     </div>
 
                                                 </div>
@@ -246,12 +226,12 @@
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2" d="M12 4v16m8-8H4" />
                                                                 </svg>
-                                                                Add to Cart
+                                                                {{ __('Add to Cart') }}
                                                             </button>
                                                         @endif
                                                     </div>
                                                     <div class="text-right sm:text-left">
-                                                        <p class="text-xs text-gray-500">Item Total</p>
+                                                        <p class="text-xs text-gray-500">{{ __('Item Total') }}</p>
                                                         <p class="text-lg font-bold text-[#028090] product-total">
                                                             {{ currencyPosition(number_format($qty * $price, 2)) }}
                                                         </p>
@@ -275,18 +255,18 @@
                             <input type="hidden" name="quantities" id="quantities">
                             <div class="p-6 rounded-[20px] bg-white border border-[#E2E8F0] shadow-sm">
                                 <div class="mb-4">
-                                    <p class="text-lg font-semibold text-gray-900">Order Summary</p>
-                                    <p class="text-sm text-gray-500">Selected items only</p>
+                                    <p class="text-lg font-semibold text-gray-900">{{ __('Order Summary') }}</p>
+                                    <p class="text-sm text-gray-500">{{ __('Selected items only') }}</p>
                                 </div>
 
                                 <div id="selected-items"
                                     class="space-y-3 py-4 border-y border-[#E2E8F0] max-h-48 overflow-y-auto">
-                                    <p class="text-gray-400 text-center py-4">No items selected</p>
+                                    <p class="text-gray-400 text-center py-4">{{ __('No items selected') }}</p>
                                 </div>
 
                                 <div class="py-4 space-y-3">
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-medium text-gray-500">Subtotal</p>
+                                        <p class="text-sm font-medium text-gray-500">{{ __('Subtotal') }}</p>
                                         <p class="text-base font-medium text-gray-900" id="subtotal">
                                             {{ currencyPosition(number_format($price,2)) }}</p>
                                     </div>
@@ -299,14 +279,14 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                             </svg>
-                                            <p class="text-sm font-medium text-gray-700">Apply Coupon</p>
+                                            <p class="text-sm font-medium text-gray-700">{{ __('Apply Coupon') }}</p>
                                         </div>
                                         <div class="flex gap-2">
-                                            <input type="text" id="coupon-code" placeholder="Enter coupon code"
+                                            <input type="text" id="coupon-code" placeholder="{{ __('Enter coupon code') }}"
                                                 class="flex-1 px-3 py-2 border border-[#E2E8F0] rounded-[12px] text-sm focus:outline-none focus:ring-2 focus:ring-[#028090] focus:border-[#028090]">
                                             <button type="button" id="apply-coupon-btn" onclick="applyCoupon()"
                                                 class="px-4 py-2 bg-[linear-gradient(135deg,#028090,#00A896)] text-white rounded-[12px] hover:bg-[#156172] transition font-medium text-sm">
-                                                Apply
+                                                {{ __('Apply') }}
                                             </button>
                                         </div>
                                         <div id="coupon-message" class="mt-2 text-sm hidden"></div>
@@ -338,16 +318,16 @@
 
                                     <div class="flex justify-between items-center" id="discount-row"
                                         style="display: none;">
-                                        <p class="text-sm font-medium text-gray-500">Coupon Discount</p>
+                                        <p class="text-sm font-medium text-gray-500">{{ __('Coupon Discount') }}</p>
                                         <p class="text-base font-medium text-[#028090]" id="discount">
                                             {{ currencyPosition(number_format($price,2)) }}</p>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-medium text-gray-500">Delivery Fee</p>
-                                        <p class="text-base font-medium text-[#028090]">Free</p>
+                                        <p class="text-sm font-medium text-gray-500">{{ __('Delivery Fee') }}</p>
+                                        <p class="text-base font-medium text-[#028090]">{{ __('Free') }}</p>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-medium text-gray-500">Tax & Vat ({{ $taxRate ?? 0 }}%)</p>
+                                        <p class="text-sm font-medium text-gray-500">{{ __('Tax & VAT') }} ({{ $taxRate ?? 0 }}%)</p>
                                         <p class="text-base font-medium text-gray-900" id="tax">
                                             {{ currencyPosition(number_format($price,2)) }}</p>
                                     </div>
@@ -355,7 +335,7 @@
 
                                 <div class="py-4 border-t border-[#E2E8F0]">
                                     <div class="flex justify-between items-center p-3 rounded-[14px] bg-[#E6F4F1]">
-                                        <p class="text-lg font-semibold text-gray-900">Total</p>
+                                        <p class="text-lg font-semibold text-gray-900">{{ __('Total') }}</p>
                                         <p class="text-xl font-bold text-[#156172]" id="grand-total">
                                             {{ currencyPosition(number_format($price,2)) }}</p>
                                     </div>
@@ -369,11 +349,11 @@
                                         @if (!auth()->user()->is_active || (!auth()->user()->email_verified_at && !auth()->user()->mobile_verified_at)) disabled @endif>
 
                                         @if (!auth()->user()->is_active)
-                                            <span>Account Inactive</span>
+                                            <span>{{ __('Account Inactive') }}</span>
                                         @elseif(!auth()->user()->email_verified_at && !auth()->user()->mobile_verified_at)
-                                            <span>Verify Email First</span>
+                                            <span>{{ __('Verify Email First') }}</span>
                                         @else
-                                            <span>Proceed To Checkout</span>
+                                            <span>{{ __('Proceed To Checkout') }}</span>
                                         @endif
 
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -382,33 +362,18 @@
                                         </svg>
                                     </button>
                                 @else
-                                    <a href="{{ route('web.login', ['service_id' => $service_id, 'redirect' => 'checkout']) }}"
-                                        class="w-full mt-2 px-6 py-3 bg-[linear-gradient(135deg,#028090,#00A896)] text-white rounded-[14px] hover:bg-[#156172] focus:ring-4 focus:ring-[#028090]/30 transition font-medium flex items-center justify-center gap-2">
-                                        <span>Login to Checkout</span>
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </a>
+                                    <p class="w-full mt-2 px-6 py-3 text-center text-gray-500">
+                                        {{ __('Guest checkout is unavailable on this website.') }}
+                                    </p>
                                 @endauth
 
 
                                 @auth
                                     @if (!auth()->user()->is_active)
-                                        <p class="text-xs text-red-500 text-center mt-2">Your account is inactive. Please
-                                            contact support.</p>
+                                        <p class="text-xs text-red-500 text-center mt-2">{{ __('Your account is inactive. Please contact support.') }}</p>
                                     @elseif(!auth()->user()->email_verified_at && !auth()->user()->mobile_verified_at)
-                                        <p class="text-xs text-red-500 text-center mt-2">Please verify your email address to
-                                            checkout.</p>
+                                        <p class="text-xs text-red-500 text-center mt-2">{{ __('Please verify your email address to checkout.') }}</p>
                                     @endif
-                                @else
-                                    <p class="text-xs text-gray-400 text-center mt-3">
-                                        <a href="{{ route('website.login') }}?redirect={{ urlencode(request()->fullUrl()) }}"
-                                            class="text-[#028090] hover:text-[#156172] font-medium">Login</a> or
-                                        <a href="{{ route('web.register') }}?redirect={{ urlencode(request()->fullUrl()) }}"
-                                            class="text-[#028090] hover:text-[#156172] font-medium">Create an account</a>
-                                        to checkout
-                                    </p>
                                 @endauth
                             </div>
                         </form>
@@ -499,16 +464,6 @@
         }
 
         // Add to Cart function - shows quantity controls when clicked
-        function filterByVariant(variantId) {
-            const currentUrl = new URL(window.location.href);
-            if (variantId) {
-                currentUrl.searchParams.set('variant_id', variantId);
-            } else {
-                currentUrl.searchParams.delete('variant_id');
-            }
-            window.location.href = currentUrl.toString();
-        }
-
         function addToCart(btn) {
             const section = btn.closest('.add-to-cart-section');
             const productId = section.dataset.productId;
@@ -748,7 +703,7 @@
             });
 
             const totalElement = serviceSection.querySelector('.text-[#028090]');
-            if (totalElement && totalElement.textContent.includes('Service Total')) {
+            if (totalElement && totalElement.textContent.includes(@json(__('Service Total')))) {
                 totalElement.textContent = formatCurrency(serviceTotal, currencySymbol, currencyPosition);
             }
         }
@@ -780,11 +735,11 @@
                         <img src="${imgSrc}" class="w-10 h-10 rounded object-cover flex-shrink-0">
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">${name}</p>
-                            <p class="text-xs text-gray-500">Qty: ${qty}</p>
+                        <p class="text-xs text-gray-500">{{ __('Qty') }}: ${qty}</p>
                         </div>
                         <p class="text-sm font-semibold text-[#028090] flex-shrink-0">${total.toFixed(2)}</p>
                         <button type="button" onclick="deselectItem('${row.dataset.id}')" class="remove-item-btn p-2 rounded-full text-red-500 hover:bg-red-100 transition-all flex-shrink-0"
-                            title="Remove item">
+                            title="{{ __('Remove item') }}">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
@@ -794,7 +749,7 @@
             });
 
             if (!anySelected) {
-                selectedItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No items selected</p>';
+                selectedItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">' + @json(__('No items selected')) + '</p>';
             }
 
             // Calculate discount if coupon is applied
@@ -832,7 +787,7 @@
 
                 const btnText = checkoutBtn.querySelector('span');
                 if (btnText && !authDisabled) {
-                    btnText.textContent = anySelected ? 'Proceed To Checkout' : 'Select items to checkout';
+                    btnText.textContent = anySelected ? @json(__('Proceed To Checkout')) : @json(__('Select items to checkout'));
                 }
             }
         }
@@ -846,7 +801,7 @@
             const applyBtn = document.getElementById("apply-coupon-btn");
 
             if (!couponCode) {
-                showCouponMessage("Please enter a coupon code", "error");
+                showCouponMessage(@json(__('Please enter a coupon code')), "error");
                 return;
             }
 
@@ -861,7 +816,7 @@
             });
 
             if (subtotal === 0) {
-                showCouponMessage("Please select items first to apply coupon", "error");
+                showCouponMessage(@json(__('Please select items first to apply coupon')), "error");
                 return;
             }
 
@@ -883,10 +838,10 @@
                 .then(response => response.json())
                 .then(data => {
                     applyBtn.disabled = false;
-                    applyBtn.innerHTML = "Apply";
+                    applyBtn.innerHTML = @json(__('Apply'));
 
                     if (data.success === false) {
-                        showCouponMessage(data.message || "Invalid coupon", "error");
+                        showCouponMessage(data.message || @json(__('Invalid coupon')), "error");
                         return;
                     }
 
@@ -896,8 +851,8 @@
 
                     // Show success message
                     const discountText = data.coupon.discount_type === "percent" ?
-                        data.coupon.discount + "% off" :
-                        "$" + data.coupon.discount + " off";
+                        data.coupon.discount + "% " + @json(__('off')) :
+                        "$" + data.coupon.discount + " " + @json(__('off'));
 
                     document.getElementById("coupon-code-display").textContent = data.coupon.code;
                     document.getElementById("coupon-discount-display").textContent = "(" + discountText + ")";
@@ -906,13 +861,13 @@
                     document.getElementById("coupon-code").value = "";
                     messageEl.classList.add("hidden");
 
-                    showToast("Coupon applied successfully!", "success");
+                    showToast(@json(__('Coupon applied successfully!')), "success");
                     updateSummary();
                 })
                 .catch(error => {
                     applyBtn.disabled = false;
-                    applyBtn.innerHTML = "Apply";
-                    showCouponMessage("Failed to apply coupon. Please try again.", "error");
+                    applyBtn.innerHTML = @json(__('Apply'));
+                    showCouponMessage(@json(__('Failed to apply coupon. Please try again.')), "error");
                 });
         }
 
@@ -920,7 +875,7 @@
             window.appliedCoupon = null;
             document.getElementById("coupon_id").value = "";
             document.getElementById("applied-coupon").classList.add("hidden");
-            showToast("Coupon removed", "success");
+            showToast(@json(__('Coupon removed')), "success");
             updateSummary();
         }
 
@@ -1028,21 +983,19 @@
             // Check if user account is active
             @if (!auth()->user()->is_active)
                 e.preventDefault();
-                showToast('Your account is inactive. Please contact support.', 'error');
+                showToast(@json(__('Your account is inactive. Please contact support.')), 'error');
                 return;
             @endif
 
             // Check if user email or mobile is verified
             @if (!auth()->user()->email_verified_at && !auth()->user()->mobile_verified_at)
                 e.preventDefault();
-                showToast('Please verify your email address to checkout.', 'error');
+                showToast(@json(__('Please verify your email address to checkout.')), 'error');
                 return;
             @endif
         @else
             e.preventDefault();
-            showToast('Please login to proceed with checkout.', 'error');
-            window.location.href = '{{ route('website.login') }}?redirect=' + encodeURIComponent(window.location
-                .href);
+            showToast(@json(__('Guest checkout is unavailable on this website.')), 'error');
             return;
         @endauth
 
@@ -1052,7 +1005,7 @@
 
         if (selectedIds.length === 0) {
             e.preventDefault();
-            showToast('Please select at least one item to proceed', 'error');
+            showToast(@json(__('Please select at least one item to proceed')), 'error');
             return;
         }
 
@@ -1169,7 +1122,7 @@
                     const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
                     if (!anyChecked) {
                         e.preventDefault();
-                        alert('No items selected.');
+                        alert(@json(__('No items selected')));
                     }
                 });
             }
@@ -1191,14 +1144,14 @@
 
             if (checkboxes.length === 0) {
                 if (selectedItemsContainer) {
-                    selectedItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">No items selected</p>';
+                    selectedItemsContainer.innerHTML = '<p class="text-gray-400 text-center py-4">' + @json(__('No items selected')) + '</p>';
                 }
             } else {
                 checkboxes.forEach(cb => {
                     const row = cb.closest('.product-row');
                     if (row) {
                         const id = row.dataset.id;
-                        const name = row.dataset.name || 'Item';
+                        const name = row.dataset.name || @json(__('Item'));
                         const price = parseFloat(row.dataset.price) || 0;
                         const qtyElement = row.querySelector('.quantity');
                         const qty = qtyElement ? parseInt(qtyElement.textContent) : 1;

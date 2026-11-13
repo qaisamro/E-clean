@@ -25,11 +25,9 @@ class AddressController extends Controller
 
     public function store(AddressRequest $request)
     {
-        $addresses = auth()->user()->customer->addresses;
-        if(!$addresses->isEmpty() && $addresses->count() >= 3){
+        if (!$this->addressRepo->storeByRequest($request)) {
             return $this->json('sorry, you can\'t add more address');
         }
-        $this->addressRepo->storeByRequest($request);
 
         return $this->json('Address is added successfully', [
             'addresses' => AddressResource::collection($this->addressRepo->getAll())
@@ -38,6 +36,13 @@ class AddressController extends Controller
 
     public function update(AddressRequest $request, Address $address)
     {
+        $customerId = $request->user()->customer?->id;
+        abort_unless($customerId, 403);
+
+        $address = Address::query()
+            ->where('customer_id', $customerId)
+            ->findOrFail($address->id);
+
         $this->addressRepo->updateByRequest($address, $request);
 
         return $this->json('Address is updated successfully', [
@@ -47,7 +52,14 @@ class AddressController extends Controller
 
     public function delete(Address $address)
     {
-        $address->delete();
+        $customerId = auth()->user()->customer?->id;
+        abort_unless($customerId, 403);
+
+        $address = Address::query()
+            ->where('customer_id', $customerId)
+            ->findOrFail($address->id);
+
+        $this->addressRepo->deleteOwned($address->id, (int) $customerId);
         return $this->json('Address delete successfully',[
             'addresses' => AddressResource::collection($this->addressRepo->getAll())
         ]);

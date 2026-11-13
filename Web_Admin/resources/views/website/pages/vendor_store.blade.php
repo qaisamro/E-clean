@@ -18,14 +18,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($services as $service)
                 <div class="flex flex-col p-4 rounded-[20px] bg-white shadow-[0_6px_14px_rgba(11,30,46,0.06)] border hover:shadow-lg transition">
-                    <img src="{{ $service->thumbnailPath }}" alt="{{ $service->name }}" class="w-full h-32 object-cover rounded-[14px] mb-3">
-                    <h3 class="font-semibold text-gray-900">{{ $service->name }}</h3>
+                    <img src="{{ $service->thumbnailPath }}" alt="{{ $service->name_bn ?? $service->name }}" class="w-full h-32 object-cover rounded-[14px] mb-3">
+                    <h3 class="font-semibold text-gray-900">{{ $service->name_bn ?? $service->name }}</h3>
                     <p class="text-sm text-gray-500 mb-3">{{ Str::limit($service->description, 80) }}</p>
-                    <div class="mt-auto flex justify-between items-center border-t pt-3">
+                    <div class="mt-auto flex items-center border-t pt-3">
                         <span class="text-[#028090] font-bold">
                             @if($service->lowestProduct) {{ currencyPosition($service->lowestProduct->final_price) }} @else {{ __('Price on request') }} @endif
                         </span>
-                        <a href="{{ route('web.cart', ['service_id' => $service->id]) }}" class="px-4 py-2 bg-[linear-gradient(135deg,#028090,#00A896)] text-white rounded-[12px] text-sm">احجز</a>
                     </div>
                 </div>
             @endforeach

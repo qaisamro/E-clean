@@ -2,10 +2,12 @@
 
 namespace App\Livewire\CustomerOrder;
 
+
+use App\Livewire\Concerns\RequiresPermission;
 use App\Livewire\Forms\OrderDetailForm;
-use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -13,6 +15,8 @@ use Livewire\Component;
 
 class CustomerCreateOrder extends Component
 {
+    use RequiresPermission;
+
     public function render()
     {
         return view('livewire.customer-order.customer-create-order')
@@ -26,7 +30,7 @@ class CustomerCreateOrder extends Component
     #[Computed(persist: true)]
     public function items()
     {
-        return Cache::rememberForever('items_for_livewire', fn() => Item::get());
+        return Cache::rememberForever('products_laundry_for_livewire', fn () => Product::where('kind', 'laundry')->orderBy('name')->get());
     }
 
     public function updated($attr, $value): void
@@ -72,6 +76,7 @@ class CustomerCreateOrder extends Component
 
     public function putOrder()
     {
+        $this->requireCustomerGuard();
         if (count($this->orderDetailForm->orders) === 0) {
             $this->addError('error_msg', 'يجب إضافة طلبات أولا');
             return;

@@ -14,12 +14,10 @@
                 </div>
                 <div class="card-body">
                     <x-form route="additional.update" updateId="{{ $additional->id }}" type="Submit" method="true">
-                        <x-input name="title" type='text' placeholder="{{ __('Title') }} {{ __('English') }}" value="{{ $additional->title }}" />
-                        <x-input name="title_bn" type='text' placeholder="{{ __('Title').' '.__('Arabic').' '.__('Name') }}" value="{{ $additional->title_bn }}" />
+                        <x-input name="title_bn" type='text' placeholder="{{ __('Title') }}" value="{{ $additional->title_bn }}" required="true" />
                         <x-input name="price" placeholder="{{ __('Price') }}" value="{{ $additional->price }}" type="text" />
 
-                        <x-textarea name="description" placeholder="{{ __('Description').' '.__('English') }}" value="{{ $additional->description }}" />
-                        <x-textarea name="description_bn" placeholder="{{ __('Description').' '.__('Arabic') }}" value="{{ $additional->description_bn }}" />
+                        <x-textarea name="description_bn" placeholder="{{ __('Description') }}" value="{{ $additional->description_bn }}" />
                     </x-form>
                 </div>
             </div>

@@ -24,7 +24,8 @@ class ApplyCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => ['required']
+            'amount' => ['required', 'numeric', 'min:0'],
+            'vendor_id' => ['sometimes', 'nullable', 'integer', 'exists:vendors,id'],
         ];
     }
 }

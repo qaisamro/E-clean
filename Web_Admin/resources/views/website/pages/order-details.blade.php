@@ -1,11 +1,11 @@
-﻿@extends('website.layouts.app')
+@extends('website.layouts.app')
 
 @section('content')
     @if (session('success'))
         <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-[20px] shadow-lg text-center">
             <div
                 class="text-4xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-500">
-                ðŸ—¡ï¸ {{ session('success') }} !
+                🗡️ {{ session('success') }} !
             </div>
         </div>
     @endif
@@ -27,18 +27,18 @@
                 </div>
                 <div class="mb-4">
                     <label class="text-neutral-700 text-base font-medium">{{ __('Label') }}</label>
-                    <input type="text" placeholder="Example : {{ __('Home') }}, Office ..."
+                    <input type="text" placeholder="{{ __('Address label example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="mb-4">
                     <label class="text-neutral-700 text-base font-medium">{{ __('Street Address') }}</label>
-                    <input type="text" placeholder="123 Lovely Road, Apt 6B"
+                    <input type="text" placeholder="{{ __('Address example') }}"
                         class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                 </div>
                 <div class="flex gap-3 mb-4">
                     <div class="w-[50%]">
                         <label class="text-neutral-700 text-base font-medium">{{ __('City') }}</label>
-                        <input type="text" placeholder="New York"
+                        <input type="text" placeholder="{{ __('City example') }}"
                             class="w-full h-[40px] mt-2.5 border border-[#E2E8F0] rounded-[12px] px-[16px] py-[10px]" />
                     </div>
                     <div class="w-[50%]">
@@ -72,15 +72,14 @@
             <div class="rs-breadcrumb-content">
                 <h1
                     class="rs-breadcrumb-title mb-[5px] sm:mb-[10px] text-[26px] md:text-[30px]  md:text-4xl text-white font-semibold leading-[140%]">
-                    Order Details
+                    {{ __('Order Details') }}
                 </h1>
                 <div class="rs-breadcrumb-top-content">
-                    <a href="{{ route('web.showLogin') }}"
-                        class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Dashboard / ') }}</a>
+                    <span class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Dashboard / ') }}</span>
                     <a href="{{ route('web.my.orders') }}"
                         class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('My Orders / ') }}</a>
-                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">Order
-                        #{{ $order->order_code }}</a>
+                    <a href="#" class="text-base md:text-lg text-white font-normal leading-[100%]">{{ __('Order Code') }}
+                        {{ $order->order_code }}</a>
                 </div>
             </div>
         </section>
@@ -95,15 +94,15 @@
                         <div class="rs-order-details-content-top flex justify-between items-center mb-4">
                             <div class="flex flex-col gap-2">
                                 <h4 class="text-sm md:text-base text-neutral-700 font-semibold leading-[140%]">
-                                    Order #{{ $order->order_code }}
+                                    {{ __('Order Code') }} {{ $order->order_code }}
                                 </h4>
                                 <div class="flex gap-2">
                                     <span
                                         class="px-2 py-1 text-xs rounded-full {{ $order->payment_status == 'Paid' ? 'bg-[#E6F4F1] text-[#156172]' : 'bg-yellow-100 text-yellow-700' }}">
-                                        {{ $order->payment_status ?? 'Pending' }}
+                                        {{ __($order->payment_status ?? 'Pending') }}
                                     </span>
                                     <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
-                                        {{ $order->order_status ?? 'Pending' }}
+                                        {{ __($order->order_status ?? 'Pending') }}
                                     </span>
                                 </div>
                             </div>
@@ -111,7 +110,7 @@
                                 class="flex text-center gap-1 text-xs text-neutral-700 font-medium w-[88px] h-[40px] justify-center items-center border-[1.5px] border-[#E2E8F0] rounded-[14px]">
                                 <img class="w-3 h-3" src="{{ asset('website/assets/icons/download-icon.svg') }}"
                                     alt="">
-                                Invoice
+                                {{ __('Invoice') }}
                             </button>
                         </div>
 
@@ -174,14 +173,14 @@
                                 </button>
                                 <div class="rs-order-info-right">
                                     <h5 class="text-xs md:text-sm text-neutral-700 font-medium leading-[100%] mb-[10px]">
-                                        {{ $step['title'] }}</h5>
+                                        {{ __($step['title']) }}</h5>
                                     <p class="text-xs md:text-sm text-neutral-500 font-normal leading-[140%] italic">
-                                        {{ $step['desc'] }}</p>
+                                        {{ __($step['desc']) }}</p>
                                     <span class="text-xs md:text-sm text-neutral-500 font-normal leading-[140%]">
                                         @if ($step['time'] instanceof \Carbon\Carbon)
-                                            {{ $step['time']->format('M d, Y - h:i A') }}
-                                        @else
-                                            {{ $step['time'] }}
+                                            {{ $step['time']->locale(app()->getLocale())->translatedFormat('M d, Y - h:i A') }}
+                                        @elseif (is_string($step['time']))
+                                            {{ __($step['time']) }}
                                         @endif
                                     </span>
                                 </div>
@@ -204,15 +203,15 @@
                                 <div
                                     class="rs-order-items-icon w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] bg-[#E6F4F1] rounded-[4px] flex items-center justify-center overflow-hidden">
                                     <img class="w-full h-full object-cover" src="{{ asset($thumbnail) }}"
-                                        alt="{{ $product->name }}">
+                                        alt="{{ $product->name_bn ?? $product->name }}">
                                 </div>
                                 <div class="rs-order-items-box-right-content">
                                     <h5 class="text-xs md:text-sm text-neutral-900 font-medium leading-[140%]">
-                                        {{ $product->name }}</h5>
-                                    <span class="text-xs md:text-sm text-neutral-500 font-normal leading-[140%]">Quantity:
+                                        {{ $product->name_bn ?? $product->name }}</h5>
+                                    <span class="text-xs md:text-sm text-neutral-500 font-normal leading-[140%]">{{ __('Quantity') }}:
                                         {{ $product->pivot->quantity }}</span>
                                     <span class="text-xs text-[#028090] font-medium">{{ currencyPosition($price, 2) }}
-                                        each</span>
+                                        {{ __('each') }}</span>
                                 </div>
                                 <div class="rs-order-items-price ml-auto">
                                     <span
@@ -228,7 +227,7 @@
                     <div class="rs-pickup-details-area flex flex-wrap sm:flex-nowrap gap-[24px]">
                         <div
                             class="rs-pickup-details-box border-[1px] border-[#E2E8F0] rounded-[14px] py-[15px] px-[24px] w-full sm:w-[50%]">
-                            <h5 class="text-sm text-neutral-700 font-medium leading-[140%] mb-[24px]">Pickup Details</h5>
+                            <h5 class="text-sm text-neutral-700 font-medium leading-[140%] mb-[24px]">{{ __('Pickup Details') }}</h5>
                             @if ($order->address)
                                 <a href="javascript:void(0)"
                                     class="leading-[140%] mb-[10px] text-[12px] sm:text-sm font-normal flex gap-[6px] text-neutral-700">
@@ -241,15 +240,15 @@
                                 class="leading-[140%] mb-[6px] text-[12px] sm:text-sm font-normal flex gap-[6px] text-neutral-700">
                                 <img src="{{ asset('website/assets/icons/celender.svg') }}" alt="">
                                 @if ($order->pick_date_time)
-                                    {{ $order->pick_date_time->format('M d, Y - h:i A') }}
+                                    {{ $order->pick_date_time->locale(app()->getLocale())->translatedFormat('M d, Y - h:i A') }}
                                 @else
-                                    Not scheduled
+                                    {{ __('Not scheduled') }}
                                 @endif
                             </a>
                         </div>
                         <div
                             class="rs-pickup-details-box border-[1px] border-[#E2E8F0] rounded-[14px] py-[15px] px-[24px] w-full sm:w-[50%]">
-                            <h5 class="text-sm text-neutral-700 font-medium leading-[140%] mb-[24px]">Delivery Details</h5>
+                            <h5 class="text-sm text-neutral-700 font-medium leading-[140%] mb-[24px]">{{ __('Delivery Details') }}</h5>
                             @if ($order->address)
                                 <a href="javascript:void(0)"
                                     class="leading-[140%] mb-[10px] text-[12px] sm:text-sm font-normal flex gap-[6px] text-neutral-700">
@@ -262,9 +261,9 @@
                                 class="leading-[140%] mb-[6px] text-[12px] sm:text-sm font-normal flex gap-[6px] text-neutral-700">
                                 <img src="{{ asset('website/assets/icons/celender.svg') }}" alt="">
                                 @if ($order->delivery_date_time)
-                                    {{ $order->delivery_date_time->format('M d, Y - h:i A') }}
+                                    {{ $order->delivery_date_time->locale(app()->getLocale())->translatedFormat('M d, Y - h:i A') }}
                                 @else
-                                    To be scheduled
+                                    {{ __('To be scheduled') }}
                                 @endif
                             </a>
                         </div>
@@ -276,15 +275,14 @@
 
                     {{-- Store Details --}}
                     <div class="rs-store-details-box bg-white px-[16px] py-[24px] rounded-[20px] mb-[24px]">
-                        <h5 class="text-sm md:text-base text-neutral-700 font-semibold leading-[140%] mb-[16px]">Store
-                            Details</h5>
+                        <h5 class="text-sm md:text-base text-neutral-700 font-semibold leading-[140%] mb-[16px]">{{ __('Store Details') }}</h5>
                         @if ($order->products->first() && $order->products->first()->service)
                             <h6 class="text-sm text-neutral-700 font-semibold leading-[140%] mb-[5px]">
-                                {{ $order->products->first()->service->name ?? 'Fresh & Fold Dry Cleaning' }}</h6>
+                                {{ $order->products->first()->service->name_bn ?? $order->products->first()->service->name ?? 'Fresh & Fold Dry Cleaning' }}</h6>
                             <div class="flex gap-[3px] pb-[16px] border-b border-b-neutral-200 mb-[16px]">
                                 <img src="{{ asset('website/assets/icons/star-small.svg') }}" alt="">
                                 <span class="text-sm text-neutral-700 font-medium leading-[140%]">4.8</span>
-                                <span class="text-sm text-neutral-700 font-normal leading-[140%]">(512 reviews)</span>
+                                <span class="text-sm text-neutral-700 font-normal leading-[140%]">(512 {{ __('reviews') }})</span>
                             </div>
                         @endif
                         <div class="rs-details-btn">
@@ -298,27 +296,26 @@
                                 class="leading-[100%] text-xs font-medium flex gap-[6px] text-neutral-700 flex items-center h-[40px] px-[16px] border-[1.50px] border-[#E2E8F0] rounded-[14px]">
                                 <img class="w-[12px] h-[12px]" src="{{ asset('website/assets/icons/comment.svg') }}"
                                     alt="">
-                                Chat With Store
+                                {{ __('Chat With Store') }}
                             </a>
                         </div>
                     </div>
 
                     {{-- Payment Summary --}}
                     <div class="rs-payment-details-box bg-white px-[16px] py-[24px] rounded-[20px] mb-[24px]">
-                        <h5 class="text-sm md:text-base text-neutral-700 font-semibold leading-[140%] mb-[16px]">Payment
-                            Summary</h5>
+                        <h5 class="text-sm md:text-base text-neutral-700 font-semibold leading-[140%] mb-[16px]">{{ __('Payment Summary') }}</h5>
                         <div class="rs-payment-info-item flex justify-between mb-[10px]">
-                            <span class="text-sm font-medium leading-[140%] text-neutral-500">Subtotal</span>
+                            <span class="text-sm font-medium leading-[140%] text-neutral-500">{{ __('Subtotal') }}</span>
                             <span
                                 class="text-sm md:text-base font-normal leading-[140%] text-neutral-700">{{ currencyPosition($order->amount, 2) }}</span>
                         </div>
                         <div class="rs-payment-info-item flex justify-between mb-[10px]">
-                            <span class="text-sm font-medium leading-[140%] text-neutral-500">Discount</span>
+                            <span class="text-sm font-medium leading-[140%] text-neutral-500">{{ __('Discount') }}</span>
                             <span
                                 class="text-sm md:text-base font-normal leading-[140%] text-neutral-700">{{ currencyPosition($order->discount ?? 0, 2) }}</span>
                         </div>
                         <div class="rs-payment-info-item flex justify-between mb-[10px]">
-                            <span class="text-sm font-medium leading-[140%] text-neutral-500">Delivery Fee</span>
+                            <span class="text-sm font-medium leading-[140%] text-neutral-500">{{ __('Delivery Fee') }}</span>
                             <span
                                 class="text-sm md:text-base font-normal leading-[140%] text-neutral-700">{{ $order->delivery_charge ?? '' }}
 

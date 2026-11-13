@@ -19,24 +19,9 @@
                                 <img width="50%" src="{{ $service->thumbnailPath }}" alt="">
                             </div>
 
-                            <label>{{ __('Name') . ' ' . __('of') . ' ' . __('English') }}</label>
-                            <x-input name="name" type="text"
-                                placeholder="{{ __('Service') . ' ' . __('Name') . ' ' . __('English') }}"
-                                value="{{ $service->name }}" />
-
-                            <label>{{ __('Name') . ' ' . __('of') . ' ' . __('Arabic') }}</label>
+                            <label>{{ __('Name') }}</label>
                             <x-input name="name_bn" type='text' value="{{ $service->name_bn }}"
-                                placeholder="{{ __('Service') . ' ' . __('Name') . ' ' . __('Arabic') }}" />
-
-                            <label for="">{{ __('Selected Variants') }}</label>
-                            <x-select :multi="true" name="variant_ids[]">
-                                @foreach ($variants as $variant)
-                                    <option value="{{ $variant->id }}"
-                                        {{ in_array($variant->id, $service->variants->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                        {{ session()->get('local') == 'ar' ? $variant->name_bn ?? $variant->name : $variant->name }}
-                                    </option>
-                                @endforeach
-                            </x-select>
+                                placeholder="{{ __('Service') . ' ' . __('Name') }}" required="true" />
 
                             <label>{{ __('Service') . ' ' . __('Photo') }}</label>
                             <x-input-file name="image" type="file" />
@@ -45,16 +30,6 @@
                             <x-textarea name="description" placeholder="{{ __('Service') . ' ' . __('Description') }}"
                                 value="{{ $service->description }}" />
 
-                            <label>{{ __('Additional_Service') }}</label>
-                            <x-select :multi="true" name="additional[]">
-                                @foreach ($additionals as $additional)
-                                    <option value="{{ $additional->id }}"
-                                        {{ in_array($additional->id, $service->additionals->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                        {{ session()->get('local') == 'ar' ? $additional->title_bn ?? $additional->title : $additional->title }}
-                                    </option>
-                                @endforeach
-
-                            </x-select>
                         </x-form>
                     </div>
                 </div>

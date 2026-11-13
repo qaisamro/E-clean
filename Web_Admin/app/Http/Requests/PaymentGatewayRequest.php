@@ -26,7 +26,7 @@ class PaymentGatewayRequest extends FormRequest
             'name' => 'nullable',
             'mode' => 'required',
             'config' => 'required|array',
-            'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'logo' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
         ];
     }
 
@@ -41,7 +41,7 @@ class PaymentGatewayRequest extends FormRequest
         return [
             'title.required' => __('The title field is required.'),
             'logo.image' => __('The logo must be an image.'),
-            'logo.mimes' => __('The logo must be a file of type: png, jpg, jpeg, png, svg, webp.'),
+            'logo.mimes' => __('The logo must be a PNG, JPG, JPEG, or WEBP image.'),
         ];
     }
 }

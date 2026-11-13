@@ -1,5 +1,15 @@
 <x-app-layout :title="config('app.name') . ' | ' . 'أسعار الخدمات'">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">الأسعار /</span> قائمة الأسعار</h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-dollar-circle"></i> الأسعار</div>
+                <h1 class="ec-section-title">قائمة الأسعار</h1>
+            </div>
+            <a href="{{ route('itemServices.create') }}" class="btn btn-primary">
+                <i class="bx bx-plus me-1"></i> إضافة تسعيرة
+            </a>
+        </div>
+    </div>
 
     <!-- Basic Bootstrap Table -->
     <div class="card">
@@ -12,10 +22,10 @@
             <table class="table table-hover table-striped">
                 <thead>
                 <tr>
-                    <th class="bg-dark text-white"><strong>الصنف</strong></th>
+                    <th class="ec-price-head"><strong>الصنف</strong></th>
                     @foreach($services as $service)
 
-                        <th class="bg-dark text-white">
+                        <th class="ec-price-head">
                             <strong>{{ $service->name }}</strong>
                         </th>
                     @endforeach

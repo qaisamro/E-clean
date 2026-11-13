@@ -2,11 +2,19 @@
 
 namespace App\Livewire\Order;
 
+
+use App\Livewire\Concerns\RequiresPermission;
 use App\Livewire\Forms\CustomerForm;
 use App\Livewire\Forms\OrderForm;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use App\Enums\ProductKind;
+use App\Enums\StockMovementType;
+use App\Services\StockService;
+use App\Services\OrderFinancials;
 use App\Models\Service;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +23,8 @@ use Livewire\Component;
 
 class CreateOrder extends Component
 {
+    use RequiresPermission;
+
     public CustomerForm $customerForm;
     public OrderForm $orderForm;
 
@@ -37,15 +47,26 @@ class CreateOrder extends Component
     #[Validate('nullable|string', as: 'وقت التسليم')]
     public $deliver_time = '';
 
-    #[Validate('integer|min:0', as: 'الخصم')]
+    #[Validate('numeric|min:0', as: 'الخصم')]
     public $discount = 0;
 
     #[Validate('nullable|string', as: 'ملاحظات')]
     public $notes = '';
 
+    // POS: product lines sold on this order (deducted from inventory)
+    public $productToAdd = '';
+    public $productLines = [];
+
     public function render()
     {
-        return view('order.create')
+        return view('order.create', [
+            'sellableProducts' => Product::query()
+                ->where('is_active', true)
+                ->where('kind', ProductKind::RETAIL->value)
+                ->where('current_stock', '>', 0)
+                ->orderBy('name')
+                ->get(['id', 'name', 'unit', 'sale_price', 'current_stock']),
+        ])
             ->title(config('app.name') . ' | ' . 'إضافة طلب');
     }
 
@@ -66,6 +87,70 @@ class CreateOrder extends Component
     {
         $this->calculateTotalPrice();
     }
+
+    // ############### POS product lines ###############
+    public function addProduct(): void
+    {
+        if (!$this->productToAdd) {
+            $this->addError('error_msg', 'اختر منتج أولاً');
+            return;
+        }
+
+        $product = Product::find((int) $this->productToAdd);
+        if (!$product) {
+            $this->addError('error_msg', 'المنتج غير موجود');
+            return;
+        }
+        if (!$product->is_active || $product->kind !== ProductKind::RETAIL->value || (float) $product->current_stock <= 0) {
+            $this->addError('error_msg', 'هذا المنتج غير متاح للبيع');
+            return;
+        }
+
+        foreach ($this->productLines as $line) {
+            if ((int) $line['product_id'] === $product->id) {
+                $this->addError('error_msg', 'هذا المنتج مُضاف مسبقاً للطلب');
+                return;
+            }
+        }
+
+        $this->productLines[] = [
+            'product_id' => $product->id,
+            'name' => $product->name,
+            'unit' => $product->unit,
+            'price' => (float) $product->sale_price,
+            'max' => (float) $product->current_stock,
+            'quantity' => 1,
+            'subtotal' => (float) $product->sale_price,
+        ];
+
+        $this->productToAdd = '';
+        $this->calculateTotalPrice();
+    }
+
+    public function removeProductLine(int $index): void
+    {
+        if (isset($this->productLines[$index])) {
+            unset($this->productLines[$index]);
+            $this->productLines = array_values($this->productLines);
+            $this->calculateTotalPrice();
+        }
+    }
+
+    public function applyProductChanges(): void
+    {
+        foreach ($this->productLines as $index => $line) {
+            $qty = max(1, (float) ($line['quantity'] ?? 1));
+            $max = (float) ($line['max'] ?? $qty);
+            if ($qty > $max) {
+                $qty = $max; // never sell more than on hand
+            }
+            $this->productLines[$index]['quantity'] = $qty;
+            $this->productLines[$index]['subtotal'] = ((float) $line['price']) * $qty;
+        }
+
+        $this->calculateTotalPrice();
+    }
+    // ############### End product lines ###############
 
     public function updatedPaymentType(): void
     {
@@ -121,6 +206,7 @@ class CreateOrder extends Component
 
     public function deleteOrder(): void
     {
+        $this->requirePermission('orders.create');
         if (array_key_exists($this->selectedOrder, $this->orderForm->orders)) {
             array_splice($this->orderForm->orders, $this->selectedOrder, 1);
             $this->reset('selectedOrder');
@@ -131,7 +217,7 @@ class CreateOrder extends Component
     public function applyChanges(): void
     {
         $this->orderForm->orders = array_map(function ($order) {
-            $order['total_price'] = intval($order['price']) * intval($order['quantity']);
+            $order['total_price'] = floatval($order['price']) * floatval($order['quantity']);
             return $order;
         }, $this->orderForm->orders);
 
@@ -140,8 +226,9 @@ class CreateOrder extends Component
 
     public function calculateTotalPrice(): void
     {
-        $subtotal = collect($this->orderForm->orders)->sum('total_price');
-        $this->total_price = max(0, $subtotal - intval($this->discount));
+        $subtotal = collect($this->orderForm->orders)->sum('total_price')
+            + collect($this->productLines)->sum('subtotal');
+        $this->total_price = max(0, $subtotal - floatval($this->discount));
 
         if ($this->payment_type == 1 || $this->payment_type == 3) {
             $this->paid_money = $this->total_price;
@@ -150,15 +237,54 @@ class CreateOrder extends Component
             $this->paid_money = 0;
             $this->remaining_money = $this->total_price;
         } else { // Partial
-            $this->remaining_money = max(0, $this->total_price - intval($this->paid_money));
+            $this->remaining_money = max(0, $this->total_price - floatval($this->paid_money));
         }
     }
 
     public function saveOrder(): void
     {
+        $this->requirePermission('orders.create');
         $this->validate();
-        if (count($this->orderForm->orders) === 0) {
-            $this->addError('error_msg', 'يجب إضافة طلبات أولا');
+        if (count($this->orderForm->orders) === 0 && count($this->productLines) === 0) {
+            $this->addError('error_msg', 'يجب إضافة طلبات أو منتجات أولا');
+            return;
+        }
+
+        foreach ($this->orderForm->orders as $index => $orderDetail) {
+            $itemService = \App\Models\ItemService::query()
+                ->where('service_id', $orderDetail['service_id'] ?? null)
+                ->where('item_id', $orderDetail['item_id'] ?? null)
+                ->first();
+            $price = (float) ($itemService?->price ?? 0);
+            if ($price <= 0 || (float) ($orderDetail['quantity'] ?? 0) <= 0) {
+                $this->addError('error_msg', 'يجب أن يكون سعر وكمية كل بند أكبر من صفر.');
+                return;
+            }
+            $this->orderForm->orders[$index]['price'] = $price;
+            $this->orderForm->orders[$index]['total_price'] = round($price * (float) $orderDetail['quantity'], 2);
+        }
+
+        foreach ($this->productLines as $index => $line) {
+            $product = Product::query()->find($line['product_id'] ?? null);
+            $price = (float) ($product?->sale_price ?? 0);
+            if (!$product || !$product->is_active || $product->kind !== ProductKind::RETAIL->value || $price <= 0 || (float) ($line['quantity'] ?? 0) <= 0) {
+                $this->addError('error_msg', 'يجب أن يكون سعر وكمية كل منتج أكبر من صفر.');
+                return;
+            }
+            $this->productLines[$index]['price'] = $price;
+            $this->productLines[$index]['subtotal'] = round($price * (float) $line['quantity'], 2);
+        }
+
+        $subtotal = round((float) collect($this->orderForm->orders)->sum('total_price') + (float) collect($this->productLines)->sum('subtotal'), 2);
+        $discount = round((float) $this->discount, 2);
+        if ($discount > $subtotal) {
+            $this->addError('discount', 'لا يمكن أن يكون الخصم أكبر من إجمالي البنود.');
+            return;
+        }
+
+        $this->total_price = round($subtotal - $discount, 2);
+        if ((int) $this->payment_type === 4 && (float) $this->paid_money > $this->total_price) {
+            $this->addError('paid_money', 'لا يمكن أن يتجاوز المدفوع إجمالي الطلب.');
             return;
         }
 
@@ -185,7 +311,7 @@ class CreateOrder extends Component
                     $remaining = $this->total_price;
                     $paymentStatus = \App\Enums\PaymentStatus::UNPAID;
                 } else { // Partial
-                    $paid = intval($this->paid_money);
+                    $paid = floatval($this->paid_money);
                     $remaining = max(0, $this->total_price - $paid);
                     if ($remaining == 0) {
                         $paymentStatus = \App\Enums\PaymentStatus::PAID;
@@ -205,7 +331,7 @@ class CreateOrder extends Component
                     'customer_id' => $this->customerForm->id,
                     'deliver_date' => $this->deliver_date,
                     'deliver_time' => $this->deliver_time,
-                    'discount' => intval($this->discount),
+                    'discount' => floatval($this->discount),
                     'notes' => $this->notes,
                     'status' => \App\Enums\OrderStatus::NEW, // starts at NEW
                 ]);
@@ -233,6 +359,30 @@ class CreateOrder extends Component
 
                 OrderDetail::insert($ordersToBeInserted);
 
+                // POS: save product lines + deduct from inventory
+                foreach ($this->productLines as $line) {
+                    $product = Product::find($line['product_id']);
+                    if (!$product) {
+                        throw new \RuntimeException('المنتج غير موجود: ' . $line['name']);
+                    }
+
+                    OrderProduct::create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'quantity' => $line['quantity'],
+                        'price' => (float) $line['price'],
+                        'total_price' => (float) $line['subtotal'],
+                    ]);
+
+                    app(StockService::class)->record(
+                        $product,
+                        StockMovementType::SALE,
+                        (float) $line['quantity'],
+                        $order->order_code,
+                        'بيع POS — طلب #' . $order->order_code
+                    );
+                }
+
                 // Insert payment record if cash flow exists
                 if ($paid > 0) {
                     Payment::create([
@@ -243,6 +393,8 @@ class CreateOrder extends Component
                         'notes' => 'الدفعة الأولى عند إنشاء الطلب',
                     ]);
                 }
+
+                app(OrderFinancials::class)->reconcile($order);
             });
         } catch (\Throwable $throwable) {
             $this->addError('error_msg', 'حدث خطأ اثناء حفظ الطلب: ' . $throwable->getMessage());
@@ -250,6 +402,8 @@ class CreateOrder extends Component
         }
 
         $this->orderForm->reset();
+        $this->productLines = [];
+        $this->productToAdd = '';
         $this->resetExcept('customerForm', 'orderForm');
         $this->customerForm->resetForNextOrder();
         $this->orderForm->setDefaultValues();

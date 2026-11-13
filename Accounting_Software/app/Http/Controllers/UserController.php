@@ -2,130 +2,112 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Roles;
 use App\Enums\UserStatus;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
-use App\Models\Order;
 use App\Models\Setting;
 use App\Models\User;
+use App\Support\PermissionRegistry;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
     /**
-     * Show all users
-     *
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * Show all users except super admins (current user + system accounts)
      */
     public function index()
     {
-        return view(
-            'user.index',
-            [
-                'users' => User::whereNotIn('id', [1, auth()->id()])->paginate(config('app.default_pagination'))
-            ]
-        );
+        return view('user.index', [
+            'users' => User::whereNot('role', Roles::SUPER_ADMIN->value)
+                ->paginate(config('app.default_pagination')),
+        ]);
     }
 
     /**
      * Show create form
-     *
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function create()
     {
-        return view('user.create');
+        return view('user.create', [
+            'groups' => PermissionRegistry::groups(),
+        ]);
     }
 
     /**
      * Handle store request
-     *
-     * @param UserStoreRequest $request
-     * @return RedirectResponse
      */
     public function store(UserStoreRequest $request)
     {
         try {
             $validated = $request->validated();
-            if (is_null($request->validated('password'))) {
-                $default_password = Setting::firstWhere('key', 'default-password');
-                if (!$default_password->value) {
-                    toast('يجب تعيين كلمة مرور إفتراضية من إعدادات الموقع او اكتب كلمة المرور', 'error');
-                    return to_route('users.index');
+            if (is_null($validated['password'] ?? null)) {
+                $defaultPassword = Setting::firstWhere('key', 'default-password');
+                if (! $defaultPassword?->value) {
+                    toast('تعذر إنشاء مستخدم جديد لأن كلمة المرور الافتراضية غير محددة في الإعدادات', 'error');
+                    return to_route('users.create');
                 }
-                $validated['password'] = $default_password->value;
+                $validated['password'] = $defaultPassword->value;
             }
+            $validated['permissions'] = $validated['permissions'] ?? [];
             User::create($validated);
         } catch (\Throwable $throwable) {
-            toast('حدث خطأ اتثاء محاولة اضافة مستخدم', 'error');
+            toast('حدث خطأ أثناء إنشاء المستخدم', 'error');
             return to_route('users.index');
         }
-        toast('تم إضافة مستخدم بنجاح', 'success');
+        toast('تم إنشاء المستخدم بنجاح', 'success');
         return to_route('users.index');
     }
 
     /**
-     * Show specified User
-     *
-     * @param User $user
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * Show specified user
      */
     public function show(User $user)
     {
-        return view('user.show',
-            [
-                'user' => $user
-            ]
-        );
+        abort_if($user->role === Roles::SUPER_ADMIN, 403);
+        return view('user.show', [
+            'user' => $user,
+            'groups' => PermissionRegistry::groups(),
+        ]);
     }
 
     /**
      * Show edit form
-     *
-     * @param User $user
-     * @return Application|Factory|View|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function edit(User $user)
     {
-        $this->checkActions($user);
-        return view(
-            'user.edit',
-            [
-                'user' => $user
-            ]
-        );
+        abort_if($user->role === Roles::SUPER_ADMIN, 403);
+        return view('user.edit', [
+            'user' => $user,
+            'groups' => PermissionRegistry::groups(),
+        ]);
     }
 
     /**
      * Handle update request
-     *
-     * @param UserUpdateRequest $request
-     * @param User $user
-     * @return RedirectResponse
      */
     public function update(UserUpdateRequest $request, User $user)
     {
         try {
-            if($user->fill($request->validated())->isDirty()){
+            $data = $request->validated();
+            $data['permissions'] = $data['permissions'] ?? [];
+            $user->fill($data);
+            if ($user->isDirty()) {
                 $user->save();
             }
         } catch (\Throwable $throwable) {
-            toast('حدث خطأ اتثاء محاولة تعديل بيانات مستخدم', 'error');
+            toast('حدث خطأ أثناء تحديث بيانات المستخدم', 'error');
             return to_route('users.index');
         }
-        toast('تم تحديث بيانات مستخدم بنجاح', 'success');
+        toast('تم تحديث بيانات المستخدم بنجاح', 'success');
         return to_route('users.index');
     }
 
     /**
      * Handle delete request
-     *
-     * @param User $user
-     * @return RedirectResponse
      */
     public function destroy(User $user)
     {
@@ -133,42 +115,36 @@ class UserController extends Controller
         try {
             $user->delete();
         } catch (\Throwable $throwable) {
-            toast('حدث خطأ اتثاء محاولة حذف مستخدم', 'error');
+            toast('حدث خطأ أثناء حذف المستخدم', 'error');
             return to_route('users.index');
         }
-        toast('تم حذف مستخدم بنجاح', 'success');
+        toast('تم حذف المستخدم بنجاح', 'success');
         return to_route('users.index');
     }
 
     /**
-     * Reset User Password
-     *
-     * @param User $user
-     * @return RedirectResponse
+     * Reset user password
      */
     public function resetPassword(User $user)
     {
         $this->checkActions($user);
         try {
-            $default_password = Setting::firstWhere('key', 'default-password');
-            if (!$default_password->value) {
-                toast('يجب تعيين كلمة مرور إفتراضية من إعدادات الموقع اولا', 'error');
+            $defaultPassword = Setting::firstWhere('key', 'default-password');
+            if (! $defaultPassword?->value) {
+                toast('تعذر استعادة كلمة المرور لأن كلمة المرور الافتراضية غير محددة في الإعدادات', 'error');
                 return to_route('users.index');
             }
-            $user->update(['password' => $default_password->value]);
+            $user->update(['password' => $defaultPassword->value]);
         } catch (\Throwable $throwable) {
-            toast('حدث خطأ اتثاء محاولة إستعادة كلمة مرور مستخدم', 'error');
+            toast('حدث خطأ أثناء استعادة كلمة مرور المستخدم', 'error');
             return to_route('users.index');
         }
-        toast('تم إستعادة كلمة مرور مستخدم بنجاح', 'success');
+        toast('تم استعادة كلمة مرور المستخدم بنجاح', 'success');
         return to_route('users.index');
     }
 
     /**
-     * Toggle user Suspension
-     *
-     * @param User $user
-     * @return RedirectResponse
+     * Toggle user suspension
      */
     public function toggleSuspension(User $user)
     {
@@ -177,21 +153,18 @@ class UserController extends Controller
             $status = $user->status === UserStatus::ACTIVE ? UserStatus::SUSPENDED : UserStatus::ACTIVE;
             $user->update(['status' => $status]);
         } catch (\Throwable $throwable) {
-            toast('حدث خطأ اتثاء محاولة تغيير حالة مستخدم', 'error');
+            toast('حدث خطأ أثناء تغيير حالة المستخدم', 'error');
             return to_route('users.index');
         }
-        toast('تم تغيير حالة مستخدم بنجاح', 'success');
+        toast('تم تغيير حالة المستخدم بنجاح', 'success');
         return to_route('users.index');
     }
 
     /**
-     * Check if the role of the user is higher than the edited user
-     *
-     * @param User $user
-     * @return void
+     * Never allow the session super admin (or an administrator) to manage a super admin.
      */
-    private function checkActions(User $user)
+    private function checkActions(User $user): void
     {
-        abort_unless(auth()->user()->role->value < $user->role->value, 401);
+        abort_if($user->role === Roles::SUPER_ADMIN, 401);
     }
 }

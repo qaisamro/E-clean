@@ -1,8 +1,16 @@
 <x-app-layout :title="config('app.name') . ' | ' . 'إضافة خدمه'">
 
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><a href="{{ route('items.index') }}">الخدمات</a>
-            /</span>
-        إضافة خدمه</h4>
+    <div class="ec-page-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <div class="ec-eyebrow"><i class="bx bx-briefcase-alt-2"></i> الخدمات</div>
+                <h1 class="ec-section-title">إضافة خدمه</h1>
+            </div>
+            <a href="{{ route('services.index') }}" class="btn btn-outline-secondary">
+                <i class="bx bx-arrow-back me-1"></i> قائمة الخدمات
+            </a>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-12">

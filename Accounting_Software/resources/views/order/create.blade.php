@@ -1,456 +1,99 @@
-<div>
-    <!-- Search Input -->
-    <!-- Search Input will be teleported to navbar inside dive #searchInputPlace -->
-    @teleport('#searchInputPlace')
-    <div class="nav-item d-flex align-items-center">
-        <i class="bx bx-search fs-4 lh-0"></i>
-        <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="بحث عن العميل..."
-               aria-label="بحث عن العميل..." wire:model.live.debounce.500ms="customerForm.search"/>
-    </div>
-    @endteleport
-    <!-- / Search Input -->
+<div class="order-create-page">
+    <style>
+        .order-create-page .order-hero { background: linear-gradient(135deg,#0f766e,#0d9488 55%,#14b8a6); color:#fff; border-radius:1.25rem; padding:1.4rem 1.6rem; box-shadow:0 18px 40px rgba(13,148,136,.28); border:1px solid rgba(255,255,255,.18); }
+        .order-create-page .section-title { font-size:1rem; font-weight:800; display:flex; align-items:center; gap:.55rem; color:#0f172a; letter-spacing:-.01em; }
+        .order-create-page .section-title i { color:#0d9488; font-size:1.25rem; }
+        .order-create-page .service-choice, .order-create-page .item-choice { cursor:pointer; border:1px solid rgba(15,23,42,.09); border-radius:.85rem; transition:.2s ease; background:#fff; }
+        .order-create-page .service-choice:hover, .order-create-page .item-choice:hover { border-color:#0d9488; background:#f0fdfa; transform:translateY(-1px); box-shadow:0 6px 16px rgba(13,148,136,.16); }
+        .order-create-page .service-choice.active { border-color:#0d9488; background:#ccfbf1; box-shadow:0 8px 20px rgba(13,148,136,.22); color:#115e59; }
+        .order-create-page .item-choice input, .order-create-page .service-choice input { position:absolute; opacity:0; pointer-events:none; }
+        .order-create-page .summary-number { background:#f0fdfa; border:1px solid rgba(13,148,136,.15); border-radius:.85rem; padding:.7rem; text-align:center; }
+        .order-create-page .summary-number strong { display:block; font-size:1.15rem; color:#0f766e; }
+        .order-create-page .line-editor { background:#fafafa; border:1px dashed rgba(13,148,136,.35); border-radius:.85rem; padding:.85rem; }
+        .order-create-page .line-editor:focus-within { border-color:#0d9488; box-shadow:0 0 0 3px rgba(13,148,136,.14); }
+        .order-create-page .order-badge-count { background:#ccfbf1 !important; color:#115e59 !important; }
+        .order-create-page .customer-found-badge { background:#ccfbf1 !important; color:#115e59 !important; }
+        @media (min-width: 992px) { .order-create-page .payment-sticky { position:sticky; top:1rem; } }
+        .order-create-page .pos-empty { color:#64748b; font-weight:600; padding:1.5rem; }
+    </style>
 
-    <!-- Notification -->
     @session('success-msg')
-    <div
-        x-data
-        x-init="setTimeout(()=> $el.remove(),3000)"
-        class="mb-3">
-        <div class="alert alert-info alert-dismissible fade show text-dark" role="alert">
-            <strong>{{ $value }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
+        <div x-data x-init="setTimeout(()=> $el.remove(),3000)" class="alert alert-success alert-dismissible fade show"><strong>{{ $value }}</strong><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     @endsession
-    <!-- / Notification -->
 
-    <div>
-        <!-- Search Results -->
-        @if($customerForm->search)
-            <div class="row gy-3 mb-4">
-                <div class="col-md">
-                    <div class="card">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-header pb-2">
-                                نتائج البحث
-                                <i class='ms-2 bx bx-loader-circle bx-spin' wire:loading
-                                   wire:target="customerForm.search"></i>
-                            </h5>
-                            <span class="me-3 fs-5">
-                        ({{ count($customerForm->customers) }})
-                    </span>
+    <div class="order-hero mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div><h4 class="mb-1 text-white">إضافة طلب جديد</h4><span class="opacity-75">أضف العميل والبنود ثم راجع الدفع قبل الحفظ.</span></div>
+        <div class="text-white-50 small"><i class="bx bx-lock-alt me-1"></i> الأسعار والمخزون تُراجع عند الحفظ</div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center"><div class="section-title"><i class="bx bx-user"></i> بيانات العميل</div>@if($customerForm->id)<span class="badge bg-label-primary">عميل #{{ $customerForm->id }}</span>@endif</div>
+                <div class="card-body">
+                    <label for="customer_search_inline" class="form-label">بحث عن عميل محفوظ</label>
+                    <div class="input-group mb-2"><span class="input-group-text"><i class="bx bx-search"></i></span><input id="customer_search_inline" type="search" class="form-control" placeholder="الاسم أو الهاتف أو رقم العميل" wire:model.live.debounce.500ms="customerForm.search"></div>
+                    @if($customerForm->search)
+                        <div class="border rounded p-2 mb-3" style="max-height:180px;overflow:auto">
+                            @forelse($customerForm->customers as $customer)
+                                <label wire:key="customer-inline-{{ $customer->id }}" class="d-flex align-items-center gap-2 border-bottom py-2 cursor-pointer mb-0"><input name="customer_id" class="form-check-input m-0" type="radio" wire:model.live="customerForm.id" value="{{ $customer->id }}"><span class="flex-grow-1"><strong>{{ $customer->name }}</strong><small class="d-block text-muted" dir="ltr">{{ $customer->phone }}</small></span><a href="{{ route('customers.show', $customer) }}" target="_blank" class="btn btn-sm btn-outline-primary" title="سجل العميل"><i class="bx bx-link-external"></i></a></label>
+                            @empty <span class="small text-muted">لا توجد نتيجة؛ أدخل بيانات عميل جديد أدناه.</span>
+                            @endforelse
                         </div>
-                        <div class="card-body pt-2" style="max-height: 450px; min-height: 93px; overflow-y: scroll">
-                            <div class="d-flex flex-column gap-1">
-
-                                @foreach($customerForm->customers as $customer)
-                                    <div wire:key="{{ 'customers-' . $customer->id . $customer->phone }}"
-                                         class="col-md d-flex gap-2 align-items-center">
-                                        <div
-                                            @class([
-                                                        'form-check custom-option custom-option-basic flex-grow-1',
-                                                        'checked' => $customerForm->id === $customer->id
-                                                ])
-                                        >
-                                            <label
-                                                class="form-check-label custom-option-content py-1 d-flex align-items-center gap-2"
-                                                for="{{ $customer->id . $customer->phone }}">
-                                                <input name="customer_id" class="form-check-input" type="radio"
-                                                       wire:model.live="customerForm.id" value="{{ $customer->id }}"
-                                                       id="{{ $customer->id . $customer->phone }}">
-                                                <div>
-                                            <span class="custom-option-header">
-                                                <span class="h6 mb-0">{{ $customer->name }}</span>
-                                            </span>
-                                                    <span class="custom-option-body">
-                                                <small>{{ $customer->phone }}</small>
-                                            </span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <a href="{{ route('customers.show', $customer) }}" target="_blank"
-                                           title="سجل العميل"
-                                           class="btn btn-linkedin">
-                                            <i class='bx bx-link-external'></i>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <x-input-error key="customerForm.id"/>
-                        </div>
+                    @endif
+                    <div class="row g-2">
+                        <div class="col-md-5"><label class="form-label" for="customer_name">اسم العميل</label><input class="form-control" id="customer_name" wire:model="customerForm.name"><x-input-error key="customerForm.name"/></div>
+                        <div class="col-md-4"><label class="form-label" for="customer_phone">رقم الهاتف</label><input class="form-control text-start" id="customer_phone" dir="ltr" type="tel" wire:model="customerForm.phone"><x-input-error key="customerForm.phone"/></div>
+                        <div class="col-md-3 d-flex align-items-end">@if($customerForm->id)<button type="button" wire:click="cancelCustomer" class="btn btn-outline-secondary w-100"><i class="bx bx-user-plus me-1"></i>عميل جديد</button>@endif</div>
+                        <div class="col-12"><label class="form-label" for="customer_address">العنوان</label><input class="form-control" id="customer_address" wire:model="customerForm.address"><x-input-error key="customerForm.address"/></div>
                     </div>
                 </div>
             </div>
-        @endif
-        <!-- / Search Results -->
 
-        <!-- Order Details -->
-        <div class="row gy-3 mb-3">
-
-            <!-- Services -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header pt-2 pb-3">
-                        <span class="fs-5 text-black">الخدمات</span>
-                    </div>
-                    <div class="card-body" style=" max-height: 275px; overflow-y: scroll">
-                        <div class="d-flex flex-column gap-2">
-
-                            @foreach($this->orderForm->services() as $service)
-                                <div wire:key="{{ 'service-' . $service->id }}"
-                                     class="col-md d-flex gap-2 align-items-center">
-                                    <div
-                                        @class([
-                                                    'form-check custom-option custom-option-basic flex-grow-1',
-                                                    'checked' => $orderForm->service_id == $service->id
-                                            ])
-                                    >
-                                        <label
-                                            class="form-check-label custom-option-content py-3 d-flex align-items-center gap-2"
-                                            for="{{ '$service-' . $service->id }}">
-                                            <input name="service__id" class="form-check-input" type="radio"
-                                                   wire:model.live="orderForm.service_id" value="{{ $service->id }}"
-                                                   id="{{ '$service-' . $service->id }}">
-                                            <div>
-                                            <span class="custom-option-header">
-                                                <span class="h6 mb-0">{{ $service->name }}</span>
-                                            </span>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <x-input-error key="orderForm.service_id"/>
-                    </div>
+            <div class="card mb-3">
+                <div class="card-header border-bottom"><div class="section-title"><i class="bx bx-washer"></i> بنود خدمات الغسيل</div></div>
+                <div class="card-body">
+                    <div class="mb-3"><label class="form-label">1. اختر الخدمة</label><div class="d-flex flex-wrap gap-2">@foreach($this->orderForm->services() as $service)<label wire:key="service-{{ $service->id }}" @class(['service-choice px-3 py-2','active' => $orderForm->service_id == $service->id])><input name="service_id" type="radio" wire:model.live="orderForm.service_id" value="{{ $service->id }}"><span>{{ $service->name }}</span></label>@endforeach</div><x-input-error key="orderForm.service_id"/></div>
+                    <label class="form-label">2. اختر المنتج لإضافته للطلب <i class="bx bx-loader-circle bx-spin ms-1" wire:loading wire:target="orderForm.service_id"></i></label>
+                    <div class="row g-2">@forelse($orderForm->items as $item)<div wire:key="item-{{ $item->id }}" class="col-6 col-md-4 col-xl-3"><label class="item-choice d-block text-center p-2 h-100"><input name="item_id" type="radio" value="{{ $item->id }}" wire:model.live="orderForm.item_id"><strong class="small">{{ $item->name }}</strong></label></div>@empty <div class="text-muted small">اختر خدمة لعرض المنتجات المرتبطة بها.</div>@endforelse</div>
                 </div>
             </div>
-            <!-- / Services -->
 
-            <!-- Items -->
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header pt-2 pb-3">
-                        <span class="fs-5 text-black">الاصناف</span>
-                        <i class='ms-2 bx bx-loader-circle bx-spin' wire:loading
-                           wire:target="orderForm.service_id"></i>
-                    </div>
-                    <div class="card-body" style=" max-height: 275px; overflow-y: scroll">
-                        <div class="row gy-3" wire:key="{{ rand() }}">
-                            @foreach($orderForm->items as $item)
-                                <div wire:key="{{ 'item-' . $item->id }}" class="col-md-3">
-                                    <div
-                                        @class([
-                                                   'form-check custom-option custom-option-basic',
-//                                                   'checked' => $orderForm->item_id == $item->id
-                                               ])
-                                    >
-                                        <label class="form-check-label custom-option-content "
-                                               for="{{ '$item-' . $item->id }}">
-                                            <input name="customRadioTemp" class="form-check-input" type="radio"
-                                                   value="{{ $item->id }}" wire:model.live="orderForm.item_id"
-                                                   id="{{ '$item-' . $item->id }}">
-                                            <span class="custom-option-header">
-                                              <span class="h6 mb-0">{{ $item->name }}</span>
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <x-input-error key="orderForm.service_id"/>
-                    </div>
+            <div class="card mb-3">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center"><div class="section-title"><i class="bx bx-receipt"></i> بنود الطلب</div><span class="badge bg-label-primary">{{ count($orderForm->orders) + count($productLines) }} بند</span></div>
+                <div class="card-body">
+                    @if(count($orderForm->orders))
+                        <div class="table-responsive mb-3"><table class="table table-hover align-middle mb-0"><thead><tr><th>المنتج</th><th>الخدمة</th><th class="text-center">الكمية</th><th class="text-center">السعر</th><th class="text-center">الإجمالي</th></tr></thead><tbody>@foreach($orderForm->orders as $index => $order)<tr wire:key="order-detail-{{ $index }}" class="cursor-pointer" wire:click="selectOrder('{{ $index }}')"><td>{{ $order['item']['name'] }}</td><td>{{ $order['service']['name'] }}</td><td class="text-center">{{ $order['quantity'] }}</td><td class="text-center">{{ number_format((float) $order['price'],2) }}</td><td class="text-center fw-bold">{{ number_format((float) $order['total_price'],2) }} ₪</td></tr>@endforeach</tbody></table></div>
+                    @endif
+                    @if($selectedOrder !== '')
+                        <div class="line-editor mb-3"><div class="row g-2 align-items-end"><div class="col-md-3"><label class="form-label">الكمية</label><input type="number" class="form-control" min="0.01" step="0.01" wire:model="orderForm.orders.{{ $selectedOrder }}.quantity" wire:input.debounce="applyChanges"></div><div class="col-md-3"><label class="form-label">السعر</label><input type="number" class="form-control" min="0.01" step="0.01" wire:model="orderForm.orders.{{ $selectedOrder }}.price" wire:input.debounce="applyChanges"></div><div class="col-md-4"><label class="form-label">ملاحظة البند</label><input class="form-control" wire:model="orderForm.orders.{{ $selectedOrder }}.description"></div><div class="col-md-2"><button type="button" wire:click="deleteOrder" class="btn btn-outline-danger w-100"><i class="bx bx-trash"></i> حذف</button></div></div></div>
+                    @endif
+                    @if(!count($orderForm->orders) && !count($productLines))<div class="text-center text-muted py-3">لم تضف أي بند بعد.</div>@endif
+                    <x-input-error key="error_msg"/>
                 </div>
             </div>
-            <!-- / Items -->
 
-            <!-- Customer Info & Orders -->
-
-            <!-- Customer Info -->
-            <div class="col-md-5">
-                <div class="card">
-                    <div class="card-header pt-3 pb-1 d-flex justify-content-between align-items-center">
-                        <h5>بيانات العميل</h5>
-                        @if($customerForm->id)
-                            <div>
-                                <label for="customer_number" class="form-label">
-                                    رقم العميل :
-                                </label>
-                                <span id="customer_number">{{ $customerForm->id }}</span>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="card-body">
-
-                        <div class="row">
-                            <div class="mb-1 col-md-6">
-                                <label for="customer_name" class="form-label">
-                                    اسم العميل
-                                </label>
-                                <input class="form-control" type="text" id="customer_name"
-                                       wire:model="customerForm.name">
-                                <x-input-error key="customerForm.name"/>
-                            </div>
-                            <div class="mb-1 col-md-6">
-                                <label for="customer_phone" class="form-label">
-                                    رقم التليفون
-                                </label>
-                                <input class="form-control text-start" type="tel" id="customer_phone"
-                                       autocomplete="tel"
-                                       wire:model="customerForm.phone">
-                                <x-input-error key="customerForm.phone"/>
-                            </div>
-                            <div>
-                                <label for="customer_address" class="form-label">
-                                    العنوان
-                                </label>
-                                <input class="form-control" type="text" id="customer_address"
-                                       wire:model="customerForm.address">
-                                <x-input-error key="customerForm.address"/>
-                            </div>
-                            @if($customerForm->id)
-                                <div class="mt-3 d-flex flex-column flex-md-row gap-3"
-                                     wire:key="{{ 'delete-customer' . $customerForm->id }}">
-                                    <button wire:click="cancelCustomer" class="btn btn-danger"
-                                            wire:key="{{ 'delete-' . $customerForm->id }}" type="button">
-                                        <i class="bx bx-trash me-1"></i>
-                                        حذف العميل المحدد
-                                    </button>
-
-                                    <a href="{{route('customers.show', $customerForm->id)}}" class="btn btn-linkedin"
-                                       target="_blank"
-                                       type="button">
-                                        طلبات العميل السابقة
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
+            @if(count($productLines) || ($sellableProducts ?? collect())->isNotEmpty())
+            <div class="card mb-3">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center"><div class="section-title"><i class="bx bx-package"></i> منتجات الكاشير</div><span class="badge bg-label-warning">تُخصم من المخزن عند الحفظ</span></div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-end"><div class="col-md-9"><label for="productToAdd" class="form-label">منتج متاح للبيع</label><select id="productToAdd" class="form-select" wire:model="productToAdd"><option value="">اختر منتجًا</option>@foreach(($sellableProducts ?? []) as $product)<option value="{{ $product->id }}">{{ $product->name }} — المتوفر {{ number_format((float) $product->current_stock,2) }} {{ $product->unit }} — {{ number_format((float) $product->sale_price,2) }} ₪</option>@endforeach</select></div><div class="col-md-3"><button type="button" class="btn btn-outline-primary w-100" wire:click="addProduct"><i class="bx bx-plus me-1"></i>إضافة</button></div></div>
+                    @if(count($productLines))<div class="table-responsive mt-3"><table class="table table-sm align-middle mb-0"><thead><tr><th>المنتج</th><th>المتوفر</th><th style="width:120px">الكمية</th><th>السعر</th><th>الإجمالي</th><th></th></tr></thead><tbody>@foreach($productLines as $index => $line)<tr wire:key="product-line-{{ $line['product_id'] }}"><td>{{ $line['name'] }}</td><td>{{ number_format((float)$line['max'],2) }} {{ $line['unit'] }}</td><td><input type="number" class="form-control form-control-sm" min="0.01" max="{{ $line['max'] }}" step="1" wire:model="productLines.{{ $index }}.quantity" wire:input.debounce.400ms="applyProductChanges"></td><td>{{ number_format((float)$line['price'],2) }} ₪</td><td class="fw-bold">{{ number_format((float)$line['subtotal'],2) }} ₪</td><td><button type="button" class="btn btn-sm btn-outline-danger" wire:click="removeProductLine({{ $index }})"><i class="bx bx-trash"></i></button></td></tr>@endforeach</tbody></table></div>@endif
                 </div>
             </div>
-            <!-- / Customer Info -->
-
-            <!-- Orders Table -->
-            <div class="col-md-7">
-                <div class="card">
-                    <div class="card-header pt-3 pb-1">
-                        <h5>الاوردر</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr class="text-nowrap">
-                                    <th class="text-center px-2">#</th>
-                                    <th class="text-center px-2">الصنف</th>
-                                    <th class="text-center px-2">الخدمه</th>
-                                    <th class="text-center px-2">العدد</th>
-                                    <th class="text-center px-2">السعر</th>
-                                    <th class="text-center px-2">الاجمالي</th>
-                                </tr>
-                                </thead>
-                                <tbody wire:key="{{ rand() }}">
-
-                                @foreach($orderForm->orders as $index =>  $order)
-                                    <tr
-                                        wire:key="{{ 'orderDetail-' . $index }}"
-                                        wire:click="selectOrder('{{ $index }}')"
-                                        @class([
-                                                'text-center cursor-pointer',
-                                                'bg-secondary text-white' => $index == $selectedOrder
-                                                ])
-                                    >
-                                        <td>
-                                            <strong>{{ $loop->iteration }}</strong>
-                                        </td>
-                                        <td>
-                                            {{ $order['item']['name'] }}
-                                        </td>
-                                        <td>
-                                            {{ $order['service']['name'] }}
-                                        </td>
-                                        <td>
-                                            {{ $order['quantity'] }}
-                                        </td>
-                                        <td>
-                                            {{ $order['price'] }}
-                                        </td>
-                                        <td>
-                                            {{ $order['total_price'] }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <x-input-error key="error_msg" />
-                        @if($selectedOrder !== '')
-                            <div class="mt-2">
-                                <div
-                                    class="d-flex align-items-center g-1 justify-content-between align-items-center  row">
-                                    <button class="btn btn-primary col-md-4" wire:click="deleteOrder">حذف
-                                        الصنف
-                                    </button>
-                                    <label class="col-3" wire:key="{{ rand() }}">
-                                        <span>العدد </span>
-                                        <input type="number" class="form-control" min="1"
-                                               wire:model="orderForm.orders.{{ $selectedOrder }}.quantity"
-                                               wire:input.debounce="applyChanges">
-                                    </label>
-
-                                    <label class="col-3" wire:key="{{ rand() }}">
-                                        السعر
-                                        @if(isset($orderForm->orders[$selectedOrder]['note']))
-                                            <span>( {{ $orderForm->orders[$selectedOrder]['note'] }} )</span>
-                                        @endif
-
-                                        <input type="number" class="form-control" min="1"
-                                               wire:model="orderForm.orders.{{ $selectedOrder }}.price"
-                                               wire:input.debounce="applyChanges">
-                                    </label>
-                                </div>
-                                <div wire:key="{{ rand() }}">
-                                    <label for="order_detail_description" class="form-label">
-                                        تفاصيل إضافيه
-                                    </label>
-                                    <textarea id="order_detail_description" class="form-control" style="resize: none"
-                                              cols="30" rows="3"
-                                              wire:model="orderForm.orders.{{ $selectedOrder }}.description"
-                                    ></textarea>
-                                    <x-input-error key="orderForm.orders.{{ $selectedOrder }}.description"/>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- / Orders Table -->
-            <!-- / Customer Info & Orders -->
+            @endif
         </div>
-        <!-- / Order Deta        <!-- Payment & Submit -->
-        <div class="row gy-3">
-            <!-- Payment Details & Notes -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header pt-3 pb-1">
-                        <h5>تفاصيل الطلب والخصم</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row gy-2">
-                            <div class="col-md-6">
-                                <label for="discount" class="form-label">الخصم (₪)</label>
-                                <input class="form-control" type="number" id="discount" min="0"
-                                       wire:model.live.debounce.500ms="discount">
-                                <x-input-error key="discount"/>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="del-time" class="form-label">وقت التسليم المتوقع</label>
-                                <input type="time" id="del-time" class="form-control" wire:model.live="deliver_time">
-                                <x-input-error key="deliver_time"/>
-                            </div>
-                            <div class="col-12 mt-2">
-                                <label for="notes" class="form-label">ملاحظات الطلب</label>
-                                <textarea id="notes" class="form-control" style="resize: none" rows="2"
-                                          wire:model="notes" placeholder="اكتب أي ملاحظات للطلب هنا..."></textarea>
-                                <x-input-error key="notes"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="row justify-content-center">
-                            <div class="col-12">
-                                <label for="del-date" class="form-label fw-bold">تاريخ التسليم</label>
-                                <input type="date" id="del-date" class="form-control" wire:model.live="deliver_date">
-                                <x-input-error key="deliver_date"/>
-                            </div>
-                        </div>
-                        <hr>
-                        <x-input-error key="error_msg" />
-                        <div wire:key="{{ rand() }}" class="row justify-content-center" x-data="{isLoading:false}">
-                            <button wire:click="saveOrder" @click="isLoading = true" :disabled="isLoading"
-                                    class="btn btn-primary btn-lg w-100">
-                                <i class="bx bx-check-circle me-1"></i>
-                                حفظ وإنشاء الطلب
-                                <i class='ms-2 bx bx-loader-circle bx-spin'
-                                   x-show="isLoading" x-cloak
-                                ></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Type -->
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header text-center pb-2 pt-3">
-                        <h5>طريقة الدفع</h5>
-                        <div class="d-flex flex-wrap justify-content-center gap-3 mt-2">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_type" id="cash" value="1"
-                                       wire:model.live="payment_type">
-                                <label class="form-check-label h6" for="cash">نقدي (كاش)</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_type" id="visa" value="3"
-                                       wire:model.live="payment_type">
-                                <label class="form-check-label h6" for="visa">فيزا</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_type" id="deferred" value="2"
-                                       wire:model.live="payment_type">
-                                <label class="form-check-label h6" for="deferred">آجل / على الحساب</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="payment_type" id="partial" value="4"
-                                       wire:model.live="payment_type">
-                                <label class="form-check-label h6" for="partial">دفع جزئي</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body text-center">
-                        <div class="row justify-content-center gap-3 align-items-center">
-                            <div class="col-md-3 d-flex justify-content-center flex-column border rounded p-2">
-                                <h6>الإجمالي المطلوب</h6>
-                                <span class="fs-4 fw-bold text-primary">{{ $total_price }} ₪</span>
-                            </div>
-                            
-                            @if($payment_type == 4)
-                                <div class="col-md-4 border rounded p-2">
-                                    <label for="paid_money" class="form-label fw-bold">المبلغ المدفوع</label>
-                                    <input class="form-control text-center fs-5" type="number" id="paid_money" min="0"
-                                           wire:model.live.debounce="paid_money">
-                                    <x-input-error key="paid_money"/>
-                                </div>
-                            @endif
-
-                            <div class="col-md-3 d-flex justify-content-center flex-column border rounded p-2">
-                                <h6>المتبقي (الدين)</h6>
-                                <span class="fs-4 fw-bold text-danger">{{ $remaining_money }} ₪</span>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <div class="text-start mt-2">
-                            <small class="text-muted">
-                                * الدفع النقدي والفيزا يسجلان المقبوضات كاملة وتصبح حالة الدفع: مدفوع بالكامل.
-                                <br>
-                                * الدفع الآجل لا يسجل مقبوضات حالية وتصبح الحالة: غير مدفوع.
-                                <br>
-                                * الدفع الجزئي يسجل الجزء المدفوع وتصبح الحالة: مدفوع جزئياً.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- / Payment Type -->
-        </div>
-        <!-- / Payment & Submit -->
+        <div class="col-lg-4"><div class="payment-sticky">
+            <div class="card mb-3"><div class="card-header border-bottom"><div class="section-title"><i class="bx bx-calendar"></i> التسليم والملاحظات</div></div><div class="card-body"><div class="row g-2"><div class="col-6"><label class="form-label" for="del-date">التاريخ</label><input type="date" id="del-date" class="form-control" wire:model.live="deliver_date"><x-input-error key="deliver_date"/></div><div class="col-6"><label class="form-label" for="del-time">الوقت</label><input type="time" id="del-time" class="form-control" wire:model.live="deliver_time"><x-input-error key="deliver_time"/></div><div class="col-12"><label class="form-label" for="notes">ملاحظات</label><textarea id="notes" rows="2" class="form-control" wire:model="notes" placeholder="اختياري"></textarea></div></div></div></div>
+            <div class="card"><div class="card-header border-bottom"><div class="section-title"><i class="bx bx-credit-card"></i> الدفع والإجمالي</div></div><div class="card-body">
+                <label class="form-label">طريقة الدفع</label><div class="vstack gap-2 mb-3">@foreach([1=>'نقدي',3=>'فيزا',2=>'آجل / على الحساب',4=>'دفع جزئي'] as $value => $label)<label @class(['border rounded p-2 d-flex align-items-center gap-2 cursor-pointer','border-primary bg-label-primary' => (int)$payment_type === $value])><input class="form-check-input m-0" type="radio" name="payment_type" value="{{ $value }}" wire:model.live="payment_type"><span>{{ $label }}</span></label>@endforeach</div>
+                @if($payment_type == 4)<label class="form-label" for="paid_money">المبلغ المدفوع</label><input class="form-control mb-3" type="number" step="0.01" id="paid_money" min="0" wire:model.live.debounce="paid_money"><x-input-error key="paid_money"/>@endif
+                <label class="form-label" for="discount">خصم الطلب</label><div class="input-group mb-3"><input class="form-control" type="number" step="0.01" id="discount" min="0" wire:model.live.debounce.500ms="discount"><span class="input-group-text">₪</span></div><x-input-error key="discount"/>
+                <div class="row g-2 mb-3"><div class="col-6"><div class="summary-number"><small>الإجمالي</small><strong>{{ number_format((float)$total_price,2) }} ₪</strong></div></div><div class="col-6"><div class="summary-number"><small>المتبقي</small><strong class="text-danger">{{ number_format((float)$remaining_money,2) }} ₪</strong></div></div></div>
+                <x-input-error key="error_msg"/>
+                <button type="button" wire:click="saveOrder" wire:loading.attr="disabled" class="btn btn-primary btn-lg w-100"><span wire:loading.remove wire:target="saveOrder"><i class="bx bx-check-circle me-1"></i>حفظ الطلب</span><span wire:loading wire:target="saveOrder"><i class="bx bx-loader-circle bx-spin me-1"></i>جارٍ الحفظ...</span></button><p class="small text-muted text-center mb-0 mt-2">يُسجل الدفع وسند المخزون تلقائيًا عند الحفظ.</p>
+            </div></div>
+        </div></div>
     </div>
 </div>
