@@ -3,6 +3,11 @@
 # Repo layout: the monorepo root contains this file; the Flutter app lives in
 # the APP/ subdirectory. Codemagic reads THIS file directly from the repo root.
 #
+# IMPORTANT: The repo also ships an untouched macos/Runner.xcodeproj (Flutter
+# default desktop project). It must NOT be code-signed here, so every signing
+# step explicitly scopes itself to the iOS project only:
+#   xcode-project use-profiles --project ios/Runner.xcodeproj --archive-method app-store
+#
 # One-time setup in the Codemagic UI:
 #   1. Connect this Git repository (GitHub: github.com/qaisamro/E-clean) to
 #      Codemagic (Application settings > Integration) and select the Flutter
@@ -15,12 +20,11 @@
 #        APP_STORE_CONNECT_PRIVATE_KEY    = contents of the .p8 file (BEGIN/END lines)
 #        APP_STORE_CONNECT_KEY_IDENTIFIER = e.g. 3MD9688D9K
 #        APP_STORE_CONNECT_ISSUER_ID      = e.g. 21d78e2f-b8ad-....
-#   4. Apple Developer account must stay active ($99/year) and App Store
-#      Connect must contain the app (Bundle ID: com.elitecleanps.laundry).
-#   5. First build: download the distribution profile is automatic.
-#   6. In App Store Connect > App Store > version 1.0.7 > select the uploaded
+#   4. Apple Developer account must stay active ($99/year) and the App Store
+#      Connect portal must contain the app (Bundle ID: com.elitecleanps.laundry).
+#   5. In App Store Connect > App Store > version 1.0.7 > select the uploaded
 #      build and submit for review; before that, configure screenshots and
-#      "App Review" sign-in notes in Apple Developer console.
+#      "App Review" sign-in notes in the Apple Developer console.
 
 workflows:
   ios-production:
@@ -40,6 +44,7 @@ workflows:
     scripts:
       - name: Install Flutter dependencies
         script: |
+          set -e
           flutter pub get
 
       - name: Set up iOS code signing (automatic)
@@ -48,37 +53,60 @@ workflows:
           echo "APP_STORE_CONNECT_KEY_IDENTIFIER: ${APP_STORE_CONNECT_KEY_IDENTIFIER:-MISSING}"
           echo "APP_STORE_CONNECT_ISSUER_ID: ${APP_STORE_CONNECT_ISSUER_ID:-MISSING}"
           echo "APP_STORE_CONNECT_PRIVATE_KEY: $([ -n "$APP_STORE_CONNECT_PRIVATE_KEY" ] && echo "set (${#APP_STORE_CONNECT_PRIVATE_KEY} chars)" || echo MISSING)"
+
+          # Fresh keychain so stale certificates cannot confuse the import.
           keychain initialize
+
+          # Looks up the distribution certificate + App Store provisioning
+          # profile for $BUNDLE_ID; creates them if they don't exist.
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE --create
+
+          # Imports the distribution certificate (.p12) into the keychain.
+          # If this emits a SecKeychainItemImport warning, the certificate
+          # identity may not be usable by codesign — the find-identity step
+          # below fails loudly in that case.
           keychain add-certificates
-          xcode-project use-profiles
+
+          # Fail early if the private key for the distribution certificate
+          # is NOT usable by codesign. Prints the available identities.
+          echo "Codesigning identities available:"
+          security find-identity -v -p codesigning || true
+          codesign_identity=$(security find-identity -v -p codesigning | grep -E -i 'iPhone Distribution|Apple Distribution' | head -n1 || true)
+          if [ -z "$codesign_identity" ]; then
+            echo "ERROR: no usable Apple Distribution identity in the keychain — check the SecKeychainItemImport warning above (certificate password/private key problem)."
+            exit 1
+          fi
+          echo "Using identity: $codesign_identity"
+
+          # CRITICAL: scope signing to the iOS project only.
+          # Without --project, this also matches macos/Runner.xcodeproj and
+          # fails with "Failed to set code signing settings for macos/Runner.xcodeproj".
+          xcode-project use-profiles \
+            --project ios/Runner.xcodeproj \
+            --archive-method app-store
           echo "Manual signing configured for $BUNDLE_ID"
 
       - name: Build signed IPA
         script: |
           set -e
-          BUILD_NUM="$(date +%s)"
-          echo "CFBundleVersion: $BUILD_NUM"
+          # Keep iOS version/build in sync with Android: versionCode 13.
+          echo "CFBundleShortVersionString: 1.0.7 | CFBundleVersion: 13"
           flutter build ipa \
             --release \
             --export-method app-store \
-            --build-number "$BUILD_NUM"
+            --build-name 1.0.7 \
+            --build-number 13
     artifacts:
       - APP/build/ios/ipa/*.ipa
       - APP/build/ios/archive/*.xcarchive
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        # Codemagic injects the API key from the app_store_connect group.
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        # Keep false to only attach the build to App Store Connect;
-        # turn on when you want Codemagic to send it to TestFlight directly.
         submit_to_testflight: false
-        # beta_groups:
-        #   - Internal Testers
 
   ios-simulator:
     name: iOS Simulator (no Apple account needed)
@@ -92,10 +120,12 @@ workflows:
     scripts:
       - name: Install Flutter dependencies
         script: |
+          set -e
           flutter pub get
 
       - name: Build for the iOS Simulator
         script: |
+          set -e
           flutter build ios --simulator --debug
     artifacts:
       - APP/build/ios/iphonesimulator/*.app
