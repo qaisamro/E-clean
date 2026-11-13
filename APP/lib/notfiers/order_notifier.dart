@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_customer/models/add_order_model/add_order_model.dart';
@@ -20,11 +22,33 @@ class AllOrdersNotifier extends StateNotifier<ApiState<AllOrdersModel>> {
   Future<void> getAllOrders() async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.getAllOrders(_filter));
+      final data = await _repo.getAllOrders(_filter);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e, stackTrace) {
+      if (!mounted) return;
       debugPrint("error is $e");
       debugPrint("stacktrace is $stackTrace");
       state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+
+  /// Refreshes the list silently: the current data stays on screen while the
+  /// new page is fetched, so a status change swaps in without a loading flash
+  /// or a full app reload. When nothing changed the state is kept as-is so the
+  /// list is not rebuilt every poll.
+  Future<void> silentRefresh() async {
+    try {
+      final data = await _repo.getAllOrders(_filter);
+      if (!mounted) return;
+      final current = state.mapOrNull(loaded: (s) => s.data);
+      if (current != null &&
+          jsonEncode(current.toMap()) == jsonEncode(data.toMap())) {
+        return;
+      }
+      state = ApiState.loaded(data: data);
+    } catch (e) {
+      debugPrint("silent refresh error is $e");
     }
   }
 }
@@ -38,9 +62,30 @@ class OrderDetailsNotifier extends StateNotifier<ApiState<OrderDetailsModel>> {
   Future<void> getOrderDetails() async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.getOrderDetails(_id));
+      final data = await _repo.getOrderDetails(_id);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+
+  /// Keeps the details page in sync with server-side status changes without
+  /// rebuilding into a loading state. When the payload is unchanged the state
+  /// is kept, avoiding needless rebuilds every poll.
+  Future<void> silentRefresh() async {
+    try {
+      final data = await _repo.getOrderDetails(_id);
+      if (!mounted) return;
+      final current = state.mapOrNull(loaded: (s) => s.data);
+      if (current != null &&
+          jsonEncode(current.toMap()) == jsonEncode(data.toMap())) {
+        return;
+      }
+      state = ApiState.loaded(data: data);
+    } catch (e) {
+      debugPrint("silent refresh error is $e");
     }
   }
 }
@@ -54,8 +99,11 @@ class PlaceOrderNotifier extends StateNotifier<ApiState<AddOrderModel>> {
   Future<void> addOrder(OrderPlaceModel orderPlaceModel) async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.addOrder(orderPlaceModel));
+      final data = await _repo.addOrder(orderPlaceModel);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
@@ -72,10 +120,61 @@ class UpdateOrderNotifier extends StateNotifier<ApiState<AddOrderModel>> {
   ) async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(
-        data: await _repo.updateOrder(orderPlaceModel, orderID),
-      );
+      final data = await _repo.updateOrder(orderPlaceModel, orderID);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
+      debugPrint(e.toString());
+      state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+}
+
+/// Cancel own order while it is pending confirmation.
+class CancelOrderNotifier extends StateNotifier<ApiState<AddOrderModel>> {
+  CancelOrderNotifier(this._repo) : super(const ApiState.initial());
+  final IOrderRepo _repo;
+
+  Future<void> cancelOrder(String orderID) async {
+    state = const ApiState.loading();
+    try {
+      final data = await _repo.cancelOrder(orderID);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
+    } catch (e) {
+      if (!mounted) return;
+      debugPrint(e.toString());
+      state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+}
+
+/// Edit delivery details of own order while it is pending confirmation.
+class EditOrderDeliveryNotifier extends StateNotifier<ApiState<AddOrderModel>> {
+  EditOrderDeliveryNotifier(this._repo) : super(const ApiState.initial());
+  final IOrderRepo _repo;
+
+  Future<void> editOrderDelivery({
+    required String orderID,
+    String? instruction,
+    String? deliveryDate,
+    String? deliveryHour,
+    int? addressId,
+  }) async {
+    state = const ApiState.loading();
+    try {
+      final data = await _repo.editOrderDelivery(
+        orderID: orderID,
+        instruction: instruction,
+        deliveryDate: deliveryDate,
+        deliveryHour: deliveryHour,
+        addressId: addressId,
+      );
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
+    } catch (e) {
+      if (!mounted) return;
       debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
@@ -92,8 +191,11 @@ class PickUpScheduleNotifier extends StateNotifier<ApiState<SchedulesModel>> {
   Future<void> getPickUpSchedules() async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.getPickUpSchedules(_date));
+      final data = await _repo.getPickUpSchedules(_date);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
@@ -109,8 +211,11 @@ class DeliveryScheduleNotifier extends StateNotifier<ApiState<SchedulesModel>> {
   Future<void> getDeliverySchedules() async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.getDeliverySchedules(_date));
+      final data = await _repo.getDeliverySchedules(_date);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
@@ -126,10 +231,11 @@ class CouponNotifier extends StateNotifier<ApiState<CouponResponseModel>> {
   }) async {
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(
-        data: await _repo.applyCoupon(coupon: coupon, amount: amount),
-      );
+      final data = await _repo.applyCoupon(coupon: coupon, amount: amount);
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }

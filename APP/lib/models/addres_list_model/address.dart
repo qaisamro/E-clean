@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class Address {
+  bool isDefault;
   int? id;
   dynamic addressName;
   dynamic roadNo;
@@ -19,6 +20,7 @@ class Address {
   dynamic longitude;
 
   Address({
+    this.isDefault = false,
     this.id,
     this.addressName,
     this.roadNo,
@@ -38,6 +40,7 @@ class Address {
   });
 
   factory Address.fromMap(Map<String, dynamic> data) => Address(
+        isDefault: data['is_default'] == true || data['is_default'] == 1 || data['is_default'] == '1',
         id: data['id'] as int?,
         addressName: data['address_name'] as dynamic,
         roadNo: data['road_no'] as dynamic,
@@ -57,6 +60,7 @@ class Address {
       );
 
   Map<String, dynamic> toMap() => {
+        'is_default': isDefault,
         'id': id,
         'address_name': addressName,
         'road_no': roadNo,
@@ -88,6 +92,7 @@ class Address {
   String toJson() => json.encode(toMap());
 
   Address copyWith({
+    bool? isDefault,
     int? id,
     dynamic addressName,
     dynamic roadNo,
@@ -106,6 +111,7 @@ class Address {
     dynamic longitude,
   }) {
     return Address(
+      isDefault: isDefault ?? this.isDefault,
       id: id ?? this.id,
       addressName: addressName ?? this.addressName,
       roadNo: roadNo ?? this.roadNo,

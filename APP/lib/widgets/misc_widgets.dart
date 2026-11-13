@@ -97,13 +97,27 @@ class MessageTextWidget extends StatelessWidget {
 // }
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({super.key, this.showBG = false});
+  const LoadingWidget({
+    super.key,
+    this.showBG = false,
+    this.size = 130,
+    this.message,
+    this.showText = true,
+  });
   final bool showBG;
+  final double size;
+  final String? message;
+  final bool showText;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BusyLoader(showbackground: showBG),
+      child: BusyLoader(
+        size: size,
+        showbackground: showBG,
+        message: message,
+        showText: showText,
+      ),
     );
   }
 }

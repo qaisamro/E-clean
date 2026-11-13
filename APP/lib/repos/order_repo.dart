@@ -25,6 +25,14 @@ abstract class IOrderRepo {
   Future<OrderDetailsModel> getOrderDetails(String id);
   Future<SchedulesModel> getPickUpSchedules(DateTime date);
   Future<SchedulesModel> getDeliverySchedules(DateTime date);
+  Future<AddOrderModel> cancelOrder(String orderID);
+  Future<AddOrderModel> editOrderDelivery({
+    required String orderID,
+    String? instruction,
+    String? deliveryDate,
+    String? deliveryHour,
+    int? addressId,
+  });
 }
 
 class OrderRepo implements IOrderRepo {
@@ -113,6 +121,35 @@ class OrderRepo implements IOrderRepo {
     );
     return SchedulesModel.fromMap(response.data as Map<String, dynamic>);
   }
+
+  @override
+  Future<AddOrderModel> cancelOrder(String orderID) async {
+    final Response response = await _dio.post(
+      '/orders/$orderID/cancel',
+      data: FormData.fromMap({}),
+    );
+    return AddOrderModel.fromMap(response.data as Map<String, dynamic>);
+  }
+
+  @override
+  Future<AddOrderModel> editOrderDelivery({
+    required String orderID,
+    String? instruction,
+    String? deliveryDate,
+    String? deliveryHour,
+    int? addressId,
+  }) async {
+    final Map<String, dynamic> body = {};
+    if (instruction != null) body['instruction'] = instruction;
+    if (deliveryDate != null) body['delivery_date'] = deliveryDate;
+    if (deliveryHour != null) body['delivery_hour'] = deliveryHour;
+    if (addressId != null) body['address_id'] = addressId;
+    final Response response = await _dio.post(
+      '/orders/$orderID/customer-edit',
+      data: FormData.fromMap(body),
+    );
+    return AddOrderModel.fromMap(response.data as Map<String, dynamic>);
+  }
 }
 
 class OfflineOrderRepo implements IOrderRepo {
@@ -162,5 +199,23 @@ class OfflineOrderRepo implements IOrderRepo {
   Future<SchedulesModel> getDeliverySchedules(DateTime date) async {
     await Future.delayed(apiDataDuration);
     return SchedulesModel.fromMap(OfflineOrderData.scheduleData);
+  }
+
+  @override
+  Future<AddOrderModel> cancelOrder(String orderID) async {
+    await Future.delayed(apiDataDuration);
+    return AddOrderModel.fromMap(OfflineOrderData.addOrderData);
+  }
+
+  @override
+  Future<AddOrderModel> editOrderDelivery({
+    required String orderID,
+    String? instruction,
+    String? deliveryDate,
+    String? deliveryHour,
+    int? addressId,
+  }) async {
+    await Future.delayed(apiDataDuration);
+    return AddOrderModel.fromMap(OfflineOrderData.addOrderData);
   }
 }

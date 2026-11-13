@@ -1,6 +1,6 @@
+import 'package:laundry_customer/models/auth_flow_model.dart';
 import 'package:laundry_customer/models/forgot_password_otp_submit_model/forgot_password_otp_submit_model.dart';
 import 'package:laundry_customer/models/login_model/login_model.dart';
-import 'package:laundry_customer/models/register_model/register_model.dart';
 import 'package:laundry_customer/notfiers/auth_notifiers.dart';
 import 'package:laundry_customer/providers/misc_providers.dart';
 import 'package:laundry_customer/repos/auth_repo.dart';
@@ -24,7 +24,7 @@ final loginProvider =
 //
 //forgot password
 final forgotPassProvider =
-    StateNotifierProvider<ForgotPassNotifier, ApiState<String>>((ref) {
+    StateNotifierProvider<ForgotPassNotifier, ApiState<PasswordRecoveryFlow>>((ref) {
   return ForgotPassNotifier(ref.watch(authRepoProvider));
 });
 
@@ -60,7 +60,8 @@ final logOutProvider =
 //
 //Registration
 final registrationProvider =
-    StateNotifierProvider<RegistrationNotifier, ApiState<RegisterModel>>((ref) {
+    StateNotifierProvider<RegistrationNotifier, ApiState<RegisterFlowModel>>(
+        (ref) {
   return RegistrationNotifier(ref.watch(authRepoProvider));
 });
 //
@@ -73,8 +74,27 @@ final registrationResendOtpProvider =
 //
 //Registration
 final registrationOtpVerifyProvider = StateNotifierProvider<
-    RegistrationOtpVerificationNotifier, ApiState<String>>((ref) {
+    RegistrationOtpVerificationNotifier, ApiState<VerifyOtpFlowModel>>((ref) {
   return RegistrationOtpVerificationNotifier(ref.watch(authRepoProvider));
+});
+//
+//Join request (admin approval) status by tracking token
+final joinRequestStatusProvider = StateNotifierProvider<
+    JoinRequestStatusNotifier,
+    ApiState<JoinRequestStatus>>((ref) {
+  return JoinRequestStatusNotifier(ref.watch(authRepoProvider));
+});
+//Join request recovery - step 1 (request OTP)
+final joinRequestRecoveryRequestProvider = StateNotifierProvider<
+    JoinRequestRecoveryRequestNotifier,
+    ApiState<String>>((ref) {
+  return JoinRequestRecoveryRequestNotifier(ref.watch(authRepoProvider));
+});
+//Join request recovery - step 2 (verify OTP, get new tracking token)
+final joinRequestRecoveryVerifyProvider = StateNotifierProvider<
+    JoinRequestRecoveryVerifyNotifier,
+    ApiState<JoinRequestRecovery>>((ref) {
+  return JoinRequestRecoveryVerifyNotifier(ref.watch(authRepoProvider));
 });
 //
 //Registration

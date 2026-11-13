@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:laundry_customer/models/auth_flow_model.dart';
 import 'package:laundry_customer/models/forgot_password_otp_submit_model/forgot_password_otp_submit_model.dart';
 import 'package:laundry_customer/models/login_model/login_model.dart';
-import 'package:laundry_customer/models/register_model/register_model.dart';
 import 'package:laundry_customer/repos/auth_repo.dart';
 import 'package:laundry_customer/services/api_state.dart';
 import 'package:laundry_customer/services/network_exceptions.dart';
@@ -34,7 +34,7 @@ class LoginNotifier extends StateNotifier<ApiState<LoginModel>> {
   }
 }
 
-class ForgotPassNotifier extends StateNotifier<ApiState<String>> {
+class ForgotPassNotifier extends StateNotifier<ApiState<PasswordRecoveryFlow>> {
   ForgotPassNotifier(this.repo) : super(const ApiState.initial());
 
   final IAuthRepo repo;
@@ -42,9 +42,9 @@ class ForgotPassNotifier extends StateNotifier<ApiState<String>> {
   Future<void> forgotPassword(String contact) async {
     state = const ApiState.loading();
     try {
-      final otp = await repo.forgotPassword(contact: contact);
+      final result = await repo.forgotPassword(contact: contact);
       state = ApiState.loaded(
-        data: otp.isNotEmpty ? otp : 'Success',
+        data: result,
       );
     } catch (e) {
       debugPrint(e.toString());
@@ -93,7 +93,6 @@ class ForgotPassResetPassNotifier extends StateNotifier<ApiState<String>> {
         data: 'Success',
       );
     } catch (e) {
-      debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
@@ -148,7 +147,7 @@ class LogoutNotifier extends StateNotifier<ApiState<String>> {
   }
 }
 
-class RegistrationNotifier extends StateNotifier<ApiState<RegisterModel>> {
+class RegistrationNotifier extends StateNotifier<ApiState<RegisterFlowModel>> {
   RegistrationNotifier(this.repo) : super(const ApiState.initial());
 
   final IAuthRepo repo;
@@ -174,7 +173,7 @@ class RegistrationResendOtpNotifier extends StateNotifier<ApiState<String>> {
     state = const ApiState.loading();
     try {
       await repo.resendOTP(data);
-      state = const ApiState.loaded(data: 'Success');
+      state = ApiState.loaded(data: 'Success');
     } catch (e) {
       debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
@@ -183,7 +182,7 @@ class RegistrationResendOtpNotifier extends StateNotifier<ApiState<String>> {
 }
 
 class RegistrationOtpVerificationNotifier
-    extends StateNotifier<ApiState<String>> {
+    extends StateNotifier<ApiState<VerifyOtpFlowModel>> {
   RegistrationOtpVerificationNotifier(this.repo)
       : super(const ApiState.initial());
 
@@ -192,8 +191,72 @@ class RegistrationOtpVerificationNotifier
   Future<void> verify(String contact, String otp) async {
     state = const ApiState.loading();
     try {
-      await repo.signUpVerification(contact: contact, otp: otp);
+      state = ApiState.loaded(
+        data: await repo.signUpVerification(contact: contact, otp: otp),
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+      state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+}
+
+/// Status of the customer's join request (public, tracking-token based).
+class JoinRequestStatusNotifier
+    extends StateNotifier<ApiState<JoinRequestStatus>> {
+  JoinRequestStatusNotifier(this.repo) : super(const ApiState.initial());
+
+  final IAuthRepo repo;
+
+  Future<void> checkStatus(String trackingToken) async {
+    state = const ApiState.loading();
+    try {
+      state = ApiState.loaded(
+        data: await repo.joinRequestStatus(trackingToken: trackingToken),
+      );
+    } catch (e) {
+      state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+}
+
+/// Join-request recovery, step 1: request an OTP for the registered contact.
+class JoinRequestRecoveryRequestNotifier
+    extends StateNotifier<ApiState<String>> {
+  JoinRequestRecoveryRequestNotifier(this.repo)
+      : super(const ApiState.initial());
+
+  final IAuthRepo repo;
+
+  Future<void> request(String contact) async {
+    state = const ApiState.loading();
+    try {
+      await repo.requestJoinRequestRecovery(contact: contact);
       state = const ApiState.loaded(data: 'Success');
+    } catch (e) {
+      debugPrint(e.toString());
+      state = ApiState.error(error: NetworkExceptions.errorText(e));
+    }
+  }
+}
+
+/// Join-request recovery, step 2: verify the OTP and store a new token.
+class JoinRequestRecoveryVerifyNotifier
+    extends StateNotifier<ApiState<JoinRequestRecovery>> {
+  JoinRequestRecoveryVerifyNotifier(this.repo)
+      : super(const ApiState.initial());
+
+  final IAuthRepo repo;
+
+  Future<void> verify(String contact, String otp) async {
+    state = const ApiState.loading();
+    try {
+      state = ApiState.loaded(
+        data: await repo.verifyJoinRequestRecovery(
+          contact: contact,
+          otp: otp,
+        ),
+      );
     } catch (e) {
       debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
@@ -210,9 +273,10 @@ class ImageUploadNotifier extends StateNotifier<ApiState<String>> {
     state = const ApiState.loading();
     try {
       await repo.addProfilePhoto(profile_photo: profilePhoto);
-      state = const ApiState.loaded(data: 'Success');
+      state = ApiState.loaded(
+        data: 'Success',
+      );
     } catch (e) {
-      debugPrint(e.toString());
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }

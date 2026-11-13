@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:laundry_customer/models/vendor_model/vendor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:laundry_customer/misc/misc_global_variables.dart';
 import 'package:laundry_customer/models/all_service_model/all_service_model.dart';
@@ -9,6 +10,7 @@ import 'package:laundry_customer/services/api_service.dart';
 
 abstract class IVendorRepo {
   Future<VendorsResponseModel> getVendors({String? search});
+  Future<VendorsResponseModel> getVendorsByService(String serviceId);
   Future<AllServiceModel> getVendorServices(String vendorId);
   Future<ProductsModel> getVendorProducts({
     required String vendorId,
@@ -18,17 +20,81 @@ abstract class IVendorRepo {
 }
 
 class VendorRepo implements IVendorRepo {
-  final Dio _dio = getDio();
+  VendorRepo({Dio? client, this.cityId}) : _dio = client ?? getDio();
+  final String? cityId;
+  final Dio _dio;
+
+  /// Map catalogue follows every page without changing the home feed contract.
+  Future<List<Vendor>> getMapVendors() async {
+    final vendors = <int, Vendor>{};
+    var page = 1;
+    while (true) {
+      final response = await _dio
+          .get('/vendors', queryParameters: {'page': page, 'per_page': 100});
+      final body = response.data as Map<String, dynamic>;
+      final parsed = VendorsResponseModel.fromMap(body);
+      for (final vendor in parsed.data?.vendors ?? <Vendor>[]) {
+        if (vendor.id != null) vendors[vendor.id!] = vendor;
+      }
+      final pagination = (body['data'] as Map?)?['vendors'];
+      if (pagination is! Map || pagination['next_page_url'] == null) break;
+      // Request only our existing endpoint, never a server-provided URL.
+      page++;
+    }
+    return vendors.values.toList();
+  }
 
   @override
   Future<VendorsResponseModel> getVendors({String? search}) async {
-    final Map<String, dynamic> qp = {};
-    if (search != null && search.isNotEmpty) {
-      qp['search'] = search;
+    final vendors = <Vendor>[];
+    var page = 1;
+    while (true) {
+      final response = await _dio.get('/vendors', queryParameters: {
+        if (cityId != null) 'city_id': cityId,
+        if (search?.isNotEmpty == true) 'search': search,
+        'per_page': 100,
+        'page': page,
+      });
+      final body = response.data as Map<String, dynamic>;
+      vendors.addAll(VendorsResponseModel.fromMap(body).data?.vendors ?? []);
+      final pagination = (body['data'] as Map?)?['vendors'];
+      if (pagination is! Map || pagination['next_page_url'] == null) break;
+      page++;
     }
-    final Response response =
-        await _dio.get('/vendors', queryParameters: qp);
-    return VendorsResponseModel.fromMap(response.data as Map<String, dynamic>);
+    // A legacy server must not silently turn a selected city into all stores.
+    if (cityId != null && vendors.any((v) => !v.cityMetadata)) {
+      throw StateError('City filtering requires the updated API');
+    }
+    return VendorsResponseModel(
+        data: VendorsData(
+            vendors: cityId == null
+                ? vendors
+                : vendors.where((v) => v.cityId == cityId).toList()));
+  }
+
+  @override
+  Future<VendorsResponseModel> getVendorsByService(String serviceId) async {
+    final response = await _dio.get(
+      '/services/$serviceId/vendors',
+      queryParameters: {
+        if (cityId != null) 'city_id': cityId,
+        'per_page': 100,
+      },
+    );
+    final parsed = VendorsResponseModel.fromMap(
+        response.data as Map<String, dynamic>);
+    final vendors = parsed.data?.vendors ?? <Vendor>[];
+    if (cityId != null && vendors.any((vendor) => !vendor.cityMetadata)) {
+      throw StateError('City filtering requires the updated API');
+    }
+    return VendorsResponseModel(
+      message: parsed.message,
+      data: VendorsData(
+        vendors: cityId == null
+            ? vendors
+            : vendors.where((vendor) => vendor.cityId == cityId).toList(),
+      ),
+    );
   }
 
   @override
@@ -36,7 +102,7 @@ class VendorRepo implements IVendorRepo {
     // Primary endpoint: GET /api/vendors/{id}/services
     // Fallback to filtered services via query param if 404
     try {
-        final Response response = await _dio.get('/vendors/$vendorId/services');
+      final Response response = await _dio.get('/vendors/$vendorId/services');
       // Support both AllServiceModel shape and raw vendors response
       return AllServiceModel.fromMap(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
@@ -58,12 +124,13 @@ class VendorRepo implements IVendorRepo {
     required String serviceId,
     required String variantId,
   }) async {
+    final cleanServiceId = serviceId == 'all' ? '' : serviceId;
     // Try vendor-scoped products endpoint first
     try {
       final Response response = await _dio.get(
         '/vendors/$vendorId/products',
         queryParameters: {
-          'service_id': serviceId,
+          'service_id': cleanServiceId,
           'variant_id': variantId,
           'search': '',
         },
@@ -75,7 +142,7 @@ class VendorRepo implements IVendorRepo {
         final Response fallback = await _dio.get(
           '/products',
           queryParameters: {
-            'service_id': serviceId,
+            'service_id': cleanServiceId,
             'variant_id': variantId,
             'vendor_id': vendorId,
             'search': '',
@@ -145,6 +212,11 @@ class OfflineVendorRepo implements IVendorRepo {
   }
 
   @override
+  Future<VendorsResponseModel> getVendorsByService(String serviceId) async {
+    return VendorsResponseModel(data: VendorsData(vendors: const []));
+  }
+
+  @override
   Future<AllServiceModel> getVendorServices(String vendorId) async {
     await Future.delayed(apiDataDuration);
     return AllServiceModel.fromMap(OfflineGuestData.servicesData);
@@ -204,8 +276,18 @@ class OfflineVendorRepo implements IVendorRepo {
                 "https://goldstardrycleaners.com:8100/storage/images/services/sAHG0x0rxJBVg7ebYp4HlYEi0PBtulec0PCqjxkw.png",
             "discount_percentage": 10,
             "sub_products": [
-              {"id": 201, "name": "With Iron", "price": 5.0, "description": "Include ironing"},
-              {"id": 202, "name": "Without Iron", "price": 0.0, "description": "No ironing"}
+              {
+                "id": 201,
+                "name": "With Iron",
+                "price": 5.0,
+                "description": "Include ironing"
+              },
+              {
+                "id": 202,
+                "name": "Without Iron",
+                "price": 0.0,
+                "description": "No ironing"
+              }
             ],
             "service": {"id": 1, "name": "Dry Cleaning"},
             "variant": {"id": 2, "name": "Laundry"}
@@ -215,4 +297,3 @@ class OfflineVendorRepo implements IVendorRepo {
     });
   }
 }
-

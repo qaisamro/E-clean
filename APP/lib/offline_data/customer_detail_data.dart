@@ -40,7 +40,6 @@ class OfflineCustomerData {
             "longitude": null
           }
         ],
-        "stripe_id": "cus_Ma4N9eEcXRnv2D"
       }
     }
   };

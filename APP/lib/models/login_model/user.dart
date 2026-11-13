@@ -11,6 +11,7 @@ class User {
   DateTime? mobileVerifiedAt;
   bool? isActive;
   dynamic alternativePhone;
+  bool? vendorNotificationsEnabled;
   String? profilePhotoPath;
 
   User({
@@ -24,6 +25,7 @@ class User {
     this.mobileVerifiedAt,
     this.isActive,
     this.alternativePhone,
+    this.vendorNotificationsEnabled,
     this.profilePhotoPath,
   });
 
@@ -47,6 +49,12 @@ class User {
             ? true
             : false as bool?,
         alternativePhone: data['alternative_phone'] as dynamic,
+        vendorNotificationsEnabled: data['vendor_notifications_enabled'] == null
+            ? null
+            : (data['vendor_notifications_enabled'] == 1 ||
+                data['vendor_notifications_enabled'] == true ||
+                data['vendor_notifications_enabled'] == '1' ||
+                data['vendor_notifications_enabled'] == 'true'),
         profilePhotoPath: data['profile_photo_path'] as String?,
       );
 
@@ -61,6 +69,7 @@ class User {
         'mobile_verified_at': mobileVerifiedAt?.toIso8601String(),
         'is_active': isActive,
         'alternative_phone': alternativePhone,
+        'vendor_notifications_enabled': vendorNotificationsEnabled,
         'profile_photo_path': profilePhotoPath,
       };
 

@@ -21,28 +21,34 @@ abstract class IGuestRepo {
 }
 
 class GuestRepo implements IGuestRepo {
-  final Dio _dio = getDio();
+  GuestRepo({Dio? client, this.cityId}) : _dio = client ?? getDio();
+  final Dio _dio;
+  final String? cityId;
+  Map<String, dynamic> get scope => {if (cityId != null) 'city_id': cityId};
   @override
   Future<PromotionsModel> getPromotions() async {
-    final Response reponse = await _dio.get('/promotions');
+    final Response reponse =
+        await _dio.get('/promotions', queryParameters: scope);
     return PromotionsModel.fromMap(reponse.data as Map<String, dynamic>);
   }
 
   @override
   Future<WideBannersModel> getWideBanners() async {
-    final Response reponse = await _dio.get('/banners/wide');
+    final Response reponse =
+        await _dio.get('/banners/wide', queryParameters: scope);
     return WideBannersModel.fromMap(reponse.data as Map<String, dynamic>);
   }
 
   @override
   Future<AllServiceModel> getServices() async {
-    final Response reponse = await _dio.get('/services');
+    final Response reponse =
+        await _dio.get('/services', queryParameters: scope);
     return AllServiceModel.fromMap(reponse.data as Map<String, dynamic>);
   }
 
   @override
   Future<OffersModel> getOffers() async {
-    final Response reponse = await _dio.get('/offers');
+    final Response reponse = await _dio.get('/offers', queryParameters: scope);
     return OffersModel.fromMap(reponse.data as Map<String, dynamic>);
   }
 
@@ -55,8 +61,12 @@ class GuestRepo implements IGuestRepo {
 
   @override
   Future<ProductsModel> getProducts(String servieID, String variationID) async {
-    final Response reponse = await _dio
-        .get('/products?service_id=$servieID&variant_id=$variationID&search=');
+    final Response reponse = await _dio.get('/products', queryParameters: {
+      ...scope,
+      'service_id': servieID,
+      'variant_id': variationID,
+      'search': ''
+    });
     return ProductsModel.fromMap(reponse.data as Map<String, dynamic>);
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'network_exceptions.freezed.dart';
@@ -46,62 +47,74 @@ abstract class NetworkExceptions with _$NetworkExceptions {
 
   const factory NetworkExceptions.unexpectedError() = UnexpectedError;
 
+  /// Human-friendly Arabic message per error category.
+  /// Raw server messages are NEVER shown — categories map to clear text.
   static String getErrorMessage(NetworkExceptions networkExceptions) {
     var errorMessage = "";
     networkExceptions.when(
       notImplemented: () {
-        errorMessage = "Not Implemented";
+        errorMessage =
+            "هذه الميزة غير متاحة حالياً — أعد المحاولة لاحقاً";
       },
       requestCancelled: () {
-        errorMessage = "Request Cancelled";
+        errorMessage = "تم إلغاء الطلب — أعد المحاولة";
       },
       internalServerError: () {
-        errorMessage = "Internal Server Error";
+        errorMessage =
+            "حدث خطأ في الخادم — أعد المحاولة بعد قليل";
       },
-      notFound: (String reason) {
-        errorMessage = reason;
+      notFound: (_) {
+        errorMessage = "لم يُعثر على المطلوب — تحقق من الرابط أو حاول لاحقًا";
       },
       serviceUnavailable: () {
-        errorMessage = "Service unavailable";
+        errorMessage =
+            "الخدمة غير متاحة حالياً — أعد المحاولة بعد قليل";
       },
       methodNotAllowed: () {
-        errorMessage = "Method Allowed";
+        errorMessage = "هذه العملية غير مسموحة";
       },
       badRequest: () {
-        errorMessage = "Bad request";
+        errorMessage = "بيانات غير صحيحة — تحقق منها";
       },
       unauthorisedRequest: () {
-        errorMessage = "Unauthorised request";
+        errorMessage =
+            "انتهت صلاحية الجلسة — سجّل الدخول من جديد";
       },
       unexpectedError: () {
-        errorMessage = "Unexpected error occurred";
+        errorMessage =
+            "حدث خطأ غير متوقع — أعد المحاولة";
       },
       requestTimeout: () {
-        errorMessage = "Connection request timeout";
+        errorMessage =
+            "انتهت مهلة الاتصال — تحقق من الإنترنت";
       },
       noInternetConnection: () {
-        errorMessage = "No internet connection";
+        errorMessage =
+            "لا يوجد اتصال بالإنترنت — تحقق من الشبكة";
       },
       conflict: () {
-        errorMessage = "Error due to a conflict";
+        errorMessage =
+            "تعذر تنفيذ العملية — هناك تعارض — أعد المحاولة";
       },
       sendTimeout: () {
-        errorMessage = "Send timeout in connection with API server";
+        errorMessage =
+            "انتهت مهلة إرسال البيانات — تحقق من الإنترنت";
       },
       unableToProcess: () {
-        errorMessage = "Unable to process the data";
+        errorMessage = "تعذر معالجة البيانات — تحقق منها";
       },
-      defaultError: (String error) {
+      defaultError: (error) {
         errorMessage = error;
       },
       formatException: () {
-        errorMessage = "Unexpected error occurred";
+        errorMessage =
+            "حدث خطأ غير متوقع — أعد المحاولة";
       },
       notAcceptable: () {
-        errorMessage = "Not acceptable";
+        errorMessage = "الطلب غير مقبول — أعد المحاولة";
       },
-      firebaseException: (String reason) {
-        errorMessage = reason;
+      firebaseException: (_) {
+        errorMessage = "خطأ في الإشعارات — أعد المحاولة";
       },
     );
 
@@ -109,13 +122,25 @@ abstract class NetworkExceptions with _$NetworkExceptions {
   }
 
   static String errorText(error) {
-    final data = getErrorMessage(getDioException(error));
-    if (data != 'No internet connection' &&
-        data != 'Unexpected error occurred') {
-      EasyLoading.showError(data);
+    final network = getDioException(error);
+    // kDebugMode prints expand with the raw body so a developer can see
+    // exactly which endpoint fails and what the server returns.
+    if (kDebugMode) {
+      Object? rawBody;
+      if (error is DioException) {
+        rawBody = error.response?.data;
+      }
+      debugPrint(
+          '[EC-ERROR] type=${network.runtimeType} status=${error is DioException ? error.response?.statusCode : null} raw=$rawBody');
     }
-
-    return data;
+    // 401/403 are not user-visible error events: the interceptor wipes the
+    // stale token and navigates to login, or swallows gate failures for
+    // pending/rejected customers. Popping a modal here is what customers
+    // reported as "تظهر بشكل مزعج غالباً" — silence it.
+    if (network is UnauthorisedRequest) {
+      return 'انتهت صلاحية الجلسة — سجّل الدخول من جديد';
+    }
+    return getErrorMessage(network);
   }
 
   // ignore: prefer_constructors_over_static_methods
@@ -124,13 +149,6 @@ abstract class NetworkExceptions with _$NetworkExceptions {
       try {
         NetworkExceptions networkExceptions;
         if (error is DioException) {
-          String? msg = error.response?.data['message'] as String?;
-          final Map<String, dynamic>? xerror =
-              error.response?.data['errors'] as Map<String, dynamic>?;
-          xerror?.forEach((key, value) {
-            msg = value.first as String;
-          });
-
           switch (error.type) {
             case DioExceptionType.cancel:
               networkExceptions = const NetworkExceptions.requestCancelled();
@@ -144,41 +162,39 @@ abstract class NetworkExceptions with _$NetworkExceptions {
             case DioExceptionType.badResponse:
               switch (error.response!.statusCode) {
                 case 302:
-                  networkExceptions = NetworkExceptions.defaultError(
-                    msg ?? 'Invalid Data',
-                  );
+                  networkExceptions =
+                      const NetworkExceptions.unauthorisedRequest();
                 case 400:
-                  networkExceptions = NetworkExceptions.defaultError(
-                    msg ?? 'UnExpected Error Occured',
-                  );
+                  networkExceptions = const NetworkExceptions.badRequest();
                 case 401:
                   networkExceptions =
                       const NetworkExceptions.unauthorisedRequest();
                 case 403:
                   networkExceptions =
-                      const NetworkExceptions.unauthorisedRequest();
+                      const NetworkExceptions.defaultError('غير مصرح لك بهذا الإجراء');
                 case 404:
                   networkExceptions =
-                      const NetworkExceptions.notFound("Not found");
+                      const NetworkExceptions.notFound('لم يُعثر على المطلوب');
                 case 409:
                   networkExceptions = const NetworkExceptions.conflict();
                 case 408:
                   networkExceptions = const NetworkExceptions.requestTimeout();
                 case 422:
-                  networkExceptions = NetworkExceptions.defaultError(
-                    msg ?? 'Invalid Data',
-                  );
+                  networkExceptions = const NetworkExceptions.badRequest();
+                case 429:
+                  networkExceptions = const NetworkExceptions.defaultError(
+                      'محاولات اتصال كثيرة — انتظر لحظة');
                 case 500:
                   networkExceptions =
                       const NetworkExceptions.internalServerError();
+                case 502:
                 case 503:
+                case 504:
                   networkExceptions =
                       const NetworkExceptions.serviceUnavailable();
                 default:
-                  final responseCode = error.response!.statusCode;
-                  networkExceptions = NetworkExceptions.defaultError(
-                    "Received invalid status code: $responseCode",
-                  );
+                  networkExceptions =
+                      const NetworkExceptions.defaultError('تعذر تنفيذ العملية — أعد المحاولة');
               }
             case DioExceptionType.sendTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();

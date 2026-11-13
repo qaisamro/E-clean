@@ -1,157 +1,339 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:laundry_customer/generated/l10n.dart';
-import 'package:laundry_customer/misc/global_functions.dart';
 import 'package:laundry_customer/models/addres_list_model/address.dart';
+import 'package:laundry_customer/providers/address_book_provider.dart';
 import 'package:laundry_customer/providers/address_provider.dart';
-import 'package:laundry_customer/utils/context_less_nav.dart';
-import 'package:laundry_customer/utils/routes.dart';
-import 'package:laundry_customer/widgets/misc_widgets.dart';
+import 'package:laundry_customer/providers/location_suggestion_provider.dart';
+import 'package:laundry_customer/providers/misc_providers.dart';
+import 'package:laundry_customer/screens/address/add_update_address.dart';
+import 'package:laundry_customer/screens/address/current_location_card.dart';
+import 'package:laundry_customer/screens/address/location_picker_screen.dart';
+
+String readableAddress(Address address) => [
+      address.area?.toString(),
+      address.addressLine,
+      address.addressLine2,
+    ].whereType<String>().where((s) => s.trim().isNotEmpty).toSet().join('، ');
+
+Address? selectedOwnedAddress(List<Address> addresses, String id) {
+  for (final address in addresses) {
+    if (address.id != null && address.id.toString() == id) return address;
+  }
+  return null;
+}
 
 class ManageAddressScreen extends ConsumerStatefulWidget {
-  const ManageAddressScreen({super.key});
+  const ManageAddressScreen({super.key, this.choose = false});
+  final bool choose;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ManageAddressScreenState();
+  ConsumerState<ManageAddressScreen> createState() =>
+      _ManageAddressScreenState();
 }
 
 class _ManageAddressScreenState extends ConsumerState<ManageAddressScreen> {
+  String _pendingId = '';
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAF7F2),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 18.h),
-            decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF028090), Color(0xFF00A896)], begin: Alignment.topRight, end: Alignment.bottomLeft), borderRadius: BorderRadius.vertical(bottom: Radius.circular(24))),
-            child: SafeArea(
-              bottom: false,
-              child: Row(children: [
-                InkWell(borderRadius: BorderRadius.circular(12.r), onTap: () => context.nav.pop(), child: Container(width: 38.w, height: 38.h, decoration: BoxDecoration(color: Colors.white.withOpacity(0.18), borderRadius: BorderRadius.circular(12.r), border: Border.all(color: Colors.white24)), child: const Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white))),
-                SizedBox(width: 12.w),
-                Expanded(child: Text(S.of(context).mngadrs, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Cairo'))),
-                Container(padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20.r)), child: Row(children: [Icon(Icons.location_on_rounded, size: 14.sp, color: const Color(0xFF028090)), SizedBox(width: 4.w), Consumer(builder: (context, ref, _) => Text('${ref.watch(addresListProvider).maybeMap(loaded: (s) => s.data.data!.addresses!.length, orElse: () => 0)} عنوان', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, color: const Color(0xFF028090))))])),
-              ]),
-            ),
-          ),
-          Expanded(
-            child: ref.watch(addresListProvider).map(
-                  initial: (_) => const SizedBox(),
-                  loading: (_) => const Center(child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF028090))),
-                  loaded: (_) {
-                    final list = _.data.data!.addresses!;
-                    if (list.isEmpty) {
-                      return Center(
-                        child: Container(
-                          margin: EdgeInsets.all(20.w), padding: EdgeInsets.all(24.w),
-                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20.r), border: Border.all(color: const Color(0xFFE2E8F0).withOpacity(0.9))),
-                          child: Column(mainAxisSize: MainAxisSize.min, children: [
-                            Container(width: 72.w, height: 72.h, decoration: BoxDecoration(color: const Color(0xFFEFFAF8), shape: BoxShape.circle), child: Icon(Icons.location_off_rounded, size: 28.sp, color: const Color(0xFF94A3B8))),
-                            SizedBox(height: 14.h),
-                            Text('لا يوجد عناوين', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900, color: const Color(0xFF0B1E2E))),
-                            SizedBox(height: 6.h),
-                            Text('أضف عنوانك الأول للتوصيل السريع', style: TextStyle(fontSize: 11.5.sp, color: const Color(0xFF64748B))),
-                          ]),
-                        ),
-                      );
-                    }
-                    return ListView.builder(
-                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 100.h),
-                      itemCount: list.length,
-                      itemBuilder: (context, i) => Padding(padding: EdgeInsets.only(bottom: 12.h), child: AddressCard(address: list[i])),
-                    );
-                  },
-                  error: (_) => Center(child: Container(margin: EdgeInsets.all(20.w), padding: EdgeInsets.all(16.w), decoration: BoxDecoration(color: const Color(0xFFFFF1F2), borderRadius: BorderRadius.circular(12.r)), child: Text(_.error, style: TextStyle(fontSize: 11.sp, color: const Color(0xFFE63946)), textAlign: TextAlign.center))),
-                ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 12.h + MediaQuery.of(context).viewPadding.bottom),
-        decoration: BoxDecoration(color: Colors.white, border: Border(top: BorderSide(color: const Color(0xFFE2E8F0))), boxShadow: [BoxShadow(color: const Color(0xFF0B1E2E).withOpacity(0.06), blurRadius: 12, offset: const Offset(0, -4))]),
-        child: SizedBox(
-          height: 48.h, width: double.infinity,
-          child: DecoratedBox(
-            decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF028090), Color(0xFF00A896)], begin: Alignment.topRight, end: Alignment.bottomLeft), borderRadius: BorderRadius.circular(16.r), boxShadow: [BoxShadow(color: const Color(0xFF00A896).withOpacity(0.28), blurRadius: 12, offset: const Offset(0, 6))]),
-            child: ElevatedButton.icon(
-              onPressed: () => context.nav.pushNamed(Routes.addOrUpdateAddressScreen),
-              icon: Icon(Icons.add_location_alt_rounded, size: 18.sp, color: Colors.white),
-              label: Text(S.of(context).adadres, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Cairo')),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r))),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddressCard extends ConsumerStatefulWidget {
-  const AddressCard({super.key, required this.address});
-  final Address address;
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AddressCardState();
-}
-
-class _AddressCardState extends ConsumerState<AddressCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20.r), border: Border.all(color: const Color(0xFFE2E8F0).withOpacity(0.9)), boxShadow: [BoxShadow(color: const Color(0xFF0B1E2E).withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 6))]),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(width: 44.w, height: 44.h, decoration: BoxDecoration(color: const Color(0xFFEFFAF8), borderRadius: BorderRadius.circular(12.r), border: Border.all(color: const Color(0xFF00A896).withOpacity(0.14))), child: Icon(Icons.location_on_rounded, size: 20.sp, color: const Color(0xFF028090))),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(widget.address.addressLine.toString(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w900, color: const Color(0xFF0B1E2E), fontFamily: 'Cairo'), maxLines: 1, overflow: TextOverflow.ellipsis),
-              SizedBox(height: 4.h),
-              Text(processAddess(), style: TextStyle(fontSize: 11.5.sp, color: const Color(0xFF64748B), height: 1.3), maxLines: 2, overflow: TextOverflow.ellipsis),
-            ]),
-          ),
-          SizedBox(width: 8.w),
-          InkWell(
-            borderRadius: BorderRadius.circular(10.r),
-            onTap: () => context.nav.pushNamed(Routes.addOrUpdateAddressScreen, arguments: widget.address),
-            child: Container(width: 36.w, height: 36.h, decoration: BoxDecoration(color: const Color(0xFFF8FAFC), borderRadius: BorderRadius.circular(10.r), border: Border.all(color: const Color(0xFFE2E8F0))), child: Icon(Icons.edit_outlined, size: 16.sp, color: const Color(0xFF028090))),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    _pendingId = ref.read(addressIDProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref.read(addressBookProvider.notifier).refresh();
+      ref.read(locationSuggestionProvider.notifier).suggest();
+    });
   }
 
-  String processAddess() {
-    if (widget.address.addressLine2 == null) {
-      return "${widget.address.addressName}, ${widget.address.area}, ${widget.address.postCode}";
-    } else {
-      return "${widget.address.addressName}, ${widget.address.area}, ${widget.address.addressLine2 ?? ''}, ${widget.address.postCode}";
+  Future<void> _add() async {
+    final saved = await Navigator.push<Address>(
+        context, MaterialPageRoute(builder: (_) => const AddOrEditAddress()));
+    if (mounted && saved != null && widget.choose) {
+      setState(() => _pendingId = saved.id.toString());
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final book = ref.watch(addressBookProvider);
+    final selected = selectedOwnedAddress(book.addresses, _pendingId);
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFFAF7F2),
+          appBar: AppBar(
+              title: Text(widget.choose ? 'اختر عنوان التوصيل' : 'عناويني'),
+              backgroundColor: const Color(0xFF028090),
+              foregroundColor: Colors.white,
+              actions: [
+                IconButton(
+                    tooltip: 'تحديث العناوين',
+                    onPressed: book.busy || book.loading
+                        ? null
+                        : () =>
+                            ref.read(addressBookProvider.notifier).refresh(),
+                    icon: const Icon(Icons.refresh))
+              ]),
+          body: SafeArea(
+              bottom: false,
+              child: RefreshIndicator(
+                onRefresh: () =>
+                    ref.read(addressBookProvider.notifier).refresh(),
+                child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      CurrentLocationCard(onSaved: (address) {
+                        if (widget.choose)
+                          setState(() => _pendingId = address.id.toString());
+                      }),
+                      const SizedBox(height: 24),
+                      Row(children: [
+                        const Expanded(
+                            child: Text('العناوين المحفوظة',
+                                style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold))),
+                        Text('${book.addresses.length}',
+                            style: const TextStyle(color: Color(0xFF64748B)))
+                      ]),
+                      const SizedBox(height: 12),
+                      if (book.loading || book.busy)
+                        const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: LinearProgressIndicator(
+                                color: Color(0xFF028090))),
+                      if (book.error != null)
+                        Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(book.error!,
+                                style:
+                                    const TextStyle(color: Color(0xFFB91C1C)))),
+                      if (!book.loading && book.addresses.isEmpty)
+                        const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Column(children: [
+                              Icon(Icons.location_off_outlined,
+                                  size: 48, color: Color(0xFF94A3B8)),
+                              SizedBox(height: 12),
+                              Text('لا توجد عناوين محفوظة. أضف عنوانك الأول.')
+                            ])),
+                      for (final address in book.addresses)
+                        Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: AddressCard(
+                                address: address,
+                                isSelected:
+                                    widget.choose && selected?.id == address.id,
+                                onSelect:
+                                    widget.choose && !book.busy && !book.loading
+                                        ? () => setState(() =>
+                                            _pendingId = address.id.toString())
+                                        : null)),
+                      const SizedBox(height: 12),
+                    ]),
+              )),
+          bottomNavigationBar: SafeArea(
+              top: false,
+              child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (widget.choose)
+                          FilledButton(
+                              onPressed: selected == null ||
+                                      book.loading ||
+                                      book.busy ||
+                                      book.error != null
+                                  ? null
+                                  : () {
+                                      ref
+                                          .read(addressIDProvider.notifier)
+                                          .state = selected.id.toString();
+                                      Navigator.pop(context, selected);
+                                    },
+                              style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFF028090),
+                                  minimumSize: const Size.fromHeight(48)),
+                              child: const Text('استخدم هذا العنوان')),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                            onPressed: book.loading || book.busy
+                                ? null
+                                : _add,
+                            icon: const Icon(Icons.add_location_alt_outlined),
+                            label: const Text('إضافة عنوان جديد')),
+                      ]))),
+        ));
+  }
+}
+
+class AddressCard extends ConsumerWidget {
+  const AddressCard(
+      {super.key,
+      required this.address,
+      this.isSelected = false,
+      this.onSelect});
+  final Address address;
+  final bool isSelected;
+  final VoidCallback? onSelect;
+
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => Directionality(
+            textDirection: TextDirection.rtl,
+            child: AlertDialog(
+              title: const Text('حذف العنوان؟'),
+              content: Text(address.isDefault
+                  ? 'هذا عنوانك الأساسي. بعد الحذف يمكنك اختيار عنوان أساسي آخر.'
+                  : 'سيُحذف العنوان من قائمة عناوينك المحفوظة.'),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('إلغاء')),
+                FilledButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('حذف العنوان'))
+              ],
+            )));
+    if (confirmed != true || !context.mounted) return;
+    final success = await ref
+        .read(addressBookProvider.notifier)
+        .mutate(address, delete: true);
+    if (!context.mounted) return;
+    if (success) {
+      if (ref.read(addressIDProvider) == address.id.toString())
+        ref.read(addressIDProvider.notifier).state = '';
+      ref.invalidate(addresListProvider);
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(success
+            ? 'تم حذف العنوان'
+            : ref.read(addressBookProvider).error ??
+                'تعذر الحذف. حاول مجددًا.')));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final busy = ref.watch(addressBookProvider).busy;
+    final point = addressLocation(address);
+    return Card(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(
+                color: isSelected
+                    ? const Color(0xFF028090)
+                    : const Color(0xFFE2E8F0),
+                width: isSelected ? 2 : 1)),
+        child: InkWell(
+            borderRadius: BorderRadius.circular(18),
+            onTap: onSelect,
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(children: [
+                        Icon(
+                            isSelected
+                                ? Icons.check_circle
+                                : Icons.location_on_outlined,
+                            color: const Color(0xFF028090)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                            child: Text(
+                                address.addressName?.toString() ??
+                                    'عنوان محفوظ',
+                                style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold))),
+                        if (address.isDefault)
+                          const Chip(
+                              label: Text('الأساسي'),
+                              backgroundColor: Color(0xFFEFFAF8)),
+                      ]),
+                      const SizedBox(height: 8),
+                      Text(readableAddress(address),
+                          style: const TextStyle(
+                              color: Color(0xFF475569), height: 1.5)),
+                      if (isSelected)
+                        const Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Text('العنوان المحدد',
+                                style: TextStyle(
+                                    color: Color(0xFF028090),
+                                    fontWeight: FontWeight.bold))),
+                      const SizedBox(height: 8),
+                      Wrap(spacing: 4, children: [
+                        TextButton.icon(
+                            style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFF028090)),
+                            onPressed: busy
+                                ? null
+                                : () => Navigator.push<Address>(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => AddOrEditAddress(
+                                            address: address))),
+                            icon: const Icon(Icons.edit_outlined, size: 18),
+                            label: const Text('تعديل')),
+                        TextButton.icon(
+                            style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFF028090)),
+                            onPressed: busy || point == null
+                                ? null
+                                : () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => LocationPickerScreen(
+                                            initial: point, readOnly: true))),
+                            icon: const Icon(Icons.map_outlined, size: 18),
+                            label: const Text('عرض الموقع')),
+                        if (!address.isDefault)
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                  foregroundColor: const Color(0xFF028090)),
+                              onPressed: busy
+                                  ? null
+                                  : () async {
+                                      final success = await ref
+                                          .read(addressBookProvider.notifier)
+                                          .mutate(address);
+                                      if (!context.mounted) return;
+                                      if (success)
+                                        ref.invalidate(addresListProvider);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(success
+                                                  ? 'تم تعيين العنوان الأساسي'
+                                                  : ref
+                                                          .read(
+                                                              addressBookProvider)
+                                                          .error ??
+                                                      'تعذر التعديل')));
+                                    },
+                              child: const Text('تعيين كأساسي')),
+                        TextButton.icon(
+                            onPressed:
+                                busy ? null : () => _delete(context, ref),
+                            icon: const Icon(Icons.delete_outline,
+                                size: 18, color: Color(0xFFB91C1C)),
+                            label: const Text('حذف',
+                                style: TextStyle(color: Color(0xFFB91C1C)))),
+                      ]),
+                    ]))));
   }
 }
 
 class AddressCardv2 extends ConsumerWidget {
-  const AddressCardv2({super.key, required this.address, required this.isSelected});
+  const AddressCardv2(
+      {super.key, required this.address, required this.isSelected});
   final Address address;
   final bool isSelected;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      margin: EdgeInsets.only(top: 12.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16.r), border: Border.all(color: isSelected ? const Color(0xFF00A896) : const Color(0xFFE2E8F0), width: isSelected ? 1.4 : 1), boxShadow: [BoxShadow(color: const Color(0xFF0B1E2E).withOpacity(0.05), blurRadius: 10)]),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(width: 36.w, height: 36.h, decoration: BoxDecoration(color: isSelected ? const Color(0xFF00A896) : const Color(0xFFF1F5F9), shape: BoxShape.circle), child: Icon(Icons.location_on_rounded, size: 16.sp, color: isSelected ? Colors.white : const Color(0xFF64748B))),
-        SizedBox(width: 10.w),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (address.addressName != null) Text(address.addressName.toString(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w900, color: const Color(0xFF0B1E2E))),
-          SizedBox(height: 2.h),
-          Text(AppGFunctions.processAdAddess(address), style: TextStyle(fontSize: 11.5.sp, color: const Color(0xFF64748B)), maxLines: 2, overflow: TextOverflow.ellipsis),
-        ])),
-        if (isSelected) Container(width: 22.w, height: 22.h, decoration: const BoxDecoration(color: Color(0xFF00A896), shape: BoxShape.circle), child: Icon(Icons.check_rounded, size: 14.sp, color: Colors.white)),
-      ]),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) =>
+      AddressCard(address: address, isSelected: isSelected);
 }

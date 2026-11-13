@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:laundry_customer/constants/app_colors.dart';
 import 'package:laundry_customer/constants/hive_contants.dart';
 import 'package:laundry_customer/misc/global_functions.dart';
 import 'package:laundry_customer/misc/misc_global_variables.dart';
@@ -11,6 +10,7 @@ import 'package:laundry_customer/providers/cart_provider.dart';
 import 'package:laundry_customer/providers/misc_providers.dart';
 import 'package:laundry_customer/providers/order_update_provider.dart';
 import 'package:laundry_customer/utils/cart_helper.dart';
+import 'package:laundry_customer/widgets/laundry_basket_icon.dart';
 import 'package:upgrader/upgrader.dart';
 
 class HomeScreenWrapper extends ConsumerWidget {
@@ -21,7 +21,7 @@ class HomeScreenWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomItems = [
+    final bottomItems = <Map<String, Object>>[
       {
         'icon': Icons.person_outline_rounded,
         'activeIcon': Icons.person_rounded,
@@ -41,8 +41,7 @@ class HomeScreenWrapper extends ConsumerWidget {
         'page': 1,
       },
       {
-        'icon': Icons.shopping_bag_outlined,
-        'activeIcon': Icons.shopping_bag_rounded,
+        'asset': 'assets/svgs/icon_laundry_basket.svg',
         'title': 'السلة',
         'page': 0,
       },
@@ -57,9 +56,15 @@ AppGFunctions.changeStatusBarColor(color: Colors.transparent);
     Widget buildItem(int index) {
       final int pageForItem = bottomItems[index]['page'] as int;
       final bool isActive = rawActiveIndex == pageForItem;
-      final IconData icon = (isActive
-          ? bottomItems[index]['activeIcon']
-          : bottomItems[index]['icon']) as IconData;
+      final Color iconColor =
+          isActive ? const Color(0xFF156172) : const Color(0xFF64748B);
+      final String? asset = bottomItems[index]['asset'] as String?;
+      final IconData? icon = asset != null
+          ? null
+          : (isActive
+                  ? bottomItems[index]['activeIcon']
+                  : bottomItems[index]['icon'])
+              as IconData;
 
       return Expanded(
         child: InkWell(
@@ -96,13 +101,9 @@ AppGFunctions.changeStatusBarColor(color: Colors.transparent);
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(14.r),
                           ),
-                          child: Icon(
-                            icon,
-                            size: 22.sp,
-                            color: isActive
-                                ? const Color(0xFF156172)
-                                : const Color(0xFF64748B),
-                          ),
+                          child: asset != null
+                              ? LaundryBasketIcon(size: 22.sp, color: iconColor)
+                              : Icon(icon!, size: 22.sp, color: iconColor),
                         ),
                         // Cart Badge
                         if (index == 3 && badge > 0)

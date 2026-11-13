@@ -7,6 +7,7 @@ import 'package:laundry_customer/services/api_state.dart';
 import 'package:laundry_customer/services/network_exceptions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:laundry_customer/utils/cart_helper.dart';
 
 class UpdateProfileNotifier extends StateNotifier<ApiState<String>> {
   UpdateProfileNotifier(this._repo) : super(const ApiState.initial());
@@ -35,6 +36,9 @@ class ProfileInfoNotifier extends StateNotifier<ApiState<ProfileInfoModel>> {
       final ProfileInfoModel userdata = await _repo.getProfileInfo();
       final Box userBox = Hive.box(AppHSC.userBox);
       userBox.putAll(userdata.data!.customer!.user!.toMap());
+      // Identity just flipped from guest -> user: adopt any items the
+      // customer added as a guest so they stay in the cart.
+      CartHelper.adoptGuestCart();
       state = ApiState.loaded(
         data: userdata,
       );

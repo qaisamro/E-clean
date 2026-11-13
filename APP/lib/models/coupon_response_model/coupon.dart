@@ -3,8 +3,8 @@ import 'dart:convert';
 class Coupon {
   int? id;
   String? code;
-  int? discount;
-  int? minAmount;
+  num? discount;
+  num? minAmount;
   String? type;
 
   Coupon({this.id, this.code, this.discount, this.minAmount, this.type});
@@ -12,8 +12,8 @@ class Coupon {
   factory Coupon.fromMap(Map<String, dynamic> data) => Coupon(
         id: data['id'] as int?,
         code: data['code'] as String?,
-        discount: data['discount'] as int?,
-        minAmount: data['min_amount'] as int?,
+        discount: data['discount'] as num?,
+        minAmount: data['min_amount'] as num?,
         type: data['type'] as String?,
       );
 
@@ -40,8 +40,8 @@ class Coupon {
   Coupon copyWith({
     int? id,
     String? code,
-    int? discount,
-    int? minAmount,
+    num? discount,
+    num? minAmount,
     String? type,
   }) {
     return Coupon(

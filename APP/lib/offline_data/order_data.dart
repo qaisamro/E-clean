@@ -44,7 +44,6 @@ class OfflineOrderData {
                 "longitude": null
               }
             ],
-            "stripe_id": "cus_Ma4N9eEcXRnv2D"
           },
           "discount": 0,
           "amount": 174.93,
@@ -147,7 +146,6 @@ class OfflineOrderData {
                 "longitude": null
               }
             ],
-            "stripe_id": "cus_Ma4N9eEcXRnv2D"
           },
           "discount": 0,
           "amount": 180.15,
@@ -250,7 +248,6 @@ class OfflineOrderData {
                 "longitude": null
               }
             ],
-            "stripe_id": "cus_Ma4N9eEcXRnv2D"
           },
           "discount": 0,
           "amount": 130.08,
@@ -353,7 +350,6 @@ class OfflineOrderData {
                 "longitude": null
               }
             ],
-            "stripe_id": "cus_Ma4N9eEcXRnv2D"
           },
           "discount": 0,
           "amount": 397.04,
@@ -463,7 +459,6 @@ class OfflineOrderData {
               "longitude": null
             }
           ],
-          "stripe_id": "cus_Ma4N9eEcXRnv2D"
         },
         "discount": 0,
         "amount": 107.7,
@@ -573,7 +568,6 @@ class OfflineOrderData {
               "longitude": null
             }
           ],
-          "stripe_id": "cus_Ma4N9eEcXRnv2D"
         },
         "discount": 0,
         "amount": 107.7,

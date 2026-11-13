@@ -35,10 +35,6 @@
 	<string>For taking pictures</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>We need access to your local network to send notifications.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>نحتاج موقعك الحالي لتحديد عنوان التوصيل بدقة وتسليم طلبك إليك</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>نحتاج موقعك الحالي لتحديد عنوان التوصيل بدقة وتسليم طلبك إليك</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>نحتاج موقعك الحالي لتحديد عنوان التوصيل بدقة</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

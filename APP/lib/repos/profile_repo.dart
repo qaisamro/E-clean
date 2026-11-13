@@ -48,6 +48,20 @@ class ProfileRepo implements IProfileRepo {
     if (filtered['alternative_phone'] != null && filtered['alternative_phone'].toString().trim().isEmpty) {
       filtered.remove('alternative_phone');
     }
+    // البريد اختياري أيضاً — لا نمسح بريد المستخدم المحتمل عند تركه فارغاً
+    if (filtered['email'] != null && filtered['email'].toString().trim().isEmpty) {
+      filtered.remove('email');
+    }
+    // Laravel's boolean rule accepts 0/1; Dio serialises bools as
+    // "true"/"false", so normalise the vendor notification preference here.
+    final rawVendorNotifications = filtered['vendor_notifications_enabled'];
+    if (rawVendorNotifications != null) {
+      final enabled = rawVendorNotifications == true ||
+          rawVendorNotifications == 1 ||
+          rawVendorNotifications.toString() == '1' ||
+          rawVendorNotifications.toString() == 'true';
+      filtered['vendor_notifications_enabled'] = enabled ? 1 : 0;
+    }
     // لا نكرر إرسال الصورة في طلب التحديث الثاني - تم رفعها بالفعل أعلاه
     final formMap = <String, dynamic>{...filtered};
     await _dio.post('/users/update', data: FormData.fromMap(formMap));

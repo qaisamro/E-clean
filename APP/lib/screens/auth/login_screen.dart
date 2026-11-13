@@ -1,146 +1,412 @@
-schemefully_same=true}","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280596","type":134},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280596","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280596","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280596","type":604},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280596","type":137},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280603","type":137},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280603","type":153},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280603","type":153},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280603","type":154},
-{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280647","type":168},
-{"params":{"result":"opened"},"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280647","type":154},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280647","type":157},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280647","type":157},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280647","type":159},
-{"params":{"buf_len":288,"index":0,"offset":0},"phase":1,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280647","type":170},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280648","type":170},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280648","type":159},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":194},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280648","type":180},
-{"params":{"source_dependency":{"id":1174,"type":32}},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280648","type":195},
-{"params":{"source_dependency":{"id":1172,"type":1}},"phase":0,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":195},
-{"phase":1,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":35},
-{"phase":2,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1174,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":181},
-{"params":{"source_dependency":{"id":1175,"type":17}},"phase":0,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280648","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":182},
-{"phase":2,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":182},
-{"phase":1,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":121},
-{"params":{"reason":"Remote side closed connection"},"phase":0,"source":{"id":1171,"start_time":"638269027","type":10},"time":"638280648","type":127},
-{"phase":0,"source":{"id":1171,"start_time":"638269027","type":10},"time":"638280648","type":88},
-{"phase":2,"source":{"id":1171,"start_time":"638269027","type":10},"time":"638280648","type":44},
-{"phase":1,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280648","type":117},
-{"phase":1,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280648","type":100},
-{"params":{"backup_job":false,"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280648","type":123},
-{"phase":1,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280648","type":104},
-{"params":{"source_dependency":{"id":1177,"type":48}},"phase":1,"source":{"id":1178,"start_time":"638280648","type":24},"time":"638280648","type":44},
-{"params":{"source_dependency":{"id":1176,"type":7}},"phase":1,"source":{"id":1177,"start_time":"638280648","type":48},"time":"638280648","type":44},
-{"phase":0,"source":{"id":1177,"start_time":"638280648","type":48},"time":"638280649","type":45},
-{"params":{"address":"[2001:4860:4860::8888]:443"},"phase":1,"source":{"id":1178,"start_time":"638280648","type":24},"time":"638280649","type":94},
-{"params":{"net_error":-109},"phase":2,"source":{"id":1178,"start_time":"638280648","type":24},"time":"638280650","type":94},
-{"params":{"address":"[2001:4860:4860::8888]:443","net_error":-109},"phase":0,"source":{"id":1177,"start_time":"638280648","type":48},"time":"638280650","type":46},
-{"phase":2,"source":{"id":1177,"start_time":"638280648","type":48},"time":"638280650","type":44},
-{"phase":2,"source":{"id":1178,"start_time":"638280648","type":24},"time":"638280650","type":44},
-{"params":{"cached":false,"ipv6_available":false},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280650","type":6},
-{"params":{"tasks":[4,9,1,0]},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280650","type":7},
-{"params":{"source_dependency":{"id":1176,"type":7}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280650","type":44},
-{"params":{"address":"127.0.0.1:28894","connector":"first","source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280650","type":111},
-{"params":{"address_list":["127.0.0.1:28894"],"aliases":[]},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280650","type":50},
-{"params":{"address":"127.0.0.1:28894"},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280650","type":51},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280651","type":51},
-{"params":{"local_address":"127.0.0.1:52773","remote_address":"127.0.0.1:28894"},"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280651","type":50},
-{"params":{"connector":"first"},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":112},
-{"params":{"connector":"first","is_usable":true},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":114},
-{"params":{"connector":"first"},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":113},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":101},
-{"phase":2,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":104},
-{"params":{"source_dependency":{"id":1176,"type":7}},"phase":0,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280651","type":124},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280651","type":125},
-{"phase":2,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280651","type":117},
-{"phase":2,"source":{"id":1176,"start_time":"638280648","type":7},"time":"638280651","type":100},
-{"params":{"source_dependency":{"id":1175,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280651","type":53},
-{"phase":2,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280652","type":186},
-{"params":{"source_dependency":{"id":1175,"type":17}},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":187},
-{"params":{"source_dependency":{"id":1172,"type":1}},"phase":0,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280652","type":189},
-{"params":{"source_dependency":{"id":1172,"type":1}},"phase":0,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280652","type":189},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":180},
-{"phase":2,"source":{"id":1175,"start_time":"638280648","type":17},"time":"638280652","type":181},
-{"phase":2,"source":{"id":1174,"start_time":"638280648","type":32},"time":"638280652","type":194},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":600},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":145},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/info HTTP/1.1\r\n"},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":238},
-{"params":{"byte_count":610},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280652","type":82},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":237},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":242},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280652","type":438},
-{"params":{"byte_count":827},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638280830","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638280830","type":245},
-{"params":{"byte_count":394},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280830","type":84},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280830","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 163","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:51:28 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280831","type":243},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280831","type":242},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280831","type":160},
-{"params":{"buf_len":820,"index":1,"offset":1867900,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638280838","type":171},
-{"params":{"bytes_copied":820},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638280838","type":171},
-{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280838","type":171},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280839","type":171},
-{"params":{"byte_count":820},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638280844","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638280845","type":245},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280845","type":160},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280845","type":162},
-{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280854","type":171},
-{"params":{"bytes_copied":0},"phase":2,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280854","type":171},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280860","type":162},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280860","type":139},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":139},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":134},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":142},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":142},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":245},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280861","type":245},
-{"params":{"buf_len":163,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280876","type":171},
-{"params":{"bytes_copied":163},"phase":2,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280876","type":171},
-{"params":{"byte_count":163},"phase":0,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280876","type":148},
-{"phase":1,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280877","type":245},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638280877","type":53},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280877","type":245},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280877","type":593},
-{"phase":2,"source":{"id":1172,"start_time":"638280595","type":1},"time":"638280877","type":2},
-{"phase":0,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280902","type":178},
-{"phase":2,"source":{"id":1173,"start_time":"638280647","type":15},"time":"638280903","type":168},
-{"params":{"byte_count":966},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638281566","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281566","type":245},
-{"params":{"buf_len":959,"index":1,"offset":1868720,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281575","type":171},
-{"params":{"bytes_copied":959},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281575","type":171},
-{"params":{"byte_count":959},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281575","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281575","type":245},
-{"params":{"byte_count":400},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638281688","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281688","type":245},
-{"params":{"buf_len":393,"index":1,"offset":1869679,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281701","type":171},
-{"params":{"bytes_copied":393},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281701","type":171},
-{"params":{"byte_count":393},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281701","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281701","type":245},
-{"params":{"byte_count":586},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638281800","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281800","type":245},
-{"params":{"buf_len":579,"index":1,"offset":1870072,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281807","type":171},
-{"params":{"bytes_copied":579},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281807","type":171},
-{"params":{"byte_count":579},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281807","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281807","type":245},
-{"params":{"byte_count":390},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638281901","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281901","type":245},
-{"params":{"buf_len":383,"index":1,"offset":1870651,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281903","type":171},
-{"params":{"bytes_copied":383},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638281903","type":171},
-{"params":{"byte_count":383},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281903","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638281903","type":245},
-{"params":{"byte_count":587},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638282055","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282055","type":245},
-{"params":{"buf_len":580,"index":1,"offset":1871034,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282055","type":171},
-{"params":{"bytes_copied":580},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282055","type":171},
-{"params":{"byte_count":580},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282055","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282055","type":245},
-{"params":{"cors_preflight_policy":"co
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:laundry_customer/constants/hive_contants.dart';
+import 'package:laundry_customer/misc/misc_global_variables.dart';
+import 'package:laundry_customer/models/auth_flow_model.dart';
+import 'package:laundry_customer/providers/auth_provider.dart';
+import 'package:laundry_customer/screens/auth/join_request_waiting_screen.dart';
+import 'package:laundry_customer/utils/context_less_nav.dart';
+import 'package:laundry_customer/utils/routes.dart';
+
+/// Login screen.
+///
+/// The backend answers `POST /login` with:
+/// * `200` + `data.access` -> the account may use the app.
+/// * `403` + `data.next_step` -> the account must first verify its phone
+///   (`verify_otp`) or wait for admin approval (`await_approval`), or its
+///   join request was `rejected`.
+/// * `401` -> the stored session is no longer valid (never silently reused).
+///
+/// The screen branches on the server response instead of assuming a session.
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormBuilderState> _formkey = GlobalKey<FormBuilderState>();
+  final FocusNode _contactFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
+  bool obsecureText = true;
+
+  @override
+  void dispose() {
+    _contactFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
+
+  InputDecoration _dec(
+          {required String hint, Widget? prefix, Widget? suffix}) =>
+      InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(fontSize: 12.sp, color: const Color(0xFF94A3B8)),
+        prefixIcon: prefix,
+        suffixIcon: suffix,
+        filled: true,
+        fillColor: const Color(0xFFF8FAFC),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.r),
+            borderSide: const BorderSide(color: Color(0xFF00A896), width: 1.4)),
+      );
+
+  /// Persist the session atomically: only a real access token is written, and
+  /// any stale join-request token is dropped so a new login starts clean.
+  Future<void> _saveSession(String type, String token, Map user) async {
+    final Box authBox = Hive.box(AppHSC.authBox);
+    final Box userBox = Hive.box(AppHSC.userBox);
+    await authBox.put(AppHSC.authTokenType, type);
+    await authBox.put(AppHSC.authToken, token);
+    await authBox.delete(AppHSC.trackingToken);
+    await authBox.delete(AppHSC.pendingContact);
+    userBox.putAll(Map<String, dynamic>.from(user));
+  }
+
+  void _goHome() {
+    context.nav.pushNamedAndRemoveUntil(Routes.homeScreen, (route) => false);
+  }
+
+  Future<void> _handleGate(
+    AuthNextStep step,
+    String contact,
+    String? serverMessage,
+  ) async {
+    final Box authBox = Hive.box(AppHSC.authBox);
+    await authBox.put(AppHSC.pendingContact, contact);
+
+    if (!mounted) return;
+
+    if (step.isVerifyOtp) {
+      // Fire the resend in the background; failures surface in the OTP screen.
+      final container = ProviderScope.containerOf(context);
+      await container
+          .read(registrationResendOtpProvider.notifier)
+          .resendOtp(contact);
+      if (!mounted) return;
+      context.nav.pushNamed(
+        Routes.signUpOtpScreen,
+        arguments: {'contact': contact, 'mode': 'login'},
+      );
+      return;
+    }
+
+    if (step.isAwaitApproval || step.isRejected) {
+      context.nav.pushNamed(
+        Routes.joinRequestWaitingScreen,
+        arguments: JoinRequestWaitingArgs(
+          contact: contact,
+          trackingToken: authBox.get(AppHSC.trackingToken) as String? ?? '',
+        ),
+      );
+      return;
+    }
+
+    if (step.isRetryLater) {
+      // The join-request store is temporarily unavailable: surface the
+      // server message instead of pretending the login failed outright.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(serverMessage ?? 'يرجى المحاولة بعد قليل.')),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(serverMessage ?? 'تعذر تسجيل الدخول، حاول مرة أخرى')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF7F2),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 14.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Row(children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12.r),
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                        width: 38.w,
+                        height: 38.h,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(color: const Color(0xFFE2E8F0))),
+                        child: const Icon(Icons.arrow_forward_rounded,
+                            size: 18, color: Color(0xFF028090))),
+                  ),
+                ]),
+              ),
+              SizedBox(height: 14.h),
+              Text('تسجيل الدخول',
+                  style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w900,
+                      color: const Color(0xFF0B1E2E),
+                      fontFamily: 'Cairo')),
+              SizedBox(height: 4.h),
+              Text('أدخل رقم جوالك أو بريدك الإلكتروني وكلمة المرور',
+                  style: TextStyle(
+                      fontSize: 11.5.sp, color: const Color(0xFF64748B)),
+                  textAlign: TextAlign.center),
+              SizedBox(height: 16.h),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24.r),
+                    border: Border.all(
+                        color: const Color(0xFFE2E8F0).withOpacity(0.9)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: const Color(0xFF0B1E2E).withOpacity(0.06),
+                          blurRadius: 18,
+                          offset: const Offset(0, 8))
+                    ]),
+                child: FormBuilder(
+                  key: _formkey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('رقم الجوال أو البريد الإلكتروني',
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w800,
+                              color: const Color(0xFF1E293B))),
+                      SizedBox(height: 8.h),
+                      FormBuilderTextField(
+                          focusNode: _contactFocus,
+                          name: 'contact',
+                          decoration: _dec(
+                              hint: '05xxxxxxxx أو email',
+                              prefix: Icon(Icons.person_outline_rounded,
+                                  size: 18.sp, color: const Color(0xFF028090))),
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: (v) =>
+                              (v == null || v.trim().isEmpty) ? 'هذا الحقل مطلوب' : null),
+                      SizedBox(height: 14.h),
+                      Text('كلمة المرور',
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w800,
+                              color: const Color(0xFF1E293B))),
+                      SizedBox(height: 8.h),
+                      FormBuilderTextField(
+                          focusNode: _passwordFocus,
+                          name: 'password',
+                          obscureText: obsecureText,
+                          decoration: _dec(
+                              hint: '••••••••',
+                              prefix: Icon(Icons.lock_outline_rounded,
+                                  size: 18.sp, color: const Color(0xFF028090)),
+                              suffix: InkWell(
+                                  onTap: () => setState(
+                                      () => obsecureText = !obsecureText),
+                                  child: Icon(
+                                      obsecureText
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 18.sp,
+                                      color: const Color(0xFF64748B)))),
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          validator: (v) =>
+                              (v == null || v.trim().isEmpty) ? 'هذا الحقل مطلوب' : null),
+                      SizedBox(height: 18.h),
+                      SizedBox(
+                        height: 50.h,
+                        width: double.infinity,
+                        child: Consumer(builder: (context, ref, _) {
+                          return ref.watch(loginProvider).map(
+                                initial: (_) => DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                          colors: [
+                                            Color(0xFF028090),
+                                            Color(0xFF00A896)
+                                          ],
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft),
+                                      borderRadius: BorderRadius.circular(16.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: const Color(0xFF00A896)
+                                                .withOpacity(0.28),
+                                            blurRadius: 12,
+                                            offset: const Offset(0, 6))
+                                      ]),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      _contactFocus.unfocus();
+                                      _passwordFocus.unfocus();
+                                      if (_formkey.currentState != null &&
+                                          _formkey.currentState!
+                                              .saveAndValidate()) {
+                                        final values =
+                                            _formkey.currentState!.value;
+                                        ref
+                                            .read(loginProvider.notifier)
+                                            .login(
+                                              (values['contact'] as String)
+                                                  .trim(),
+                                              (values['password'] as String).trim(),
+                                            );
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        shadowColor: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16.r))),
+                                    child: Text('تسجيل الدخول',
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.white,
+                                            fontFamily: 'Cairo')),
+                                  ),
+                                ),
+                                loading: (_) => const Center(
+                                    child: SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Color(0xFF028090)))),
+                                loaded: (_) {
+                                  final data = _.data.data;
+                                  final access = data?.access;
+                                  final nextStep =
+                                      data?.nextStep ?? AuthNextStep.unknown;
+
+                                  // 1) Full session -> persist and enter.
+                                  if (access != null &&
+                                      (access.token ?? '').isNotEmpty &&
+                                      nextStep.isReady) {
+                                    _saveSession(
+                                      access.authType ?? 'Bearer',
+                                      access.token!,
+                                      data?.user?.toMap() ??
+                                          <String, dynamic>{},
+                                    );
+                                    Future.delayed(transissionDuration)
+                                        .then((_) => _goHome());
+                                    return Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xFFEFFAF8),
+                                            borderRadius:
+                                                BorderRadius.circular(12.r)),
+                                        child: Text('تم تسجيل الدخول بنجاح',
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w800,
+                                                color: const Color(0xFF028090))));
+                                  }
+
+                                  // 2) Gate -> follow the server's next_step.
+                                  final contact = (_formkey
+                                          .currentState
+                                          ?.value['contact'] as String?)
+                                      ?.trim() ??
+                                      '';
+                                  final serverMessage =
+                                      data?.gateMessage ?? _.data.message;
+                                  Future.delayed(buildDuration).then((_) {
+                                    ref.refresh(loginProvider);
+                                    _handleGate(
+                                        nextStep, contact, serverMessage);
+                                  });
+                                  return Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFFFF7ED),
+                                          borderRadius:
+                                              BorderRadius.circular(12.r)),
+                                      child: Text(serverMessage ?? '...',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 11.5.sp,
+                                              fontWeight: FontWeight.w700,
+                                              color: const Color(0xFF9A3412))));
+                                },
+                                error: (_) {
+                                  Future.delayed(transissionDuration).then(
+                                      (_) => ref.refresh(loginProvider));
+                                  return Container(
+                                      padding: EdgeInsets.all(10.w),
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFFFF1F2),
+                                          borderRadius:
+                                              BorderRadius.circular(12.r),
+                                          border: Border.all(
+                                              color: const Color(0xFFE63946)
+                                                  .withOpacity(0.22))),
+                                      child: Text(_.error,
+                                          style: TextStyle(
+                                              fontSize: 11.sp,
+                                              color: const Color(0xFFE63946)),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 3));
+                                },
+                              );
+                        }),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () => context.nav
+                              .pushNamed(Routes.recoverPassWordStageOne),
+                          child: Text('هل نسيت كلمة المرور؟',
+                              style: TextStyle(
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF028090))),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text('ليس لديك حساب؟ ',
+                    style: TextStyle(
+                        fontSize: 12.sp, color: const Color(0xFF64748B))),
+                InkWell(
+                  onTap: () => context.nav.pushNamed(Routes.signUpScreen),
+                  child: Text('إنشاء حساب جديد',
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w900,
+                          color: const Color(0xFF028090))),
+                ),
+              ]),
+              SizedBox(height: 24.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

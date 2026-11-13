@@ -14,6 +14,8 @@ class Data {
   final List<String>? postCode;
   final String? androidUrl;
   final String? iosUrl;
+  final bool trackingRecoveryAvailable;
+  final bool showPartnersSection;
 
   const Data({
     this.currency,
@@ -25,6 +27,8 @@ class Data {
     this.postCode,
     this.androidUrl,
     this.iosUrl,
+    this.trackingRecoveryAvailable = false,
+    this.showPartnersSection = true,
   });
 
   factory Data.fromMap(Map<String, dynamic> map) {
@@ -42,6 +46,12 @@ class Data {
           .toList(),
       androidUrl: map['android_url'] as String?,
       iosUrl: map['ios_url'] as String?,
+      trackingRecoveryAvailable: map['tracking_recovery_available'] == true ||
+          map['tracking_recovery_available'] == 1 || map['tracking_recovery_available'] == '1',
+      showPartnersSection: map['show_partners_section'] == null ||
+          map['show_partners_section'] == true ||
+          map['show_partners_section'] == 1 ||
+          map['show_partners_section'] == '1',
     );
   }
 
@@ -56,6 +66,8 @@ class Data {
       'post_code': postCode,
       'android_url': androidUrl,
       'ios_url': iosUrl,
+      'tracking_recovery_available': trackingRecoveryAvailable,
+      'show_partners_section': showPartnersSection,
     };
   }
 
@@ -71,6 +83,8 @@ class Data {
     List<String>? postCode,
     String? androidUrl,
     String? iosUrl,
+    bool? trackingRecoveryAvailable,
+    bool? showPartnersSection,
   }) {
     return Data(
       currency: currency ?? this.currency,
@@ -82,6 +96,8 @@ class Data {
       postCode: postCode ?? this.postCode,
       androidUrl: androidUrl ?? this.androidUrl,
       iosUrl: iosUrl ?? this.iosUrl,
+      trackingRecoveryAvailable: trackingRecoveryAvailable ?? this.trackingRecoveryAvailable,
+      showPartnersSection: showPartnersSection ?? this.showPartnersSection,
     );
   }
 

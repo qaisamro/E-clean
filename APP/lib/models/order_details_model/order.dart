@@ -9,14 +9,15 @@ import 'package:laundry_customer/models/order_details_model/quantity.dart';
 class Order {
   int? id;
   String? orderCode;
+  int? vendorId;
   dynamic driverStatus;
   bool? drivers;
   bool? isChatAble;
   Customer? customer;
-  int? discount;
+  double? discount;
   double? amount;
   double? totalAmount;
-  int? deliveryCharge;
+  double? deliveryCharge;
   String? orderStatus;
   String? orderStatusbn;
   String? paymentStatus;
@@ -26,6 +27,8 @@ class Order {
   String? pickHour;
   String? deliveryDate;
   String? deliveryHour;
+  String? deliveryHourRaw;
+  String? instruction;
   String? orderedAt;
   dynamic rating;
   int? item;
@@ -39,6 +42,7 @@ class Order {
   Order({
     this.id,
     this.orderCode,
+    this.vendorId,
     this.driverStatus,
     this.drivers,
     this.isChatAble,
@@ -56,6 +60,8 @@ class Order {
     this.pickHour,
     this.deliveryDate,
     this.deliveryHour,
+    this.deliveryHourRaw,
+    this.instruction,
     this.orderedAt,
     this.rating,
     this.item,
@@ -70,16 +76,17 @@ class Order {
   factory Order.fromMap(Map<String, dynamic> data) => Order(
         id: data['id'] as int?,
         orderCode: data['order_code'] as String?,
+        vendorId: data['vendor_id'] is int ? data['vendor_id'] as int? : int.tryParse('${data['vendor_id'] ?? ''}'),
         driverStatus: data['driver_status'] as dynamic,
         drivers: data['drivers'] as bool,
         isChatAble: data['isChatAble'] as bool?,
         customer: data['customer'] == null
             ? null
             : Customer.fromMap(data['customer'] as Map<String, dynamic>),
-        discount: data['discount'] as int?,
+        discount: (data['discount'] as num?)?.toDouble(),
         amount: (data['amount'] as num?)?.toDouble(),
         totalAmount: (data['total_amount'] as num?)?.toDouble(),
-        deliveryCharge: data['delivery_charge'] as int?,
+        deliveryCharge: (data['delivery_charge'] as num?)?.toDouble(),
         orderStatus: data['order_status'] as String?,
         orderStatusbn: data['order_status_bn'] as String?,
         paymentStatus: data['payment_status'] as String?,
@@ -89,6 +96,8 @@ class Order {
         pickHour: data['pick_hour'] as String?,
         deliveryDate: data['delivery_date'] as String?,
         deliveryHour: data['delivery_hour'] as String?,
+        deliveryHourRaw: data['delivery_hour_raw'] as String?,
+        instruction: data['instruction'] as String?,
         orderedAt: data['ordered_at'] as String?,
         rating: data['rating'] as dynamic,
         item: data['item'] as int?,
@@ -111,6 +120,7 @@ class Order {
   Map<String, dynamic> toMap() => {
         'id': id,
         'order_code': orderCode,
+        'vendor_id': vendorId,
         'driver_status': driverStatus,
         'drivers': drivers,
         'isChatAble': isChatAble,
@@ -128,6 +138,8 @@ class Order {
         'pick_hour': pickHour,
         'delivery_date': deliveryDate,
         'delivery_hour': deliveryHour,
+        'delivery_hour_raw': deliveryHourRaw,
+        'instruction': instruction,
         'ordered_at': orderedAt,
         'rating': rating,
         'item': item,

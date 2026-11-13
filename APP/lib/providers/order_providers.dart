@@ -46,6 +46,16 @@ final updateOrderProvider = StateNotifierProvider.autoDispose<
   return UpdateOrderNotifier(ref.watch(orderRepoProvider));
 });
 
+final orderCancelProvider = StateNotifierProvider.autoDispose<
+    CancelOrderNotifier, ApiState<AddOrderModel>>((ref) {
+  return CancelOrderNotifier(ref.watch(orderRepoProvider));
+});
+
+final orderEditDeliveryProvider = StateNotifierProvider.autoDispose<
+    EditOrderDeliveryNotifier, ApiState<AddOrderModel>>((ref) {
+  return EditOrderDeliveryNotifier(ref.watch(orderRepoProvider));
+});
+
 final pickUpScheduleProvider = StateNotifierProvider.autoDispose<
     PickUpScheduleNotifier, ApiState<SchedulesModel>>((ref) {
   final DateTime date =

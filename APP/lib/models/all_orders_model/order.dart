@@ -75,7 +75,7 @@ class Order {
         discount: (data['discount'] as num?)?.toDouble(),
         amount: (data['amount'] as num?)?.toDouble(),
         totalAmount: (data['total_amount'] as num?)?.toDouble(),
-        deliveryCharge: (data['delivery_charge'] as num).toInt(),
+        deliveryCharge: (data['delivery_charge'] as num?)?.toInt(),
         orderStatus: data['order_status'] as String?,
         orderStatusbn: data['order_status_bn'] as String?,
         paymentStatus: data['payment_status'] as String?,

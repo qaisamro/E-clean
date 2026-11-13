@@ -1,12 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_customer/models/hive_cart_item_model.dart';
+import 'package:laundry_customer/providers/address_session_provider.dart';
 import 'package:laundry_customer/utils/cart_helper.dart';
 
 /// Provider that exposes Map<vendorId, List<CartItem>>.
-/// It is auto-refreshed when Hive box changes via ValueListenableBuilder in UI.
-/// For Riverpod re-builds we expose a StateProvider that can be invalidated.
+/// Rebuilds whenever the auth session changes, so an account switch picks
+/// up the newly-scoped cart automatically (no cross-account leakage).
+/// The UI also listens to the Hive box via ValueListenableBuilder for
+/// immediate updates after mutations.
 final vendorCartsProvider =
     StateProvider<Map<String, List<CarItemHiveModel>>>((ref) {
+  ref.watch(addressSessionProvider);
   return CartHelper.getAllVendorCarts();
 });
 

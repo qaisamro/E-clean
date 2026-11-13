@@ -1,425 +1,371 @@
-rt_time":"638282218","type":1},"time":"638282218","type":134},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282218","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282218","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282218","type":604},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282218","type":137},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282219","type":137},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282219","type":153},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282219","type":153},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282219","type":154},
-{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/session/ses_e5778b47effePXcWd2JyqIGKMb"},"phase":1,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282222","type":168},
-{"params":{"result":"opened"},"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282222","type":154},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282222","type":157},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282222","type":157},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282222","type":159},
-{"params":{"buf_len":288,"index":0,"offset":0},"phase":1,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282223","type":170},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282223","type":170},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282223","type":159},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/session/ses_e5778b47effePXcWd2JyqIGKMb"},"phase":1,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":194},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282223","type":180},
-{"params":{"source_dependency":{"id":1182,"type":32}},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282223","type":195},
-{"params":{"source_dependency":{"id":1180,"type":1}},"phase":0,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":195},
-{"phase":1,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":35},
-{"phase":2,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1182,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":181},
-{"params":{"source_dependency":{"id":1183,"type":17}},"phase":0,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282223","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":182},
-{"phase":2,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":182},
-{"phase":1,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":121},
-{"phase":1,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":117},
-{"params":{"idle_ms":1346},"phase":0,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":120},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":125},
-{"phase":2,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":117},
-{"params":{"source_dependency":{"id":1183,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282223","type":53},
-{"phase":2,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282223","type":186},
-{"params":{"source_dependency":{"id":1183,"type":17}},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":187},
-{"params":{"source_dependency":{"id":1180,"type":1}},"phase":0,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282224","type":189},
-{"params":{"source_dependency":{"id":1180,"type":1}},"phase":0,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282224","type":189},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":180},
-{"phase":2,"source":{"id":1183,"start_time":"638282223","type":17},"time":"638282224","type":181},
-{"phase":2,"source":{"id":1182,"start_time":"638282223","type":32},"time":"638282224","type":194},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":600},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":145},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/session/ses_e5778b47effePXcWd2JyqIGKMb HTTP/1.1\r\n"},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":238},
-{"params":{"byte_count":644},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282224","type":82},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":237},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":242},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282224","type":438},
-{"params":{"byte_count":856},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282227","type":84},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282227","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 625","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:51:29 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282227","type":243},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282228","type":242},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282228","type":160},
-{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282229","type":171},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282229","type":171},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282229","type":160},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282229","type":162},
-{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282229","type":171},
-{"params":{"bytes_copied":0},"phase":2,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282229","type":171},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282229","type":162},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282229","type":139},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":139},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":134},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":142},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":142},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":245},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":245},
-{"params":{"buf_len":625,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282231","type":171},
-{"params":{"bytes_copied":625},"phase":2,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282231","type":171},
-{"params":{"byte_count":625},"phase":0,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":148},
-{"phase":1,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":245},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282231","type":53},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282231","type":245},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282232","type":593},
-{"phase":2,"source":{"id":1180,"start_time":"638282218","type":1},"time":"638282232","type":2},
-{"phase":0,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282232","type":178},
-{"phase":2,"source":{"id":1181,"start_time":"638282222","type":15},"time":"638282232","type":168},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282278","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282278","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282278","type":2},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282278","type":138},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282278","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":134},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":604},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":137},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":137},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":153},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":153},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":154},
-{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282279","type":168},
-{"params":{"result":"opened"},"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":154},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":157},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":157},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282279","type":159},
-{"params":{"buf_len":288,"index":0,"offset":0},"phase":1,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282279","type":170},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282280","type":170},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":159},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":194},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":180},
-{"params":{"source_dependency":{"id":1186,"type":32}},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":195},
-{"params":{"source_dependency":{"id":1184,"type":1}},"phase":0,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":195},
-{"phase":1,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":35},
-{"phase":2,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1186,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":181},
-{"params":{"source_dependency":{"id":1187,"type":17}},"phase":0,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":182},
-{"phase":2,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":182},
-{"phase":1,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":121},
-{"phase":1,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":117},
-{"params":{"idle_ms":48},"phase":0,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":120},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":125},
-{"phase":2,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":117},
-{"params":{"source_dependency":{"id":1187,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282280","type":53},
-{"phase":2,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":186},
-{"params":{"source_dependency":{"id":1187,"type":17}},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":187},
-{"params":{"source_dependency":{"id":1184,"type":1}},"phase":0,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":189},
-{"params":{"source_dependency":{"id":1184,"type":1}},"phase":0,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":189},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":180},
-{"phase":2,"source":{"id":1187,"start_time":"638282280","type":17},"time":"638282280","type":181},
-{"phase":2,"source":{"id":1186,"start_time":"638282280","type":32},"time":"638282280","type":194},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":600},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":145},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/config?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282280","type":238},
-{"params":{"byte_count":685},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282281","type":82},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282281","type":237},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282281","type":242},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282281","type":438},
-{"params":{"byte_count":595},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282283","type":84},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282283","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 364","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:51:29 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282283","type":243},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282283","type":242},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282283","type":160},
-{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282283","type":171},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282284","type":171},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":160},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":162},
-{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282284","type":171},
-{"params":{"bytes_copied":0},"phase":2,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282284","type":171},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":162},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":139},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":139},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":134},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282284","type":142},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282285","type":142},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282285","type":245},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282285","type":245},
-{"params":{"buf_len":364,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282285","type":171},
-{"params":{"bytes_copied":364},"phase":2,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282285","type":171},
-{"params":{"byte_count":364},"phase":0,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282285","type":148},
-{"phase":1,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282286","type":245},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282286","type":53},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282286","type":245},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282286","type":593},
-{"phase":2,"source":{"id":1184,"start_time":"638282278","type":1},"time":"638282286","type":2},
-{"phase":0,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282286","type":178},
-{"phase":2,"source":{"id":1185,"start_time":"638282279","type":15},"time":"638282286","type":168},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","content-type: application/json","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"POST /api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":593},
-{"params":{"preflight_required":true,"preflight_required_reason":"disallowed_header"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":594},
-{"params":{"status":"hit-and-pass"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":595},
-{"params":{"access-control-allow-headers":"content-type","access-control-allow-methods":"DELETE,GET,HEAD,PATCH,POST,PUT"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":599},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":2},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":138},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":65600,"method":"POST","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","upload_id":"0","url":"http://127.0.0.1:28894/api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":134},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282295","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":604},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":137},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":137},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":153},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":153},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall"},"phase":1,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":194},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":180},
-{"params":{"source_dependency":{"id":1189,"type":32}},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282296","type":195},
-{"params":{"source_dependency":{"id":1188,"type":1}},"phase":0,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":195},
-{"phase":1,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":35},
-{"phase":2,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1189,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":181},
-{"params":{"source_dependency":{"id":1190,"type":17}},"phase":0,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282296","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":182},
-{"phase":2,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":182},
-{"phase":1,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":121},
-{"phase":1,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282296","type":117},
-{"params":{"idle_ms":10},"phase":0,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":120},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":125},
-{"phase":2,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":117},
-{"params":{"source_dependency":{"id":1190,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282297","type":53},
-{"phase":2,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":186},
-{"params":{"source_dependency":{"id":1190,"type":17}},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":187},
-{"params":{"source_dependency":{"id":1188,"type":1}},"phase":0,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":189},
-{"params":{"source_dependency":{"id":1188,"type":1}},"phase":0,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282297","type":189},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":180},
-{"phase":2,"source":{"id":1190,"start_time":"638282296","type":17},"time":"638282297","type":181},
-{"phase":2,"source":{"id":1189,"start_time":"638282296","type":32},"time":"638282297","type":194},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":600},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":145},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":531},
-{"params":{"is_chunked":false,"net_error":0,"total_size":56},"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":531},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","Content-Length: 56","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","content-type: application/json","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"POST /api/rpc/opencode.goal/get?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall HTTP/1.1\r\n"},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":238},
-{"params":{"current_position":0},"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":532},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":532},
-{"params":{"did_merge":true,"is_chunked":false,"length":56},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":239},
-{"params":{"byte_count":809},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282297","type":82},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":237},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":242},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282297","type":438},
-{"params":{"byte_count":245},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282301","type":84},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282301","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 15","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:51:29 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282301","type":243},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282301","type":242},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282301","type":139},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":139},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":134},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":142},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":142},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":245},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":245},
-{"params":{"byte_count":15},"phase":0,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":148},
-{"phase":1,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":245},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282302","type":53},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":245},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":593},
-{"phase":2,"source":{"id":1188,"start_time":"638282295","type":1},"time":"638282302","type":2},
-{"params":{"byte_count":687},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638282306","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282306","type":245},
-{"params":{"buf_len":680,"index":1,"offset":1871614,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282307","type":171},
-{"params":{"bytes_copied":680},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282307","type":171},
-{"params":{"byte_count":680},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282308","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282308","type":245},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2 HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2"},"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2"},"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":2},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":138},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2"},"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":134},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":604},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282312","type":137},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":137},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":153},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":153},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":154},
-{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2"},"phase":1,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282313","type":168},
-{"params":{"result":"opened"},"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":154},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":157},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":157},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":159},
-{"params":{"buf_len":288,"index":0,"offset":0},"phase":1,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282313","type":170},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282313","type":170},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282313","type":159},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2"},"phase":1,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":194},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":180},
-{"params":{"source_dependency":{"id":1193,"type":32}},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":195},
-{"params":{"source_dependency":{"id":1191,"type":1}},"phase":0,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":195},
-{"phase":1,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":35},
-{"phase":2,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1193,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":181},
-{"params":{"source_dependency":{"id":1194,"type":17}},"phase":0,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":182},
-{"phase":2,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":182},
-{"phase":1,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":121},
-{"phase":1,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":117},
-{"params":{"idle_ms":11},"phase":0,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":120},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":125},
-{"phase":2,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":117},
-{"params":{"source_dependency":{"id":1194,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282314","type":53},
-{"phase":2,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":186},
-{"params":{"source_dependency":{"id":1194,"type":17}},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":187},
-{"params":{"source_dependency":{"id":1191,"type":1}},"phase":0,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":189},
-{"params":{"source_dependency":{"id":1191,"type":1}},"phase":0,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":189},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":180},
-{"phase":2,"source":{"id":1194,"start_time":"638282314","type":17},"time":"638282314","type":181},
-{"phase":2,"source":{"id":1193,"start_time":"638282314","type":32},"time":"638282314","type":194},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":600},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":145},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/worktree?projectID=bebc9a82fc6ced05874ea0708726651a00e00ef2 HTTP/1.1\r\n"},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":238},
-{"params":{"byte_count":665},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282314","type":82},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":237},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":242},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282314","type":438},
-{"params":{"byte_count":363},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282318","type":84},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 132","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 21:51:30 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":243},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":242},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":160},
-{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282318","type":171},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282318","type":171},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":160},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":162},
-{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282318","type":171},
-{"params":{"bytes_copied":0},"phase":2,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282318","type":171},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":162},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282318","type":139},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":139},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":134},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":142},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":142},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":245},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282319","type":245},
-{"params":{"buf_len":132,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282319","type":171},
-{"params":{"bytes_copied":132},"phase":2,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282320","type":171},
-{"params":{"byte_count":132},"phase":0,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282320","type":148},
-{"phase":1,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282320","type":245},
-{"phase":2,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282320","type":53},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282320","type":245},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282320","type":593},
-{"phase":2,"source":{"id":1191,"start_time":"638282312","type":1},"time":"638282320","type":2},
-{"phase":0,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282320","type":178},
-{"phase":2,"source":{"id":1192,"start_time":"638282313","type":15},"time":"638282320","type":168},
-{"params":{"byte_count":364},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638282420","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282420","type":245},
-{"params":{"buf_len":357,"index":1,"offset":1872294,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282420","type":171},
-{"params":{"bytes_copied":357},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638282420","type":171},
-{"params":{"byte_count":357},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282421","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282421","type":245},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","content-type: application/json","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"POST /api/worktree/refresh HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/worktree/refresh"},"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":593},
-{"params":{"preflight_required":true,"preflight_required_reason":"disallowed_header"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":594},
-{"params":{"status":"hit-and-pass"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":595},
-{"params":{"access-control-allow-headers":"content-type","access-control-allow-methods":"DELETE,GET,HEAD,PATCH,POST,PUT"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":599},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/worktree/refresh"},"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":2},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":138},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":65600,"method":"POST","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","upload_id":"0","url":"http://127.0.0.1:28894/api/worktree/refresh"},"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":134},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":604},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282579","type":137},
-{"params":{"byte_count":811},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638282579","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638282579","type":245},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":137},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":153},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":153},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/worktree/refresh"},"phase":1,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":194},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":180},
-{"params":{"source_dependency":{"id":1196,"type":32}},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":195},
-{"params":{"source_dependency":{"id":1195,"type":1}},"phase":0,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":195},
-{"phase":1,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":35},
-{"phase":2,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":1196,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":181},
-{"params":{"source_dependency":{"id":1197,"type":17}},"phase":0,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":182},
-{"phase":2,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":182},
-{"phase":1,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":186},
-{"params":{"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":121},
-{"phase":1,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":117},
-{"params":{"idle_ms":260},"phase":0,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":120},
-{"params":{"source_dependency":{"id":1179,"type":10}},"phase":0,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":125},
-{"phase":2,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":117},
-{"params":{"source_dependency":{"id":1197,"type":17}},"phase":1,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282580","type":53},
-{"phase":2,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":186},
-{"params":{"source_dependency":{"id":1197,"type":17}},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":187},
-{"params":{"source_dependency":{"id":1195,"type":1}},"phase":0,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":189},
-{"params":{"source_dependency":{"id":1195,"type":1}},"phase":0,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":189},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":180},
-{"phase":2,"source":{"id":1197,"start_time":"638282580","type":17},"time":"638282580","type":181},
-{"phase":2,"source":{"id":1196,"start_time":"638282580","type":32},"time":"638282580","type":194},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":600},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":145},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":531},
-{"params":{"is_chunked":false,"net_error":0,"total_size":56},"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":531},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282580","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","Content-Length: 56","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","content-type: application/json","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"POST /api/worktree/refresh HTTP/1.1\r\n"},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":238},
-{"params":{"current_position":0},"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":532},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":532},
-{"params":{"did_merge":true,"is_chunked":false,"length":56},"phase":0,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":239},
-{"params":{"byte_count":731},"phase":0,"source":{"id":1179,"start_time":"638280650","type":10},"time":"638282581","type":82},
-{"phase":2,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":237},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":242},
-{"phase":1,"source":{"id":1195,"start_time":"638282579","type":1},"time":"638282581","type":438},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200 HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200"},"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200"},"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":2},
-{"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":138},
-{"phase":2,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=artifacts%2Fapi-server&type=file&limit=200"},"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":134},
-{"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":604},
-{"phase":1,"source":{"id":1198,"start_time":"638282582","type":1},"time":"638282582","type":137},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=.agents%2Fmemory&type=file&limit=200 HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=.agents%2Fmemory&type=file&limit=200"},"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282582","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=.agents%2Fmemory&type=file&limit=200"},"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":2},
-{"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":138},
-{"phase":2,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=.agents%2Fmemory&type=file&limit=200"},"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":134},
-{"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":604},
-{"phase":1,"source":{"id":1199,"start_time":"638282582","type":1},"time":"638282583","type":137},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=package.json&type=file&limit=200 HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=package.json&type=file&limit=200"},"phase":1,"source":{"id":1200,"start_time":"638282583","type":1},"time":"638282583","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":1200,"start_time":"638282583","type":1},"time":"638282583","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/fs/find?location%5Bdirectory%5D=D%3A%5CDownloads%5Csmartmall+%281%29%5Csmartmall&query=package.json&type=file&limit=200"},"phase":1,"source":{"id":1200,"start_time":"638282583","type":1},"time":"638282583","type":2},
-{"phase":1,"source":{"id":1200,"start_time":"638282583","type":1},"time":"638282584","type":138},
-{"phase":2,"source":{"id":1200,"start_time":"63828258
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:laundry_customer/constants/hive_contants.dart';
+import 'package:laundry_customer/models/all_service_model/service.dart';
+import 'package:laundry_customer/models/hive_cart_item_model.dart';
+import 'package:laundry_customer/models/products_model/product.dart';
+import 'package:laundry_customer/models/products_model/sub_product.dart';
+import 'package:laundry_customer/notfiers/guest_notfiers.dart';
+import 'package:laundry_customer/providers/cart_provider.dart';
+import 'package:laundry_customer/providers/guest_providers.dart';
+import 'package:laundry_customer/screens/homePage/subProductBottomSheet/sub_product_bottom_sheet.dart';
+import 'package:laundry_customer/utils/cart_helper.dart';
+import 'package:laundry_customer/utils/cart_single_vendor_guard.dart';
+import 'package:laundry_customer/widgets/app_network_image.dart';
+import 'package:laundry_customer/widgets/buttons/cart_item_inc_dec_button.dart';
+import 'package:laundry_customer/widgets/misc_widgets.dart';
+import 'package:laundry_customer/widgets/product_price_block.dart';
+
+/// Total value of the given cart items, including each item's sub-product
+/// price. Shared helper used by the cart, the checkout sheet and this screen.
+double calculateTotal(List<CarItemHiveModel> cartItems) {
+  double total = 0;
+  for (final item in cartItems) {
+    final double extra = item.subProduct?.price?.toDouble() ?? 0;
+    total += item.productsQTY * (item.unitPrice + extra);
+  }
+  return total;
+}
+
+/// Choose-items screen for a service.
+///
+/// Rebuilt to the same behaviour as the previous implementation: it lists the
+/// service's products (respecting the selected variation), lets the customer
+/// pick variants via the shared sub-product bottom sheet and keeps every
+/// action inside the Hive-backed multi-vendor cart.
+class ChooseItems extends ConsumerStatefulWidget {
+  const ChooseItems({
+    super.key,
+    required this.service,
+    this.vendorId,
+    this.vendorName,
+  });
+
+  final Service service;
+  final String? vendorId;
+  final String? vendorName;
+
+  @override
+  ConsumerState<ChooseItems> createState() => _ChooseItemsState();
+}
+
+class _ChooseItemsState extends ConsumerState<ChooseItems> {
+  final Box _settingsBox = Hive.box(AppHSC.appSettingsBox);
+
+  String get _vendorId {
+    if (widget.vendorId != null && widget.vendorId!.isNotEmpty) {
+      return widget.vendorId!;
+    }
+    return ref.read(activeVendorIdProvider) ?? 'default';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Scope every product request to this service (+ selected variation).
+    Future.microtask(() {
+      ref.read(productsFilterProvider.notifier).state =
+          ProducServiceVariavtionDataModel(
+        servieID: (widget.service.id ?? '').toString(),
+        variationID: ref.read(productsFilterProvider).variationID,
+      );
+      ref.invalidate(productsProvider);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final String vendorId = _vendorId;
+    ref.watch(vendorCartsProvider); // rebuild on cart mutations
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF028090)),
+        title: Text(
+          widget.service.name ?? 'الخدمة',
+          style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w900,
+              color: const Color(0xFF0B1E2E),
+              fontFamily: 'Cairo'),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Consumer(builder: (context, ref, _) {
+              return ref.watch(productsProvider).map(
+                    initial: (_) => const SizedBox.shrink(),
+                    loading: (_) => const Center(
+                        child: LoadingWidget(size: 110, message: 'جاري تحميل العناصر...')),
+                    loaded: (loaded) {
+                      final products = loaded.data.data?.products ?? [];
+                      if (products.isEmpty) {
+                        return const Center(child: Text('لا توجد عناصر لهذه الخدمة'));
+                      }
+                      return ListView.separated(
+                        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 90.h),
+                        itemCount: products.length,
+                        separatorBuilder: (_, __) => AppSpacerH(10.h),
+                        itemBuilder: (context, index) =>
+                            _productCard(products[index], vendorId),
+                      );
+                    },
+                    error: (err) => Center(child: Text(err.error)),
+                  );
+            }),
+          ),
+          _bottomBar(vendorId),
+        ],
+      ),
+    );
+  }
+
+  Widget _productCard(Product product, String vendorId) {
+    final bool hasVariants =
+        (product.sbproducts?.isNotEmpty ?? false) || product.variant != null;
+
+    return Container(
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14.r),
+            child: SizedBox(
+              width: 76.w,
+              height: 76.w,
+              child: (product.imagePath?.isNotEmpty ?? false)
+                  ? AppNetworkImage(product.imagePath!,
+                      fit: BoxFit.cover,
+                      width: 76.w,
+                      height: 76.w,
+                      placeholder: 'assets/images/app_icon.png')
+                  : Container(
+                      color: const Color(0xFFEAF6F8),
+                      child: const Icon(Icons.local_laundry_service_rounded,
+                          color: Color(0xFF156172)),
+                    ),
+            ),
+          ),
+          AppSpacerW(12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(product.name ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF0B1E2E))),
+                AppSpacerH(4.h),
+                ProductPriceBlock(
+                  currency: _settingsBox.get('currency')?.toString() ?? '\$',
+                  currentPrice:
+                      (product.currentPrice ?? product.oldPrice ?? 0).toDouble(),
+                  oldPrice: product.oldPrice?.toDouble(),
+                ),
+                if (widget.vendorName != null) ...[
+                  AppSpacerH(2.h),
+                  Text(widget.vendorName!,
+                      style: TextStyle(
+                          fontSize: 10.5.sp, color: const Color(0xFF64748B))),
+                ],
+                AppSpacerH(8.h),
+                if (hasVariants)
+                  SizedBox(
+                    height: 36.h,
+                    width: 120.w,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF028090),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r)),
+                      ),
+                      onPressed: () => _openVariantSheet(product, vendorId),
+                      child: const Text('اختر الخيار',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800)),
+                    ),
+                  )
+                else
+                  _addButton(product, vendorId, null),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _addButton(Product product, String vendorId, SubProduct? sub) {
+    final existing = CartHelper.findCartItem(
+      vendorId: vendorId,
+      productId: product.id ?? sub?.id ?? 0,
+      subProductId: sub?.id,
+    );
+
+    if (existing != null) {
+      return IncDecButtonWithValueV2(
+        height: 36.h,
+        width: 120.w,
+        value: existing.productsQTY,
+        onDec: () {
+          CartHelper.decrement(
+            vendorId: vendorId,
+            productId: existing.productsId,
+            subProductId: existing.subProduct?.id ?? existing.subproductsId,
+          );
+          ref.refreshVendorCarts();
+        },
+        onInc: () {
+          CartHelper.increment(
+            vendorId: vendorId,
+            productId: existing.productsId,
+            subProductId: existing.subProduct?.id ?? existing.subproductsId,
+          );
+          ref.refreshVendorCarts();
+        },
+      );
+    }
+
+    return SizedBox(
+      height: 36.h,
+      width: 120.w,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          side: const BorderSide(color: Color(0xFF028090)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+        ),
+        onPressed: () async {
+          final double unit = sub != null
+              ? (sub.price ?? 0).toDouble()
+              : (product.currentPrice ?? product.oldPrice ?? 0).toDouble();
+          final allowed = await ensureSingleVendorOrConfirmClear(
+            context: context,
+            ref: ref,
+            vendorId: vendorId,
+          );
+          if (!allowed) return;
+          CartHelper.addItem(
+            vendorId,
+            CarItemHiveModel(
+              productsId: product.id ?? sub?.id ?? 0,
+              subproductsId: sub?.id,
+              productsQTY: 1,
+              unitPrice: unit,
+              productsName: sub?.name ?? product.name ?? '',
+              productsImage: product.imagePath ?? '',
+              serviceName: widget.service.name ?? '',
+              subProduct: sub,
+              vendorId: vendorId,
+              vendorName: widget.vendorName,
+            ),
+          );
+          ref.refreshVendorCarts();
+        },
+        child: const Text('أضف',
+            style: TextStyle(
+                color: Color(0xFF028090),
+                fontSize: 12,
+                fontWeight: FontWeight.w800)),
+      ),
+    );
+  }
+
+  Future<void> _openVariantSheet(Product product, String vendorId) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => SubPrductBottomSheet(
+        product: product,
+        vendorId: vendorId,
+        vendorName: widget.vendorName,
+      ),
+    );
+    if (!mounted) return;
+    ref.refreshVendorCarts();
+  }
+
+  Widget _bottomBar(String vendorId) {
+    final items = CartHelper.getCartForVendor(vendorId);
+    return ValueListenableBuilder(
+      valueListenable: Hive.box(AppHSC.cartBox).listenable(),
+      builder: (context, Box box, _) {
+        final double total = calculateTotal(items);
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: const Color(0xFF0C2238).withOpacity(0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, -4))
+            ],
+          ),
+          child: SafeArea(
+            top: false,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('${items.length} عنصر في السلة',
+                          style: TextStyle(
+                              fontSize: 11.sp,
+                              color: const Color(0xFF64748B))),
+                      AppSpacerH(2.h),
+                      Text(
+                          '${_settingsBox.get('currency') ?? '\$'} ${total.toStringAsFixed(2)}',
+                          style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w900,
+                              color: const Color(0xFF0B1E2E))),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 46.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF028090),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.r)),
+                    ),
+                    onPressed: items.isEmpty ? null : () => Navigator.pop(context),
+                    child: const Text('متابعة',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w800)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

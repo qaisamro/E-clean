@@ -14,6 +14,7 @@ import 'package:laundry_customer/providers/cart_provider.dart';
 import 'package:laundry_customer/providers/vendor_providers.dart';
 import 'package:laundry_customer/screens/homePage/choose_items.dart';
 import 'package:laundry_customer/utils/cart_helper.dart';
+import 'package:laundry_customer/utils/cart_single_vendor_guard.dart';
 import 'package:laundry_customer/utils/context_less_nav.dart';
 import 'package:laundry_customer/widgets/buttons/cart_item_inc_dec_button.dart';
 import 'package:laundry_customer/widgets/buttons/full_width_button.dart';
@@ -280,7 +281,14 @@ class _SubPrductBottomSheetState extends ConsumerState<SubPrductBottomSheet> {
                         title: S.of(context).additm,
                         width: 120.w,
                         height: 36.h,
-                        onTap: () {
+                        onTap: () async {
+                          final bool allowed =
+                              await ensureSingleVendorOrConfirmClear(
+                            context: context,
+                            ref: ref,
+                            vendorId: vendorId,
+                          );
+                          if (!allowed) return;
                           final newItem = CarItemHiveModel(
                             productsId: subProduct.id ?? 0,
                             subproductsId: subProduct.id,

@@ -1,115 +1,332 @@
-"type":100},
-{"params":{"backup_job":false,"group_id":"pm/http://127.0.0.1:28894"},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998967","type":123},
-{"phase":1,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998967","type":104},
-{"params":{"source_dependency":{"id":3024,"type":48}},"phase":1,"source":{"id":3025,"start_time":"638998967","type":24},"time":"638998967","type":44},
-{"params":{"source_dependency":{"id":3023,"type":7}},"phase":1,"source":{"id":3024,"start_time":"638998967","type":48},"time":"638998967","type":44},
-{"phase":0,"source":{"id":3024,"start_time":"638998967","type":48},"time":"638998968","type":45},
-{"params":{"address":"[2001:4860:4860::8888]:443"},"phase":1,"source":{"id":3025,"start_time":"638998967","type":24},"time":"638998968","type":94},
-{"params":{"net_error":-109},"phase":2,"source":{"id":3025,"start_time":"638998967","type":24},"time":"638998968","type":94},
-{"params":{"address":"[2001:4860:4860::8888]:443","net_error":-109},"phase":0,"source":{"id":3024,"start_time":"638998967","type":48},"time":"638998968","type":46},
-{"phase":2,"source":{"id":3024,"start_time":"638998967","type":48},"time":"638998968","type":44},
-{"phase":2,"source":{"id":3025,"start_time":"638998967","type":24},"time":"638998968","type":44},
-{"params":{"cached":false,"ipv6_available":false},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998968","type":6},
-{"params":{"tasks":[4,9,1,0]},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998968","type":7},
-{"params":{"source_dependency":{"id":3023,"type":7}},"phase":1,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998968","type":44},
-{"params":{"address":"127.0.0.1:28894","connector":"first","source_dependency":{"id":3026,"type":10}},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998968","type":111},
-{"params":{"address_list":["127.0.0.1:28894"],"aliases":[]},"phase":1,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998968","type":50},
-{"params":{"address":"127.0.0.1:28894"},"phase":1,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998968","type":51},
-{"phase":2,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998969","type":51},
-{"params":{"local_address":"127.0.0.1:59866","remote_address":"127.0.0.1:28894"},"phase":2,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998969","type":50},
-{"params":{"connector":"first"},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998969","type":112},
-{"params":{"connector":"first","is_usable":true},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998969","type":114},
-{"params":{"connector":"first"},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998970","type":113},
-{"params":{"source_dependency":{"id":3026,"type":10}},"phase":0,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998970","type":101},
-{"phase":2,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998970","type":104},
-{"params":{"source_dependency":{"id":3023,"type":7}},"phase":0,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":124},
-{"params":{"source_dependency":{"id":3026,"type":10}},"phase":0,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":125},
-{"phase":2,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":117},
-{"phase":2,"source":{"id":3023,"start_time":"638998967","type":7},"time":"638998970","type":100},
-{"params":{"source_dependency":{"id":3022,"type":17}},"phase":1,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998970","type":53},
-{"phase":2,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":186},
-{"params":{"source_dependency":{"id":3022,"type":17}},"phase":0,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":187},
-{"params":{"source_dependency":{"id":3019,"type":1}},"phase":0,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":189},
-{"params":{"source_dependency":{"id":3019,"type":1}},"phase":0,"source":{"id":3021,"start_time":"638998967","type":32},"time":"638998970","type":189},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":180},
-{"phase":2,"source":{"id":3022,"start_time":"638998967","type":17},"time":"638998970","type":181},
-{"phase":2,"source":{"id":3021,"start_time":"638998967","type":32},"time":"638998970","type":194},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":145},
-{"params":{"client_address_space":"unknown","resource_address_space":"loopback","result":"allowed-by-policy-allow"},"phase":0,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":600},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":145},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":237},
-{"params":{"headers":["Host: 127.0.0.1:28894","Connection: keep-alive","sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*","Origin: oc://renderer","Sec-Fetch-Site: cross-site","Sec-Fetch-Mode: cors","Sec-Fetch-Dest: empty","Accept-Encoding: gzip, deflate, br, zstd","Accept-Language: en-US","Authorization: [78 bytes were stripped]"],"line":"GET /api/info HTTP/1.1\r\n"},"phase":0,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":238},
-{"params":{"byte_count":610},"phase":0,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998970","type":82},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":237},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":242},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998970","type":438},
-{"params":{"byte_count":394},"phase":0,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998972","type":84},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998972","type":438},
-{"params":{"headers":["HTTP/1.1 200 OK","content-type: application/json","content-length: 163","access-control-allow-origin: oc://renderer","vary: Origin, Accept-Encoding","Date: Wed, 04 Nov 2026 22:03:26 GMT","Connection: keep-alive","Keep-Alive: timeout=5"]},"phase":0,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998972","type":243},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998972","type":242},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998972","type":160},
-{"params":{"buf_len":288,"index":0,"offset":0,"truncate":true},"phase":1,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998972","type":171},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998972","type":171},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":160},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":162},
-{"params":{"buf_len":0,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998973","type":171},
-{"params":{"bytes_copied":0},"phase":2,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998973","type":171},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":162},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":139},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":139},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":134},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998973","type":142},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":142},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":245},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":245},
-{"params":{"buf_len":163,"index":1,"offset":0,"truncate":true},"phase":1,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998974","type":171},
-{"params":{"bytes_copied":163},"phase":2,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998974","type":171},
-{"params":{"byte_count":163},"phase":0,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":148},
-{"phase":1,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":245},
-{"phase":2,"source":{"id":3026,"start_time":"638998968","type":10},"time":"638998974","type":53},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":245},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":593},
-{"phase":2,"source":{"id":3019,"start_time":"638998965","type":1},"time":"638998974","type":2},
-{"phase":0,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998975","type":178},
-{"phase":2,"source":{"id":3020,"start_time":"638998966","type":15},"time":"638998975","type":168},
-{"params":{"byte_count":18},"phase":0,"source":{"id":69,"start_time":"637888856","type":10},"time":"638999062","type":84},
-{"phase":2,"source":{"id":62,"start_time":"637888844","type":1},"time":"638999062","type":245},
-{"params":{"buf_len":13,"index":1,"offset":2847971,"truncate":true},"phase":1,"source":{"id":63,"start_time":"637888853","type":15},"time":"638999062","type":171},
-{"params":{"bytes_copied":13},"phase":2,"source":{"id":63,"start_time":"637888853","type":15},"time":"638999062","type":171},
-{"params":{"byte_count":13},"phase":0,"source":{"id":62,"start_time":"637888844","type":1},"time":"638999062","type":148},
-{"phase":1,"source":{"id":62,"start_time":"637888844","type":1},"time":"638999062","type":245},
-{"params":{"cors_preflight_policy":"consider_preflight","is_revalidating":false,"request_headers":{"headers":["sec-ch-ua-platform: \"Windows\"","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) OpenCode/2.2.5 Chrome/152.0.7977.167 Electron/44.9.1 Safari/537.36","sec-ch-ua: \"Not?A_Brand\";v=\"24\", \"Chromium\";v=\"152\"","sec-ch-ua-mobile: ?0","Accept: */*"],"line":"GET /api/info HTTP/1.1\r\n"},"url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009007","type":593},
-{"params":{"preflight_required":false},"phase":0,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":594},
-{"params":{"priority":"MEDIUM","traffic_annotation":101845102,"url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":2},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":138},
-{"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":138},
-{"params":{"get_sts_state_result":false,"host":"127.0.0.1","host_found_in_hsts_bypass_list":false,"should_upgrade_to_ssl":false},"phase":0,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":611},
-{"params":{"initiator":"oc://renderer","load_flags":73792,"method":"GET","network_isolation_key":"oc://renderer oc://renderer","request_type":"other","site_for_cookies":"SiteForCookies: {site=oc://renderer; schemefully_same=true}","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":134},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":616},
-{"params":{"cache_filter":"none","frame_entry":"none","top_frame_primary":"none"},"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":616},
-{"params":{"privacy_mode":"enabled"},"phase":0,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":604},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009008","type":137},
-{"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":137},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":153},
-{"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":153},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":154},
-{"params":{"created":false,"key":"1/0/http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3028,"start_time":"639009009","type":15},"time":"639009009","type":168},
-{"params":{"result":"opened"},"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":154},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":157},
-{"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":157},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":159},
-{"params":{"buf_len":288,"index":0,"offset":0},"phase":1,"source":{"id":3028,"start_time":"639009009","type":15},"time":"639009009","type":170},
-{"params":{"bytes_copied":288},"phase":2,"source":{"id":3028,"start_time":"639009009","type":15},"time":"639009009","type":170},
-{"phase":2,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":159},
-{"params":{"allowed_bad_certs":[],"is_preconnect":false,"privacy_mode":"enabled","url":"http://127.0.0.1:28894/api/info"},"phase":1,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":194},
-{"phase":1,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":180},
-{"params":{"source_dependency":{"id":3029,"type":32}},"phase":0,"source":{"id":3027,"start_time":"639009007","type":1},"time":"639009009","type":195},
-{"params":{"source_dependency":{"id":3027,"type":1}},"phase":0,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":195},
-{"phase":1,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":33},
-{"params":{"proxy_info":"DIRECT"},"phase":0,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":35},
-{"phase":2,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":33},
-{"params":{"proxy_chain":"[direct://]"},"phase":0,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":196},
-{"params":{"destination":"http://127.0.0.1:28894","expect_spdy":false,"logical_destination":"http://127.0.0.1:28894","priority":"MEDIUM","source_dependency":{"id":3029,"type":32},"type":"main","using_quic":false},"phase":1,"source":{"id":3030,"start_time":"639009009","type":17},"time":"639009009","type":181},
-{"params":{"source_dependency":{"id":3030,"type":17}},"phase":0,"source":{"id":3029,"start_time":"639009009","type":32},"time":"639009009","type":183},
-{"params":{"should_wait":false},"phase":1,"source":{"id":3030,"start_time":"639009009","type":17},"time":"639009009","type":182},
-{"phase
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:laundry_customer/constants/config.dart';
+import 'package:laundry_customer/utils/context_less_nav.dart';
+import 'package:laundry_customer/widgets/misc_widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+/// Contact support screen — redesigned to match the app's teal identity.
+/// Every channel is hidden automatically when its config value is empty.
+class ContactUs extends StatelessWidget {
+  const ContactUs({super.key});
+
+  Future<void> _open(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final String whatsapp = AppConfig.ctWhatsApp;
+    final String phone = AppConfig.ctPhone;
+    final String mail = AppConfig.ctMail;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF7F2),
+      body: SafeArea(
+        bottom: false,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // ===== Gradient hero =====
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 30.h),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF028090), Color(0xFF00A896)],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                  ),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(28)),
+                ),
+                child: Column(children: [
+                  Row(children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(12.r),
+                      onTap: () => context.nav.pop(),
+                      child: Container(
+                          width: 38.w,
+                          height: 38.h,
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.16),
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.22))),
+                          child: const Icon(Icons.arrow_forward_rounded,
+                              size: 18, color: Colors.white)),
+                    ),
+                    const Spacer(),
+                    Image.asset('assets/images/app_icon.png', height: 36.h),
+                  ]),
+                  SizedBox(height: 18.h),
+                  Container(
+                    width: 92.w,
+                    height: 92.w,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.16),
+                      shape: BoxShape.circle,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x5500474A),
+                          blurRadius: 18,
+                          offset: Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Icon(Icons.support_agent_rounded,
+                        size: 44.sp, color: Colors.white),
+                  ),
+                  SizedBox(height: 14.h),
+                  Text('تواصل مع الدعم',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          fontFamily: 'Cairo')),
+                  SizedBox(height: 6.h),
+                  Text('نسعد بخدمتك على مدار الساعة',
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white.withOpacity(0.92),
+                          fontFamily: 'Cairo')),
+                ]),
+              ),
+
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 28.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'اختر القناة المناسبة وسنقوم بالرد عليك في أقرب وقت',
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF64748B),
+                          height: 1.5,
+                          fontFamily: 'Cairo'),
+                    ),
+                    SizedBox(height: 18.h),
+
+                    if (whatsapp.isNotEmpty)
+                      _channelCard(
+                        icon: Icons.chat_rounded,
+                        color: const Color(0xFF25D366),
+                        title: 'واتساب',
+                        subtitle: whatsapp,
+                        buttonLabel: 'ابدأ محادثة',
+                        buttonColor: const Color(0xFF25D366),
+                        onTap: () =>
+                            _open('https://wa.me/${whatsapp.replaceAll('+', '')}'),
+                      ),
+
+                    if (whatsapp.isNotEmpty && phone.isNotEmpty)
+                      SizedBox(height: 12.h),
+
+                    if (phone.isNotEmpty)
+                      _channelCard(
+                        icon: Icons.phone_in_talk_rounded,
+                        color: const Color(0xFF028090),
+                        title: 'اتصال هاتفي',
+                        subtitle: phone,
+                        buttonLabel: 'اتصل بنا',
+                        buttonColor: const Color(0xFF028090),
+                        onTap: () => _open('tel:$phone'),
+                      ),
+
+                    if ((whatsapp.isNotEmpty || phone.isNotEmpty) && mail.isNotEmpty)
+                      SizedBox(height: 12.h),
+
+                    if (mail.isNotEmpty)
+                      _channelCard(
+                        icon: Icons.mail_outline_rounded,
+                        color: const Color(0xFFF59E0B),
+                        title: 'البريد الإلكتروني',
+                        subtitle: mail,
+                        buttonLabel: 'أرسل بريداً',
+                        buttonColor: const Color(0xFFF59E0B),
+                        onTap: () => _open('mailto:$mail'),
+                      ),
+
+                    if (whatsapp.isEmpty && phone.isEmpty && mail.isEmpty)
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 36.h),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(Icons.contact_support_outlined,
+                                size: 44.sp,
+                                color: const Color(0xFFCBD5E1)),
+                            SizedBox(height: 12.h),
+                            Text('لا توجد قنوات تواصل متاحة حالياً.',
+                                style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: const Color(0xFF64748B),
+                                    fontFamily: 'Cairo')),
+                          ],
+                        ),
+                      ),
+                    SizedBox(height: 18.h),
+                    Container(
+                      padding: EdgeInsets.all(14.w),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFFAF8),
+                        borderRadius: BorderRadius.circular(20.r),
+                        border:
+                            Border.all(color: const Color(0xFF00A896).withOpacity(0.35)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 44.w,
+                            height: 44.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF028090),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.schedule_rounded,
+                                size: 22.sp, color: Colors.white),
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('ساعات العمل',
+                                    style: TextStyle(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w900,
+                                        color: const Color(0xFF0B1E2E),
+                                        fontFamily: 'Cairo')),
+                                SizedBox(height: 2.h),
+                                Text('على مدار الساعة — بلا عطلة رسمية',
+                                    style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: const Color(0xFF475569),
+                                        fontFamily: 'Cairo')),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _channelCard({
+    required IconData icon,
+    required Color color,
+    required String title,
+    required String subtitle,
+    required String buttonLabel,
+    required Color buttonColor,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22.r),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+              color: const Color(0xFF0B1E2E).withOpacity(0.05),
+              blurRadius: 14,
+              offset: const Offset(0, 6))
+        ],
+      ),
+      padding: EdgeInsets.all(16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(children: [
+            Container(
+              width: 52.w,
+              height: 52.w,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 26.sp),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w900,
+                          color: const Color(0xFF0B1E2E),
+                          fontFamily: 'Cairo')),
+                  SizedBox(height: 3.h),
+                  Text(subtitle,
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF028090),
+                          fontFamily: 'Cairo'),
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.right),
+                ],
+              ),
+            ),
+          ]),
+          SizedBox(height: 14.h),
+          SizedBox(
+            height: 44.h,
+            width: double.infinity,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: buttonColor,
+                borderRadius: BorderRadius.circular(14.r),
+                boxShadow: [
+                  BoxShadow(
+                      color: buttonColor.withOpacity(0.28),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4)),
+                ],
+              ),
+              child: ElevatedButton.icon(
+                onPressed: onTap,
+                icon: const Icon(Icons.arrow_forward_rounded,
+                    size: 17, color: Colors.white),
+                label: Text(
+                  buttonLabel,
+                  style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      fontFamily: 'Cairo'),
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    )),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

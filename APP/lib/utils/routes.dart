@@ -5,22 +5,20 @@ import 'package:laundry_customer/models/all_service_model/service.dart';
 import 'package:laundry_customer/screens/address/add_update_address.dart';
 import 'package:laundry_customer/screens/address/manage_address_screen.dart';
 import 'package:laundry_customer/screens/auth/login_screen.dart';
+import 'package:laundry_customer/screens/auth/join_request_waiting_screen.dart';
 import 'package:laundry_customer/screens/auth/password_recovery.dart';
 import 'package:laundry_customer/screens/auth/password_recovery_stage_three.dart';
 import 'package:laundry_customer/screens/auth/password_recovery_stage_two.dart';
 import 'package:laundry_customer/screens/auth/post_code_check_screen.dart';
 import 'package:laundry_customer/screens/auth/pot_code_check_success.dart';
-import 'package:laundry_customer/screens/auth/sign_up_otp_image_upload.dart';
 import 'package:laundry_customer/screens/auth/sign_up_otp_verification.dart';
 import 'package:laundry_customer/screens/auth/sign_up_screen.dart';
-import 'package:laundry_customer/screens/auth/sign_up_success.dart';
 import 'package:laundry_customer/models/vendor_model/vendor.dart';
 import 'package:laundry_customer/screens/homePage/choose_items.dart';
 import 'package:laundry_customer/screens/homePage/create_password_screen.dart';
 import 'package:laundry_customer/screens/homePage/edit_profile.dart';
 import 'package:laundry_customer/screens/homePage/home_screen.dart';
 import 'package:laundry_customer/screens/store/vendor_store_screen.dart';
-import 'package:laundry_customer/screens/onBoarding/on_boarding.dart';
 import 'package:laundry_customer/screens/onBoarding/splash_screen.dart';
 import 'package:laundry_customer/screens/order/delivery_schedule_picker.dart';
 import 'package:laundry_customer/screens/order/my_order_home_tile.dart';
@@ -30,10 +28,8 @@ import 'package:laundry_customer/screens/other/about_us.dart';
 import 'package:laundry_customer/screens/other/contact_us.dart';
 import 'package:laundry_customer/screens/other/privacy_policy.dart';
 import 'package:laundry_customer/screens/other/terms_of_service.dart';
-import 'package:laundry_customer/screens/payment/add_card_screen.dart';
 import 'package:laundry_customer/screens/payment/order_success.dart';
 import 'package:laundry_customer/screens/payment/payment_screen.dart';
-import 'package:laundry_customer/screens/payment/web_payment_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Routes {
@@ -53,8 +49,7 @@ class Routes {
   static const recoverPassWordStageThree = '/recoverPassWordStageThree';
   static const signUpScreen = '/signUpScreen';
   static const signUpOtpScreen = '/signUpOtpScreen';
-  static const signUpImageUpload = '/signUpImageUpload';
-  static const signUpComeplete = '/signUpComplete';
+  static const joinRequestWaitingScreen = '/joinRequestWaitingScreen';
   static const homeScreen = '/homeScreen';
   static const orderDetails = '/orderDetails';
   // static const messageScreen = '/messageScreen';
@@ -75,11 +70,7 @@ class Routes {
   static const schedulePickerScreen = '/schedulePickerScreen';
   static const deilverySchedulePickerScreen = '/deilverySchedulePickerScreen';
 
-  //Card
-  static const addCardScreen = '/addCardScreen';
-
   static const editProfileScreen = '/editProfileScreen';
-  static const webviewPayment = '/webviewPayment';
   static const vendorStoreScreen = '/vendorStoreScreen';
 }
 
@@ -90,8 +81,6 @@ Route generatedRoutes(RouteSettings settings) {
     //core
     case Routes.splash:
       child = const SplashScreen();
-    case Routes.onBoarding:
-      child = OnBoardingScreen();
 
     case Routes.loginScreen:
       child = const LoginScreen();
@@ -114,13 +103,31 @@ Route generatedRoutes(RouteSettings settings) {
     case Routes.signUpScreen:
       child = const SignUpScreen();
     case Routes.signUpOtpScreen:
+      final dynamic otpArgs = settings.arguments;
+      String otpContact = '';
+      String otpMode = 'register';
+      if (otpArgs is String) {
+        otpContact = otpArgs;
+      } else if (otpArgs is Map) {
+        otpContact = otpArgs['contact']?.toString() ?? '';
+        otpMode = otpArgs['mode']?.toString() ?? 'register';
+      }
       child = SignUpOtpVerification(
-        forEmailorPhone: settings.arguments! as String,
+        forEmailorPhone: otpContact,
+        mode: otpMode,
       );
-    case Routes.signUpImageUpload:
-      child = const SignUpImageUpload();
-    case Routes.signUpComeplete:
-      child = const SignUpComplete();
+    case Routes.joinRequestWaitingScreen:
+      child = JoinRequestWaitingScreen(
+        args: settings.arguments is JoinRequestWaitingArgs
+            ? settings.arguments! as JoinRequestWaitingArgs
+            : JoinRequestWaitingArgs(
+                contact: (settings.arguments as Map?)?['contact']?.toString() ??
+                    '',
+                trackingToken: (settings.arguments as Map?)?['tracking_token']
+                        ?.toString() ??
+                    '',
+              ),
+      );
     case Routes.homeScreen:
       child = const HomeScreen();
     case Routes.orderDetails:
@@ -180,16 +187,8 @@ Route generatedRoutes(RouteSettings settings) {
     case Routes.deilverySchedulePickerScreen:
       child = const DeliverySchedulerPicker();
     //Card
-    case Routes.addCardScreen:
-      child = AddCardScreen();
     case Routes.editProfileScreen:
       child = const EditProfilePage();
-
-    case Routes.webviewPayment:
-      final arg = settings.arguments! as WebPaymentScreenArg;
-      child = WebPayementScreen(
-        webPaymentScreenAr: arg,
-      );
 
     default:
       throw Exception('Invalid route: ${settings.name}');

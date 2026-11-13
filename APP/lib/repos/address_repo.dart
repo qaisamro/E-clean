@@ -8,10 +8,13 @@ abstract class IAddressRepo {
   Future<AddresListModel> getAddresses();
   Future<Response?> addAddress(Map<String, dynamic> address);
   Future<void> updateAddress(Map<String, dynamic> address, String addressID);
+  Future<void> deleteAddress(String addressID);
+  Future<void> setDefault(String addressID);
 }
 
 class AddressRepo implements IAddressRepo {
-  final Dio _dio = getDio();
+  AddressRepo({Dio? client}) : _dio = client ?? getDio();
+  final Dio _dio;
   @override
   Future<AddresListModel> getAddresses() async {
     final Response response = await _dio.get(
@@ -22,8 +25,14 @@ class AddressRepo implements IAddressRepo {
 
   @override
   Future<Response> addAddress(Map<String, dynamic> address) async {
-    final response =
-        await _dio.post('/addresses', data: FormData.fromMap(address));
+    final response = await _dio.post('/addresses',
+        data: FormData.fromMap(_payload(address)));
+    final body = response.data;
+    if (body is! Map ||
+        body['data'] is! Map ||
+        body['data']['addresses'] is! List) {
+      throw const AddressSaveFailure('لم يتم حفظ العنوان. حاول مرة أخرى.');
+    }
     return response;
   }
 
@@ -34,12 +43,40 @@ class AddressRepo implements IAddressRepo {
   ) async {
     await _dio.post(
       '/addresses/$addressID',
-      data: FormData.fromMap(address),
+      data: FormData.fromMap(_payload(address)),
     );
   }
+
+  Map<String, dynamic> _payload(Map<String, dynamic> address) => {
+        ...address,
+        if (address.containsKey('is_default'))
+          'is_default': address['is_default'] == true ? '1' : '0',
+      };
+
+  @override
+  Future<void> deleteAddress(String addressID) async {
+    await _dio.delete('/addresses/$addressID');
+  }
+
+  @override
+  Future<void> setDefault(String addressID) =>
+      updateAddress({'is_default': true}, addressID);
+}
+
+class AddressSaveFailure implements Exception {
+  const AddressSaveFailure(this.message);
+  final String message;
+  @override
+  String toString() => message;
 }
 
 class OfflineAddressRepo implements IAddressRepo {
+  @override
+  Future<void> deleteAddress(String addressID) async =>
+      throw const AddressSaveFailure('الحفظ يحتاج اتصالاً بالخادم');
+  @override
+  Future<void> setDefault(String addressID) async =>
+      throw const AddressSaveFailure('الحفظ يحتاج اتصالاً بالخادم');
   @override
   Future<AddresListModel> getAddresses() async {
     await Future.delayed(apiDataDuration);
@@ -49,7 +86,7 @@ class OfflineAddressRepo implements IAddressRepo {
 
   @override
   Future<Response?> addAddress(Map<String, dynamic> address) async {
-    final response = await Future.delayed(apiDataDuration);
+    await Future.delayed(apiDataDuration);
 
     return null;
   }

@@ -1,34 +1,33 @@
-# Codemagic configuration — iOS builds for the Flutter customer app.
+# Codemagic configuration — iOS builds for the Flutter laundry customer app.
 #
-# This file MUST live in the repository root (Codemagic only looks there).
-# The Flutter app itself lives in Best-Laundry-Customer-App-SDK-3.41.6,
-# so every workflow sets working_directory to that folder.
+# Repo layout: the monorepo root contains this file; the Flutter app lives in
+# the APP/ subdirectory. Codemagic reads THIS file directly from the repo root.
 #
-# Docs:
-#   - Signing iOS apps (codemagic.yaml): https://docs.codemagic.io/yaml-code-signing/signing-ios/
-#   - Flutter projects: https://docs.codemagic.io/flutter-configuration/flutter-projects
-#
-# One-time setup (in the Codemagic UI):
-#   1. Create an App Store Connect API key in the Apple Developer Portal
-#      (Users & Access > Keys > App Store Connect API). Save the .p8 file and
-#      note the Key ID and Issuer ID.
-#   2. Codemagic > Team settings > Environment variables > global:
-#      add a GROUP named  app_store_connect  with the 3 variables:
-#        APP_STORE_CONNECT_PRIVATE_KEY    = (full contents of the .p8 file)
-#        APP_STORE_CONNECT_KEY_IDENTIFIER = (e.g. 3MD9688D9K)
-#        APP_STORE_CONNECT_ISSUER_ID      = (e.g. 21d78e2f-b8ad-....)
-#   3. Connect this repository (GitHub/GitLab/Bitbucket) and add the app,
-#      with Project path set to: Best-Laundry-Customer-App-SDK-3.41.6
-#      Then click "Check for configuration file".
-#   4. A paid Apple Developer Program ($99/year) account is required for
-#      signing builds that run on real iPhones or go to TestFlight/App Store.
+# One-time setup in the Codemagic UI:
+#   1. Connect this Git repository (GitHub: github.com/qaisamro/E-clean) to
+#      Codemagic (Application settings > Integration) and select the Flutter
+#      app (APP/). Codemagic auto-detects this codemagic.yaml.
+#   2. Create an App Store Connect API key in Apple Developer (Users & Access
+#      > Keys > App Store Connect API). Role: Admin (required to create
+#      certificates and distribution profiles automatically).
+#   3. Codemagic > Team settings > Environment variables > global:
+#      add a GROUP named  app_store_connect  with:
+#        APP_STORE_CONNECT_PRIVATE_KEY    = contents of the .p8 file (BEGIN/END lines)
+#        APP_STORE_CONNECT_KEY_IDENTIFIER = e.g. 3MD9688D9K
+#        APP_STORE_CONNECT_ISSUER_ID      = e.g. 21d78e2f-b8ad-....
+#   4. Apple Developer account must stay active ($99/year) and App Store
+#      Connect must contain the app (Bundle ID: com.elitecleanps.laundry).
+#   5. First build: download the distribution profile is automatic.
+#   6. In App Store Connect > App Store > version 1.0.7 > select the uploaded
+#      build and submit for review; before that, configure screenshots and
+#      "App Review" sign-in notes in Apple Developer console.
 
 workflows:
   ios-production:
     name: iOS Production (App Store / TestFlight)
     instance_type: mac_mini_m2
     max_build_duration: 120
-    working_directory: Best-Laundry-Customer-App-SDK-3.41.6
+    working_directory: APP
     environment:
       flutter: stable
       xcode: latest
@@ -39,12 +38,6 @@ workflows:
         BUNDLE_ID: com.elitecleanps.laundry
         APP_DISPLAY_NAME: Elite Cleaning
     scripts:
-      - name: Disable Swift Package Manager (use CocoaPods)
-        script: |
-          # firebase_core 3.6.0 has no working SwiftPM manifest, so the
-          # automatic SPM integration fails; build with CocoaPods instead.
-          flutter config --no-enable-swift-package-manager
-
       - name: Install Flutter dependencies
         script: |
           flutter pub get
@@ -55,84 +48,55 @@ workflows:
           echo "APP_STORE_CONNECT_KEY_IDENTIFIER: ${APP_STORE_CONNECT_KEY_IDENTIFIER:-MISSING}"
           echo "APP_STORE_CONNECT_ISSUER_ID: ${APP_STORE_CONNECT_ISSUER_ID:-MISSING}"
           echo "APP_STORE_CONNECT_PRIVATE_KEY: $([ -n "$APP_STORE_CONNECT_PRIVATE_KEY" ] && echo "set (${#APP_STORE_CONNECT_PRIVATE_KEY} chars)" || echo MISSING)"
-          echo "CERTIFICATE_PRIVATE_KEY: $([ -n "$CERTIFICATE_PRIVATE_KEY" ] && echo "set (${#CERTIFICATE_PRIVATE_KEY} chars)" || echo MISSING)"
-          case "$APP_STORE_CONNECT_PRIVATE_KEY" in
-            *BEGIN*) echo "API key format: PEM" ;;
-            *) echo "API key format: UNEXPECTED - paste the full .p8 file including BEGIN/END lines"; exit 1 ;;
-          esac
-          # Unlock/prepare the default keychain first, otherwise codesign cannot
-          # use the imported private key (errSecInternalComponent).
           keychain initialize
-          # fetch-signing-files requires CERTIFICATE_PRIVATE_KEY; it fails hard without it.
-          # --create registers the Bundle ID, distribution certificate and profile if missing.
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE --create
           keychain add-certificates
           xcode-project use-profiles
-          if ! grep -q "CODE_SIGN_STYLE = Manual" ios/Runner.xcodeproj/project.pbxproj; then
-            echo "ERROR: xcode-project use-profiles did not apply manual signing"
-            exit 1
-          fi
           echo "Manual signing configured for $BUNDLE_ID"
 
       - name: Build signed IPA
         script: |
-          # NOTE: --export-method accepts only: app-store, ad-hoc, development, enterprise.
-          # Flutter maps "app-store" to App Store Connect automatically for modern Xcode.
-          # Use a timestamp as CFBundleVersion: it is always higher than any
-          # previously uploaded build number (Apple rejects duplicates).
-          # Info.plist must read $(FLUTTER_BUILD_NUMBER); reading
-          # $(CURRENT_PROJECT_VERSION) ignores --build-number entirely.
+          set -e
           BUILD_NUM="$(date +%s)"
-          echo "Requested CFBundleVersion: $BUILD_NUM"
+          echo "CFBundleVersion: $BUILD_NUM"
           flutter build ipa \
             --release \
             --export-method app-store \
-            --build-number "$BUILD_NUM" \
-            --dart-define=API_BASE_URL=https://elitecleanps.com/api
-          unzip -p build/ios/ipa/*.ipa 'Payload/*.app/Info.plist' > /tmp/app_info.plist
-          echo "Actual IPA CFBundleVersion: $(plutil -extract CFBundleVersion raw /tmp/app_info.plist 2>/dev/null || echo UNKNOWN)"
+            --build-number "$BUILD_NUM"
     artifacts:
-      - Best-Laundry-Customer-App-SDK-3.41.6/build/ios/ipa/*.ipa
-      - build/ios/ipa/*.ipa
+      - APP/build/ios/ipa/*.ipa
+      - APP/build/ios/archive/*.xcarchive
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        # Reference the group created above; Codemagic injects these vars.
+        # Codemagic injects the API key from the app_store_connect group.
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        # Set to true to also submit the build to TestFlight beta review.
-        # The build is uploaded to App Store Connect regardless.
+        # Keep false to only attach the build to App Store Connect;
+        # turn on when you want Codemagic to send it to TestFlight directly.
         submit_to_testflight: false
         # beta_groups:
         #   - Internal Testers
-        # email:
-        #   recipients:
-        #     - you@example.com
-        # slack:
-        #   channel: '#builds'
 
   ios-simulator:
     name: iOS Simulator (no Apple account needed)
     instance_type: mac_mini_m2
     max_build_duration: 60
-    working_directory: Best-Laundry-Customer-App-SDK-3.41.6
+    working_directory: APP
     environment:
       flutter: stable
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Disable Swift Package Manager (use CocoaPods)
-        script: |
-          flutter config --no-enable-swift-package-manager
       - name: Install Flutter dependencies
         script: |
           flutter pub get
+
       - name: Build for the iOS Simulator
         script: |
           flutter build ios --simulator --debug
     artifacts:
-      - Best-Laundry-Customer-App-SDK-3.41.6/build/ios/iphonesimulator/*.app
-      - build/ios/iphonesimulator/*.app
+      - APP/build/ios/iphonesimulator/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/Runner.app

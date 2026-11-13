@@ -59,11 +59,11 @@ class _AppConfettiWrapperState extends State<AppConfettiWrapper> {
           confettiController: _controller,
           blastDirectionality: BlastDirectionality.explosive,
           colors: const [
-            Colors.red,
-            Colors.blue,
-            Colors.green,
-            Colors.orange,
-            Colors.purple,
+            Color(0xFF028090), // teal primary
+            Color(0xFF00A896), // teal light
+            Color(0xFF2563EB), // blue
+            Color(0xFFF59E0B), // amber/gold
+            Color(0xFFE63946), // crimson
           ],
           gravity: 0.3,
           emissionFrequency: 0.05,

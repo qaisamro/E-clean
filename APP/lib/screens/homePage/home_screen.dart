@@ -2,10 +2,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:laundry_customer/constants/hive_contants.dart';
 import 'package:laundry_customer/providers/misc_providers.dart';
-import 'package:laundry_customer/providers/profile_update_provider.dart';
 import 'package:laundry_customer/providers/settings_provider.dart';
 import 'package:laundry_customer/screens/cart/my_cart_tab.dart';
 import 'package:laundry_customer/screens/homePage/home_tab_new.dart';
@@ -51,17 +48,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     ref.watch(settingsProvider);
-    // Only persist the Stripe customer id when the profile actually changes,
-    // instead of writing to disk on every rebuild of the whole shell.
-    ref.listen(profileInfoProvider, (previous, next) {
-      next.maybeWhen(
-        orElse: () {},
-        loaded: (_) {
-          final Box userBox = Hive.box(AppHSC.userBox);
-          userBox.put(AppHSC.stripeCustomerID, _.data?.customer?.stripeId);
-        },
-      );
-    });
     return HomeScreenWrapper(
       child: PageView(
         controller: ref.watch(homeScreenPageControllerProvider),

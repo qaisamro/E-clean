@@ -4,8 +4,10 @@ import 'package:laundry_customer/models/schedules_model/schedule.dart';
 class ScheduleModel {
   Schedule schedule;
   DateTime dateTime;
+  String? vendorId;
   ScheduleModel({
     required this.schedule,
     required this.dateTime,
+    this.vendorId,
   });
 }

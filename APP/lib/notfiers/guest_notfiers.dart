@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_customer/services/safe_api_notifier.dart';
 import 'package:laundry_customer/models/all_service_model/all_service_model.dart';
 import 'package:laundry_customer/models/products_model/products_model.dart';
 import 'package:laundry_customer/models/offers_model/offers_model.dart';
@@ -11,7 +11,7 @@ import 'package:laundry_customer/repos/guest_repo.dart';
 import 'package:laundry_customer/services/api_state.dart';
 import 'package:laundry_customer/services/network_exceptions.dart';
 
-class AllPromotionsNotifier extends StateNotifier<ApiState<PromotionsModel>> {
+class AllPromotionsNotifier extends SafeApiNotifier<PromotionsModel> {
   AllPromotionsNotifier(this.repo) : super(const ApiState.initial()) {
     getAllpromotions();
   }
@@ -19,18 +19,18 @@ class AllPromotionsNotifier extends StateNotifier<ApiState<PromotionsModel>> {
   final IGuestRepo repo;
 
   Future<void> getAllpromotions() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(
+      emit(ApiState.loaded(
         data: await repo.getPromotions(),
-      );
+      ));
     } catch (e) {
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }
 
-class WideBannersNotifier extends StateNotifier<ApiState<WideBannersModel>> {
+class WideBannersNotifier extends SafeApiNotifier<WideBannersModel> {
   WideBannersNotifier(this.repo) : super(const ApiState.initial()) {
     getWideBanners();
   }
@@ -38,18 +38,18 @@ class WideBannersNotifier extends StateNotifier<ApiState<WideBannersModel>> {
   final IGuestRepo repo;
 
   Future<void> getWideBanners() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(
+      emit(ApiState.loaded(
         data: await repo.getWideBanners(),
-      );
+      ));
     } catch (e) {
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }
 
-class AllServicerNotifier extends StateNotifier<ApiState<AllServiceModel>> {
+class AllServicerNotifier extends SafeApiNotifier<AllServiceModel> {
   AllServicerNotifier(this.repo) : super(const ApiState.initial()) {
     getAllServices();
   }
@@ -57,19 +57,18 @@ class AllServicerNotifier extends StateNotifier<ApiState<AllServiceModel>> {
   final IGuestRepo repo;
 
   Future<void> getAllServices() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(
+      emit(ApiState.loaded(
         data: await repo.getServices(),
-      );
+      ));
     } catch (e) {
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }
 
-class ServiceVariationsNotifier
-    extends StateNotifier<ApiState<VariationsModel>> {
+class ServiceVariationsNotifier extends SafeApiNotifier<VariationsModel> {
   ServiceVariationsNotifier(this.repo, this.id)
       : super(const ApiState.initial()) {
     getAllVariations();
@@ -79,18 +78,18 @@ class ServiceVariationsNotifier
   final String id;
 
   Future<void> getAllVariations() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(
+      emit(ApiState.loaded(
         data: await repo.getVariations(id),
-      );
+      ));
     } catch (e) {
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }
 
-class ProductsNotifier extends StateNotifier<ApiState<ProductsModel>> {
+class ProductsNotifier extends SafeApiNotifier<ProductsModel> {
   ProductsNotifier(this.repo, this.data) : super(const ApiState.initial()) {
     getAllVariations();
   }
@@ -99,32 +98,31 @@ class ProductsNotifier extends StateNotifier<ApiState<ProductsModel>> {
   final ProducServiceVariavtionDataModel data;
 
   Future<void> getAllVariations() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(
+      emit(ApiState.loaded(
         data: await repo.getProducts(data.servieID, data.variationID),
-      );
+      ));
     } catch (e, stackTrace) {
       debugPrint("getprstacktrace $stackTrace");
       debugPrint("getpro $e");
-      throw stackTrace;
 
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }
 
-class OffersNotifier extends StateNotifier<ApiState<OffersModel>> {
+class OffersNotifier extends SafeApiNotifier<OffersModel> {
   OffersNotifier(this.repo) : super(const ApiState.initial()) {
     getOffers();
   }
   final IGuestRepo repo;
   Future<void> getOffers() async {
-    state = const ApiState.loading();
+    emit(const ApiState.loading());
     try {
-      state = ApiState.loaded(data: await repo.getOffers());
+      emit(ApiState.loaded(data: await repo.getOffers()));
     } catch (e) {
-      state = ApiState.error(error: NetworkExceptions.errorText(e));
+      emit(ApiState.error(error: NetworkExceptions.errorText(e)));
     }
   }
 }

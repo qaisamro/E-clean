@@ -45,6 +45,15 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         builder: (context, Box userBox, _) {
           final Map<String, dynamic> processedData = {};
           userBox.toMap().forEach((k, v) => processedData[k.toString()] = v);
+          final rawVendorNotifications =
+              processedData['vendor_notifications_enabled'];
+          processedData['vendor_notifications_enabled'] =
+              rawVendorNotifications == null
+                  ? true
+                  : (rawVendorNotifications == true ||
+                      rawVendorNotifications == 1 ||
+                      rawVendorNotifications == '1' ||
+                      rawVendorNotifications == 'true');
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -127,6 +136,22 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                           SizedBox(height: 8.h),
                           FormBuilderTextField(name: 'mobile', decoration: _dec(hint: '05xxxxxxxx', prefix: Icon(Icons.phone_rounded, size: 18.sp, color: const Color(0xFF028090)), readOnly: true), readOnly: true),
                           SizedBox(height: 14.h),
+                          Row(children: [Text('البريد الإلكتروني', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))), SizedBox(width: 6.w), Container(padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h), decoration: BoxDecoration(color: const Color(0xFFEFFAF8), borderRadius: BorderRadius.circular(8.r)), child: Text('اختياري', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700, color: const Color(0xFF028090))))]),
+                          SizedBox(height: 8.h),
+                          FormBuilderTextField(
+                            name: 'email',
+                            decoration: _dec(hint: 'example@email.com', prefix: Icon(Icons.email_outlined, size: 18.sp, color: const Color(0xFF028090))),
+                            keyboardType: TextInputType.emailAddress,
+                            textDirection: TextDirection.ltr,
+                            validator: (v) {
+                              final value = v?.toString().trim() ?? '';
+                              if (value.isEmpty) return null;
+                              final emailRegex = RegExp(r'^[\w\.+-]+@[\w-]+\.[\w\.-]+$');
+                              if (!emailRegex.hasMatch(value)) return 'بريد إلكتروني غير صالح';
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 14.h),
                           Row(children: [Text('رقم بديل', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))), SizedBox(width: 6.w), Container(padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h), decoration: BoxDecoration(color: const Color(0xFFEFFAF8), borderRadius: BorderRadius.circular(8.r)), child: Text('اختياري', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700, color: const Color(0xFF028090))))]),
                           SizedBox(height: 8.h),
                           FormBuilderTextField(
@@ -141,6 +166,78 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                               if (s.length > 12) return 'طويل جداً';
                               return null;
                             },
+                          ),
+                          SizedBox(height: 16.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(16.r),
+                              border:
+                                  Border.all(color: const Color(0xFFE2E8F0)),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 36.w,
+                                  height: 36.h,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFEFFAF8),
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.notifications_active_outlined,
+                                    size: 18.sp,
+                                    color: const Color(0xFF028090),
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'إشعارات المتاجر',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w800,
+                                          color: const Color(0xFF1E293B),
+                                        ),
+                                      ),
+                                      SizedBox(height: 2.h),
+                                      Text(
+                                        'استقبل إشعارات من المتاجر التي لديك طلبات مكتملة منها',
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: const Color(0xFF64748B),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                FormBuilderField<bool>(
+                                  name: 'vendor_notifications_enabled',
+                                  initialValue: processedData[
+                                          'vendor_notifications_enabled'] ==
+                                      true,
+                                  builder: (field) {
+                                    return Switch(
+                                      value: field.value ?? true,
+                                      activeThumbColor: Colors.white,
+                                      activeTrackColor:
+                                          const Color(0xFF00A896),
+                                      inactiveThumbColor: Colors.white,
+                                      inactiveTrackColor:
+                                          const Color(0xFFCBD5E1),
+                                      onChanged: (value) =>
+                                          field.didChange(value),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(height: 16.h),
                           SizedBox(

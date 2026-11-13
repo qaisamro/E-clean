@@ -1,7 +1,7 @@
 import 'package:laundry_customer/models/schedule_model.dart';
-import 'package:laundry_customer/notfiers/misc_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_customer/providers/address_session_provider.dart';
 
 final isAppLive = Provider<bool>((ref) => true);
 
@@ -37,7 +37,10 @@ final dateProvider = StateProvider.family<DateTime?, String>((ref, id) => null);
 
 // final imageProvider = StateProvider.autoDispose<File?>((ref) => null);
 
-final addressIDProvider = StateProvider.autoDispose<String>((ref) => '');
+final addressIDProvider = StateProvider<String>((ref) {
+  ref.watch(addressSessionProvider);
+  return '';
+});
 final scheduleProvider =
     StateProvider.family<ScheduleModel?, String>((ref, id) => null);
 

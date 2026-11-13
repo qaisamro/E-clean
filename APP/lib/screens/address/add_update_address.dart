@@ -1,139 +1,244 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:laundry_customer/generated/l10n.dart';
-import 'package:laundry_customer/misc/misc_global_variables.dart';
 import 'package:laundry_customer/models/addres_list_model/address.dart';
+import 'package:laundry_customer/providers/address_book_provider.dart';
 import 'package:laundry_customer/providers/address_provider.dart';
-import 'package:laundry_customer/providers/settings_provider.dart';
-import 'package:laundry_customer/utils/context_less_nav.dart';
-import 'package:laundry_customer/widgets/misc_widgets.dart';
+import 'package:laundry_customer/screens/address/location_picker_screen.dart';
+import 'package:laundry_customer/services/location_service.dart';
+
+PickedLocation? addressLocation(Address? address) {
+  final lat = double.tryParse(address?.latitude?.toString() ?? '');
+  final lon = double.tryParse(address?.longitude?.toString() ?? '');
+  if (!validCoordinates(lat, lon)) return null;
+  return PickedLocation(
+      latitude: lat!,
+      longitude: lon!,
+      addressLine: address?.addressLine ?? '',
+      area: address?.area?.toString() ?? '',
+      postCode: address?.postCode ?? '');
+}
 
 class AddOrEditAddress extends ConsumerStatefulWidget {
-  const AddOrEditAddress({super.key, this.address});
+  const AddOrEditAddress({super.key, this.address, this.initialLocation});
   final Address? address;
+  final PickedLocation? initialLocation;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AddOrEditAddressState();
+  ConsumerState<AddOrEditAddress> createState() => _AddOrEditAddressState();
 }
 
 class _AddOrEditAddressState extends ConsumerState<AddOrEditAddress> {
-  final GlobalKey<FormBuilderState> _formkey = GlobalKey<FormBuilderState>();
-  List postCodelist = [];
-  bool isMatchFound = false;
-
-  void postCodeValidation({required String postCode}) {
-    isMatchFound = false;
-    // An empty list means the backend has no postcode restriction configured,
-    // so the service is available everywhere and the address is always saved.
-    final hasRestriction = postCodelist.isNotEmpty;
-    for (final e in postCodelist) {
-      final code = e.toString().toLowerCase().replaceAll(' ', '');
-      final int len = code.length;
-      if (code == postCode) {
-        setState(() => isMatchFound = true);
-      } else if (postCode.length > 3 && code.substring(0, len) == postCode.substring(0, len)) {
-        setState(() => isMatchFound = true);
-      }
-    }
-    if (isMatchFound || !hasRestriction) {
-      ref.watch(addAddresProvider.notifier).addAddress(address: _formkey.currentState!.value).then((_) => setState(() => isMatchFound = false));
-    } else {
-      EasyLoading.showError("Service not Available in Your Area");
-    }
-  }
-
-  String validationError({required String fieldName}) => '$fieldName مطلوب';
-
-  InputDecoration _dec({required String hint, Widget? prefix}) => InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(fontSize: 12.sp, color: const Color(0xFF94A3B8)),
-        prefixIcon: prefix,
-        filled: true, fillColor: const Color(0xFFF8FAFC),
-        contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r), borderSide: const BorderSide(color: Color(0xFF00A896), width: 1.4)),
-      );
+  final _form = GlobalKey<FormState>();
+  late final TextEditingController _name;
+  late final TextEditingController _area;
+  late final TextEditingController _line;
+  PickedLocation? _location;
+  bool _default = false;
+  bool _saving = false;
+  String? _error;
 
   @override
-  Widget build(BuildContext context) {
-    ref.watch(settingsProvider).maybeWhen(orElse: () {}, loaded: (_) => postCodelist = _.data?.postCode ?? []);
-    final isEdit = widget.address != null;
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAF7F2),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 18.h),
-            decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF028090), Color(0xFF00A896)], begin: Alignment.topRight, end: Alignment.bottomLeft), borderRadius: BorderRadius.vertical(bottom: Radius.circular(24))),
-            child: SafeArea(
-              bottom: false,
-              child: Row(children: [
-                InkWell(borderRadius: BorderRadius.circular(12.r), onTap: () => context.nav.pop(), child: Container(width: 38.w, height: 38.h, decoration: BoxDecoration(color: Colors.white.withOpacity(0.18), borderRadius: BorderRadius.circular(12.r), border: Border.all(color: Colors.white24)), child: const Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white))),
-                SizedBox(width: 12.w),
-                Text(isEdit ? S.of(context).updtadrs : S.of(context).adadres, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Cairo')),
-                const Spacer(),
-                Container(width: 36.w, height: 36.h, decoration: BoxDecoration(color: Colors.white.withOpacity(0.18), shape: BoxShape.circle), child: Icon(isEdit ? Icons.edit_location_alt_rounded : Icons.add_location_alt_rounded, size: 18.sp, color: Colors.white)),
-              ]),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 16.h),
-              child: Container(
-                padding: EdgeInsets.all(20.w),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24.r), border: Border.all(color: const Color(0xFFE2E8F0).withOpacity(0.9)), boxShadow: [BoxShadow(color: const Color(0xFF0B1E2E).withOpacity(0.06), blurRadius: 18, offset: const Offset(0, 8))]),
-                child: FormBuilder(
-                  key: _formkey,
-                  initialValue: widget.address != null ? widget.address!.toMap() : {},
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('اسم المنزل', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))),
-                      SizedBox(height: 8.h),
-                      FormBuilderTextField(name: 'address_name', decoration: _dec(hint: 'مثال: منزل، عمل', prefix: Icon(Icons.home_outlined, size: 18.sp, color: const Color(0xFF028090))), validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: validationError(fieldName: 'الاسم'))])),
-                      SizedBox(height: 14.h),
-                      Text('العنوان', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))),
-                      SizedBox(height: 8.h),
-                      FormBuilderTextField(name: 'address_line', decoration: _dec(hint: 'الشارع، الحي', prefix: Icon(Icons.location_on_outlined, size: 18.sp, color: const Color(0xFF028090))), validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: validationError(fieldName: 'العنوان'))])),
-                      SizedBox(height: 14.h),
-                      FormBuilderTextField(name: "address_line2", decoration: _dec(hint: 'تفاصيل إضافية (اختياري)', prefix: Icon(Icons.notes_rounded, size: 18.sp, color: const Color(0xFF94A3B8)))),
-                      SizedBox(height: 14.h),
-                      Text('المنطقة', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))),
-                      SizedBox(height: 8.h),
-                      FormBuilderTextField(name: 'area', decoration: _dec(hint: 'مثال: دورا', prefix: Icon(Icons.map_outlined, size: 18.sp, color: const Color(0xFF028090))), validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: validationError(fieldName: 'المنطقة'))])),
-                      SizedBox(height: 14.h),
-                      Text('الرمز البريدي', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF1E293B))),
-                      SizedBox(height: 8.h),
-                      FormBuilderTextField(name: 'post_code', decoration: _dec(hint: '00000', prefix: Icon(Icons.local_post_office_outlined, size: 18.sp, color: const Color(0xFF028090))), validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: validationError(fieldName: 'الرمز'))])),
-                      SizedBox(height: 22.h),
-                      SizedBox(
-                        height: 50.h, width: double.infinity,
-                        child: isEdit
-                            ? ref.watch(updateAddresProvider).map(
-                                initial: (_) => DecoratedBox(decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF028090), Color(0xFF00A896)]), borderRadius: BorderRadius.circular(16.r)), child: ElevatedButton(onPressed: () { if (_formkey.currentState!.saveAndValidate()) ref.read(updateAddresProvider.notifier).updateAddress(address: _formkey.currentState!.value, addressID: widget.address!.id!.toString()); }, style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r))), child: Text(S.of(context).updtadrs, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Cairo')))),
-                                loading: (_) => const Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF028090)))),
-                                loaded: (_) { Future.delayed(apiDataDuration).then((_) { ref.refresh(updateAddresProvider); ref.refresh(addresListProvider); ref.refresh(addAddresProvider); Future.delayed(transissionDuration).then((_) => context.nav.pop()); }); return Container(alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFEFFAF8), borderRadius: BorderRadius.circular(12.r)), child: Text('تم التحديث', style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF028090)))); },
-                                error: (_) { Future.delayed(transissionDuration).then((_) { ref.refresh(addAddresProvider); ref.refresh(updateAddresProvider); ref.refresh(addresListProvider); }); return Container(padding: EdgeInsets.all(10.w), decoration: BoxDecoration(color: const Color(0xFFFFF1F2), borderRadius: BorderRadius.circular(12.r)), child: Text(_.error, style: TextStyle(fontSize: 11.sp, color: const Color(0xFFE63946)), textAlign: TextAlign.center)); },
-                              )
-                            : ref.watch(addAddresProvider).map(
-                                initial: (_) => DecoratedBox(decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF028090), Color(0xFF00A896)]), borderRadius: BorderRadius.circular(16.r)), child: ElevatedButton(onPressed: () { if (_formkey.currentState!.saveAndValidate()) ref.read(addAddresProvider.notifier).addAddress(address: _formkey.currentState!.value); }, style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r))), child: Text(S.of(context).adadres, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w900, color: Colors.white, fontFamily: 'Cairo')))),
-                                loading: (_) => const Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF028090)))),
-                                loaded: (d) { Future.delayed(apiDataDuration).then((_) { ref.refresh(updateAddresProvider); ref.refresh(addresListProvider); ref.refresh(addAddresProvider); Future.delayed(transissionDuration).then((_) => context.nav.pop()); }); return Container(alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFEFFAF8), borderRadius: BorderRadius.circular(12.r)), child: Text(d.data, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w800, color: const Color(0xFF028090)))); },
-                                error: (_) { Future.delayed(transissionDuration).then((_) { ref.refresh(addAddresProvider); ref.refresh(updateAddresProvider); ref.refresh(addresListProvider); }); return Container(padding: EdgeInsets.all(10.w), decoration: BoxDecoration(color: const Color(0xFFFFF1F2), borderRadius: BorderRadius.circular(12.r)), child: Text(_.error, style: TextStyle(fontSize: 11.sp, color: const Color(0xFFE63946)), textAlign: TextAlign.center)); },
-                              ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    final address = widget.address;
+    final initial = widget.initialLocation;
+    _name = TextEditingController(
+        text: address?.addressName?.toString() ??
+            (initial != null ? 'الموقع الحالي' : ''));
+    // Area is NEVER auto-filled — it must be typed by the customer manually.
+    _area = TextEditingController(text: address?.area?.toString() ?? '');
+    _line = TextEditingController(text: address?.addressLine ?? '');
+    _default = address?.isDefault ?? false;
+    _location = initial ?? addressLocation(address);
   }
+
+  @override
+  void dispose() {
+    for (final controller in [_name, _area, _line]) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _chooseLocation() async {
+    final picked = await Navigator.push<PickedLocation>(
+        context,
+        MaterialPageRoute(
+            builder: (_) => LocationPickerScreen(
+                initial: _location, locateOnOpen: _location == null)));
+    if (!mounted || picked == null) return;
+    setState(() {
+      _location = picked;
+      // The area (المنطقة) is deliberately NOT auto-filled here — the
+      // customer types it themselves; it stays required.
+      _error = null;
+    });
+  }
+
+  Future<void> _save() async {
+    if (_saving || !_form.currentState!.validate()) return;
+    if (_location == null || !_location!.valid) {
+      setState(() => _error = 'حدد نقطة صالحة على الخريطة قبل حفظ العنوان.');
+      return;
+    }
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
+    final fields = <String, dynamic>{
+      'address_name': _name.text.trim(),
+      'area': _area.text.trim(),
+      'address_line': _line.text.trim(),
+      'latitude': _location!.latitude.toStringAsFixed(7),
+      'longitude': _location!.longitude.toStringAsFixed(7),
+      'is_default': _default,
+    };
+    final notifier = ref.read(addressBookProvider.notifier);
+    final saved = await notifier.save(fields, existing: widget.address);
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (saved != null) {
+      ref.invalidate(addresListProvider);
+      Navigator.pop(context, saved);
+    } else {
+      setState(() => _error = ref.read(addressBookProvider).error ??
+          'تعذر تأكيد الحفظ. حدّث العناوين قبل المحاولة مجددًا.');
+    }
+  }
+
+  Widget _field(TextEditingController controller, String label, IconData icon,
+          {bool required = false, int lines = 1}) =>
+      Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TextFormField(
+            controller: controller,
+            maxLines: lines,
+            enabled: !_saving,
+            maxLength: controller == _name ? 256 : null,
+            validator: required
+                ? (value) =>
+                    (value ?? '').trim().isEmpty ? '$label مطلوب' : null
+                : null,
+            decoration: InputDecoration(
+                labelText: label,
+                prefixIcon: Icon(icon, color: const Color(0xFF028090)),
+                filled: true,
+                fillColor: const Color(0xFFF8FAFC),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14))),
+          ));
+
+  @override
+  Widget build(BuildContext context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: PopScope(
+            canPop: !_saving,
+            child: Scaffold(
+              backgroundColor: const Color(0xFFFAF7F2),
+              appBar: AppBar(
+                  title: Text(widget.address == null
+                      ? 'إضافة عنوان جديد'
+                      : 'تعديل العنوان'),
+                  backgroundColor: const Color(0xFF028090),
+                  foregroundColor: Colors.white),
+              body: SafeArea(
+                  child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                    key: _form,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text('مكانك محفوظ، وتوصيلك أدق',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF0B1E2E))),
+                          const SizedBox(height: 8),
+                          const Text(
+                              'اختر الموقع على الخريطة وأضف وصفًا يساعدنا في الوصول إليك.'),
+                          const SizedBox(height: 20),
+                          Wrap(
+                              spacing: 8,
+                              children: ['البيت', 'العمل']
+                                  .map((label) => ActionChip(
+                                      label: Text(label),
+                                      avatar: Icon(
+                                          label == 'البيت'
+                                              ? Icons.home_outlined
+                                              : Icons.work_outline,
+                                          size: 18),
+                                      onPressed: _saving
+                                          ? null
+                                          : () => setState(
+                                              () => _name.text = label)))
+                                  .toList()),
+                          const SizedBox(height: 12),
+                          _field(_name, 'اسم العنوان', Icons.label_outline,
+                              required: true),
+                          _field(_area, 'المنطقة', Icons.map_outlined,
+                              required: true),
+                          _field(_line, 'الشارع ورقم البناية (اختياري)',
+                              Icons.signpost_outlined,
+                              lines: 2),
+                          Card(
+                              color: Colors.white,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Column(children: [
+                                    Icon(
+                                        _location == null
+                                            ? Icons.add_location_alt_outlined
+                                            : Icons.location_on,
+                                        size: 36,
+                                        color: const Color(0xFF028090)),
+                                    const SizedBox(height: 8),
+                                    Text(_location == null
+                                        ? 'لم يُحدّد موقع العنوان بعد'
+                                        : 'تم تحديد موقع العنوان على الخريطة'),
+                                    const SizedBox(height: 8),
+                                    OutlinedButton.icon(
+                                        onPressed:
+                                            _saving ? null : _chooseLocation,
+                                        icon: const Icon(Icons.map_outlined),
+                                        label: Text(_location == null
+                                            ? 'اختيار الموقع على الخريطة'
+                                            : 'عرض الموقع أو تغييره')),
+                                  ]))),
+                          SwitchListTile.adaptive(
+                              value: _default,
+                              onChanged: _saving
+                                  ? null
+                                  : (value) => setState(() => _default = value),
+                              activeTrackColor: const Color(0xFF028090),
+                              title: const Text('اجعله عنواني الأساسي'),
+                              subtitle: const Text(
+                                  'يمكنك اختيار عنوان مختلف عند تأكيد الطلب.')),
+                          if (_error != null)
+                            Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Text(_error!,
+                                    style: const TextStyle(
+                                        color: Color(0xFFB91C1C)),
+                                    textAlign: TextAlign.center)),
+                          const SizedBox(height: 12),
+                          FilledButton.icon(
+                              onPressed: _saving ? null : _save,
+                              style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFF028090),
+                                  minimumSize: const Size.fromHeight(52)),
+                              icon: _saving
+                                  ? const SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2))
+                                  : const Icon(Icons.check),
+                              label: Text(_saving
+                                  ? 'جارٍ حفظ العنوان...'
+                                  : 'حفظ العنوان')),
+                          const SizedBox(height: 16),
+                        ])),
+              )),
+            )),
+      );
 }

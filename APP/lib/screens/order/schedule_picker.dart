@@ -17,6 +17,7 @@ import 'package:laundry_customer/widgets/misc_widgets.dart';
 import 'package:laundry_customer/widgets/nav_bar.dart';
 import 'package:laundry_customer/widgets/screen_wrapper.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:laundry_customer/widgets/time_slot_tile.dart';
 
 class SchedulerPicker extends ConsumerStatefulWidget {
   const SchedulerPicker({
@@ -258,6 +259,11 @@ class _SchedulerPickerState extends ConsumerState<SchedulerPicker> {
                                   ],
                                 ),
                               ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    20.w, 2.h, 18.w, 0),
+                                child: const TimeSlotLegend(),
+                              ),
                               Expanded(
                                 child: GridView.count(
                                   crossAxisCount: 2,
@@ -276,147 +282,43 @@ class _SchedulerPickerState extends ConsumerState<SchedulerPicker> {
                                                 selectedLocal == 'en')
                                             ? e.title ?? ""
                                             : "${e.title!.split("-").last}- ${e.title!.split("-").first}";
-                                        return Opacity(
-                                          opacity: isBooked ? 0.6 : 1,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(18.r),
-                                            onTap: isBooked
-                                                ? null
-                                                : () {
-                                                    ref
-                                                        .watch(
-                                                          scheduleProvider(
-                                                            AppStrConst.pickup,
-                                                          ).notifier,
-                                                        )
-                                                        .state = ScheduleModel(
-                                                      schedule: e,
-                                                      dateTime: dateSelect ??
-                                                          DateUtils.dateOnly(
-                                                            DateTime.now(),
-                                                          ),
-                                                    );
-
-                                                    ref
-                                                        .watch(
-                                                          dateProvider(
-                                                                  'Delivery')
-                                                              .notifier,
-                                                        )
-                                                        .state = null;
-                                                    ref
-                                                        .watch(
-                                                          scheduleProvider(
-                                                                  'Delivery')
-                                                              .notifier,
-                                                        )
-                                                        .state = null;
-
-                                                    context.nav.pop();
-                                                  },
-                                            child: Container(
-                                              padding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: 10.w,
-                                                      vertical: 8.h),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        18.r),
-                                                border: Border.all(
-                                                    color: isBooked
-                                                        ? const Color(
-                                                            0xFFE2E8F0)
-                                                        : const Color(
-                                                                0xFF028090)
-                                                            .withOpacity(
-                                                                0.4)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: const Color(
-                                                              0xFF0B1E2E)
-                                                          .withOpacity(0.05),
-                                                      blurRadius: 10,
-                                                      offset: const Offset(
-                                                          0, 4)),
-                                                ],
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    width: 34.w,
-                                                    height: 34.h,
-                                                    decoration: BoxDecoration(
-                                                      color: (isBooked
-                                                              ? const Color(
-                                                                  0xFF64748B)
-                                                              : const Color(
-                                                                  0xFF028090))
-                                                          .withOpacity(0.12),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.r),
-                                                    ),
-                                                    child: Icon(
-                                                        Icons.access_time_rounded,
-                                                        size: 17.sp,
-                                                        color: isBooked
-                                                            ? const Color(
-                                                                0xFF64748B)
-                                                            : const Color(
-                                                                0xFF028090)),
-                                                  ),
-                                                  SizedBox(width: 8.w),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          title,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 11.5.sp,
-                                                            fontWeight:
-                                                                FontWeight.w800,
-                                                            color: const Color(
-                                                                0xFF0B1E2E),
-                                                            decoration: isBooked
-                                                                ? TextDecoration
-                                                                    .lineThrough
-                                                                : null,
-                                                          ),
+                                        return TimeSlotTile(
+                                          title: title,
+                                          available: !isBooked,
+                                          onTap: isBooked
+                                              ? null
+                                              : () {
+                                                  ref
+                                                      .watch(
+                                                        scheduleProvider(
+                                                          AppStrConst.pickup,
+                                                        ).notifier,
+                                                      )
+                                                      .state = ScheduleModel(
+                                                    schedule: e,
+                                                    dateTime: dateSelect ??
+                                                        DateUtils.dateOnly(
+                                                          DateTime.now(),
                                                         ),
-                                                        Text(
-                                                          isBooked
-                                                              ? 'محجوز'
-                                                              : 'متاح',
-                                                          style: TextStyle(
-                                                            fontSize: 9.5.sp,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            color: isBooked
-                                                                ? const Color(
-                                                                    0xFF94A3B8)
-                                                                : const Color(
-                                                                    0xFF00A896),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                                  );
+
+                                                  ref
+                                                      .watch(
+                                                        dateProvider(
+                                                            'Delivery')
+                                                            .notifier,
+                                                      )
+                                                      .state = null;
+                                                  ref
+                                                      .watch(
+                                                        scheduleProvider(
+                                                            'Delivery')
+                                                            .notifier,
+                                                      )
+                                                      .state = null;
+
+                                                  context.nav.pop();
+                                              },
                                         );
                                       },
                                     ),

@@ -1,21 +1,17 @@
-import 'package:flutter/foundation.dart';
-
 class AppConfig {
   AppConfig._();
 
-  // debug  -> local server  (needs: adb reverse tcp:8000 tcp:8000)
-  // release -> production
-  // Override any time with: --dart-define=API_BASE_URL=https://...
+  // USB/debug and release builds use production by default.
+  // Local development override: --dart-define=API_BASE_URL=http://localhost:8000/api
   static const String _defaultApiBase =
-      kDebugMode ? 'http://localhost:8000/api' : 'https://elitecleanps.com/api';
+      'https://elitecleanps.com/api';
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: _defaultApiBase,
   );
 
-  //Stripe Keys For App - Replace With Yours
-  static const String secretKey = 'sk_test_dummy';
-  static const String publicKey = 'pk_test_dummy';
+  //Online card payments were removed from the app. Orders are placed as
+  //cash-on-delivery only (see PaymentType in payment_screen.dart).
 
   //One Signal
   static const String oneSignalAppID =

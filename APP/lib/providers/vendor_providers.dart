@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_customer/providers/city_providers.dart';
 import 'package:laundry_customer/models/all_service_model/all_service_model.dart';
 import 'package:laundry_customer/models/products_model/products_model.dart';
 import 'package:laundry_customer/models/vendor_model/vendors_response_model.dart';
@@ -8,20 +9,30 @@ import 'package:laundry_customer/repos/vendor_repo.dart';
 import 'package:laundry_customer/services/api_state.dart';
 
 final vendorRepoProvider = Provider<IVendorRepo>((ref) {
-  return ref.watch(isAppLive) ? VendorRepo() : OfflineVendorRepo();
+  return ref.watch(isAppLive)
+      ? VendorRepo(cityId: ref.watch(currentCityIdProvider))
+      : OfflineVendorRepo();
 });
 
 final vendorSearchQueryProvider = StateProvider<String>((ref) => '');
-final selectedVendorAreaProvider = StateProvider<String>((ref) => 'الكل');
-final selectedVendorFilterInServiceProvider = StateProvider<String>((ref) => 'الكل');
+final selectedVendorAreaProvider = Provider<String>(
+    (ref) => ref.watch(citySelectionProvider).city?.name ?? 'الكل');
+final selectedVendorFilterInServiceProvider =
+    StateProvider<String>((ref) => 'الكل');
 
-final vendorsProvider = StateNotifierProvider<VendorsNotifier,
-    ApiState<VendorsResponseModel>>((ref) {
+final vendorsProvider =
+    StateNotifierProvider<VendorsNotifier, ApiState<VendorsResponseModel>>(
+        (ref) {
   final search = ref.watch(vendorSearchQueryProvider);
   return VendorsNotifier(
     ref.watch(vendorRepoProvider),
     search,
   );
+});
+
+final serviceVendorsProvider = FutureProvider.autoDispose
+    .family<VendorsResponseModel, String>((ref, serviceId) {
+  return ref.watch(vendorRepoProvider).getVendorsByService(serviceId);
 });
 
 // Vendor-specific services

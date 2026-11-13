@@ -125,8 +125,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الحد الأدنى للطلب"),
         "msgonwhtsap":
             MessageLookupByLibrary.simpleMessage("راسلنا عبر تطبيق الواتس اب"),
-        "myCart": MessageLookupByLibrary.simpleMessage("عربة التسوق"),
-        "mycrt": MessageLookupByLibrary.simpleMessage("عربة التسوق"),
+        "myCart": MessageLookupByLibrary.simpleMessage("السلة"),
+        "mycrt": MessageLookupByLibrary.simpleMessage("السلة"),
         "myorder": MessageLookupByLibrary.simpleMessage("قائمة طلباتي"),
         "myordr": MessageLookupByLibrary.simpleMessage("طلبي"),
         "ndgtotp": MessageLookupByLibrary.simpleMessage(

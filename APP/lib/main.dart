@@ -10,10 +10,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:laundry_customer/constants/config.dart';
 import 'package:laundry_customer/constants/hive_contants.dart';
 import 'package:laundry_customer/firebase_options.dart';
 import 'package:laundry_customer/generated/l10n.dart';
@@ -23,6 +21,7 @@ import 'package:laundry_customer/utils/context_less_nav.dart';
 import 'package:laundry_customer/utils/notification_translator.dart';
 import 'package:laundry_customer/utils/push_events.dart';
 import 'package:laundry_customer/utils/routes.dart';
+import 'package:laundry_customer/widgets/busy_loader.dart';
 
 // @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -213,9 +212,6 @@ Future<void> _initFirebaseMessaging() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (!kIsWeb) {
-    Stripe.publishableKey = AppConfig.publicKey;
-  }
   await _initFirebaseMessaging();
   // await oneSignalHandler();
   await Hive.initFlutter();
@@ -232,11 +228,43 @@ void main() async {
     await appSettingsBox.put(AppHSC.appLocal, 'ar');
   }
   HttpOverrides.global = MyHttpOverrides();
+  configEasyLoading();
   runApp(
     const ProviderScope(
       child: MyApp(),
     ),
   );
+}
+
+void configEasyLoading() {
+  EasyLoading.instance
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..indicatorWidget = const AppLoadingIndicator(size: 54, showText: false)
+    ..radius = 20.0
+    ..backgroundColor = Colors.white
+    ..indicatorColor = const Color(0xFF028090)
+    ..progressColor = const Color(0xFF00A896)
+    ..textColor = const Color(0xFF0B1E2E)
+    ..maskColor = const Color(0xFF0B1E2E).withValues(alpha: 0.35)
+    ..userInteractions = false
+    ..dismissOnTap = false
+    ..maskType = EasyLoadingMaskType.custom
+    ..contentPadding = const EdgeInsets.symmetric(horizontal: 24, vertical: 20)
+    ..boxShadow = [
+      BoxShadow(
+        color: const Color(0xFF028090).withValues(alpha: 0.16),
+        blurRadius: 28,
+        spreadRadius: 2,
+        offset: const Offset(0, 8),
+      ),
+    ]
+    ..textStyle = const TextStyle(
+      fontFamily: 'Cairo',
+      fontSize: 13,
+      fontWeight: FontWeight.w700,
+      color: Color(0xFF0B1E2E),
+    );
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -365,6 +393,80 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
                     'Tahoma',
                     'Arial',
                   ],
+                  // ── Brand colour system ──────────────────────────────
+                  // Forces every Material widget (TextButton, FilledButton,
+                  // ListTile selection, Switch, Checkbox …) to use the
+                  // brand teal instead of Flutter's default purple/indigo.
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: const Color(0xFF028090),
+                    primary: const Color(0xFF028090),
+                    secondary: const Color(0xFF00A896),
+                    surface: Colors.white,
+                    brightness: Brightness.light,
+                  ),
+                  // Legacy primaryColor – used by some older widgets.
+                  primaryColor: const Color(0xFF028090),
+                  // FilledButton global style
+                  filledButtonTheme: FilledButtonThemeData(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF028090),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                      ),
+                    ),
+                  ),
+                  // TextButton global style
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF028090),
+                    ),
+                  ),
+                  // OutlinedButton global style
+                  outlinedButtonTheme: OutlinedButtonThemeData(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF028090),
+                      side: const BorderSide(color: Color(0xFF028090)),
+                    ),
+                  ),
+                  // ElevatedButton global style
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF028090),
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                  // ListTile selected color
+                  listTileTheme: const ListTileThemeData(
+                    selectedColor: Color(0xFF028090),
+                    iconColor: Color(0xFF028090),
+                  ),
+                  // Icon default color
+                  iconTheme: const IconThemeData(color: Color(0xFF028090)),
+                  // Progress indicators
+                  progressIndicatorTheme: const ProgressIndicatorThemeData(
+                    color: Color(0xFF028090),
+                  ),
+                  // Switch / Checkbox / Radio
+                  switchTheme: SwitchThemeData(
+                    thumbColor: WidgetStateProperty.resolveWith(
+                      (s) => s.contains(WidgetState.selected)
+                          ? const Color(0xFF028090)
+                          : null,
+                    ),
+                    trackColor: WidgetStateProperty.resolveWith(
+                      (s) => s.contains(WidgetState.selected)
+                          ? const Color(0xFFB2DDE3)
+                          : null,
+                    ),
+                  ),
+                  checkboxTheme: CheckboxThemeData(
+                    fillColor: WidgetStateProperty.resolveWith(
+                      (s) => s.contains(WidgetState.selected)
+                          ? const Color(0xFF028090)
+                          : null,
+                    ),
+                  ),
                 ),
                 navigatorKey: ContextLess
                     .navigatorkey, //Setting Global navigator key to navigate from anywhere without Context

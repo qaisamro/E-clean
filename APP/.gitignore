@@ -58,3 +58,6 @@ android/app/*.keystore
 .env
 .env.*
 !.env.example
+
+# Firebase Android config — not needed for iOS/Codemagic; supply locally or via CI secrets
+google-services.json

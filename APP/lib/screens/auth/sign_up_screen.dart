@@ -9,8 +9,10 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:laundry_customer/constants/hive_contants.dart';
 import 'package:laundry_customer/misc/misc_global_variables.dart';
+import 'package:laundry_customer/models/auth_flow_model.dart';
 import 'package:laundry_customer/providers/auth_provider.dart';
 import 'package:laundry_customer/providers/settings_provider.dart';
+import 'package:laundry_customer/screens/auth/join_request_waiting_screen.dart';
 import 'package:laundry_customer/utils/context_less_nav.dart';
 import 'package:laundry_customer/utils/routes.dart';
 import 'package:laundry_customer/widgets/misc_widgets.dart';
@@ -336,27 +338,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             strokeWidth: 2,
                                             color: Color(0xFF028090)))),
                                 loaded: (_) {
-                                  final Box box = Hive.box(AppHSC.authBox);
-                                  final Box userBox = Hive.box(AppHSC.userBox);
-                                  box.putAll(_.data.data!.access!.toMap());
-                                  userBox.putAll(_.data.data!.user!.toMap());
-                                  Future.delayed(transissionDuration).then((_) {
-                                    ref.refresh(registrationProvider);
-                                    Future.delayed(buildDuration).then((_) =>
-                                        context.nav.pushNamed(
-                                            Routes.signUpImageUpload));
-                                  });
+                                  final RegisterFlowModel flow = _.data;
+                                  final contact = (_formkey
+                                          .currentState
+                                          ?.value['mobile'] as String?)
+                                      ?.trim() ??
+                                      '';
+                                  _afterRegister(flow, contact, ref);
                                   return Container(
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                          color: const Color(0xFFEFFAF8),
+                                          color: flow.nextStep.isReady
+                                              ? const Color(0xFFEFFAF8)
+                                              : const Color(0xFFFFF7ED),
                                           borderRadius:
                                               BorderRadius.circular(12.r)),
-                                      child: Text('تم إنشاء الحساب بنجاح',
+                                      child: Text(
+                                          flow.nextStep.isReady
+                                              ? 'تم إنشاء الحساب بنجاح'
+                                              : (flow.serverMessage ??
+                                                  flow.message ??
+                                                  'تم إنشاء الحساب'),
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: 12.sp,
+                                              fontSize: 11.5.sp,
                                               fontWeight: FontWeight.w800,
-                                              color: const Color(0xFF028090))));
+                                              color: flow.nextStep.isReady
+                                                  ? const Color(0xFF028090)
+                                                  : const Color(0xFF9A3412))));
                                 },
                                 error: (_) {
                                   Future.delayed(transissionDuration).then(
@@ -403,6 +412,101 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  /// Branches purely on the server's `next_step`:
+  /// * `ready`         -> persist the token (exactly like before) and continue
+  ///                     to the profile-photo step.
+  /// * `verify_otp`    -> NO token is stored; open the OTP screen.
+  /// * `await_approval`-> NO token is stored; store the tracking token and open
+  ///                     the approval-waiting screen.
+  /// * `rejected`      -> cannot happen at registration, handled defensively.
+  /// * `retry_later`   -> the join-request store is unavailable (503); the
+  ///                     server message is surfaced and nothing is stored.
+  Future<void> _afterRegister(
+    RegisterFlowModel flow,
+    String contact,
+    WidgetRef ref,
+  ) async {
+    final Box authBox = Hive.box(AppHSC.authBox);
+    final Box userBox = Hive.box(AppHSC.userBox);
+    final dynamic userMap = flow.user;
+
+    switch (flow.nextStep) {
+      case AuthNextStep.ready:
+        final access = flow.access;
+        if (access == null || (access.token ?? '').isEmpty) {
+          // Defensive: never enter the app without a real token.
+          return;
+        }
+        await authBox.put(AppHSC.authTokenType, access.authType ?? 'Bearer');
+        await authBox.put(AppHSC.authToken, access.token!);
+        await authBox.delete(AppHSC.trackingToken);
+        await authBox.delete(AppHSC.pendingContact);
+        await authBox.put(AppHSC.pendingContact, contact);
+        if (userMap is Map) {
+          userBox.putAll(Map<String, dynamic>.from(userMap));
+        }
+        break;
+
+      case AuthNextStep.verifyOtp:
+        // A token must NOT be stored here - the user is not signed in yet.
+        await authBox.delete(AppHSC.authToken);
+        await authBox.delete(AppHSC.authTokenType);
+        await authBox.put(AppHSC.pendingContact, contact);
+        break;
+
+      case AuthNextStep.awaitApproval:
+      case AuthNextStep.rejected:
+        await authBox.delete(AppHSC.authToken);
+        await authBox.delete(AppHSC.authTokenType);
+        if (flow.trackingToken != null && flow.trackingToken!.isNotEmpty) {
+          await authBox.put(AppHSC.trackingToken, flow.trackingToken);
+        }
+        await authBox.put(AppHSC.pendingContact, contact);
+        break;
+
+      case AuthNextStep.retryLater:
+      case AuthNextStep.unknown:
+        // Nothing is stored; the message inside the button already informs
+        // the user. A manual retry is possible at any time.
+        Future.delayed(transissionDuration)
+            .then((_) => ref.refresh(registrationProvider));
+        return;
+    }
+
+    Future.delayed(transissionDuration).then((_) async {
+      if (!mounted) return;
+      ref.refresh(registrationProvider);
+      await Future.delayed(buildDuration);
+      if (!mounted) return;
+
+      switch (flow.nextStep) {
+        case AuthNextStep.ready:
+          context.nav.pushNamedAndRemoveUntil(Routes.homeScreen, (route) => false);
+          break;
+        case AuthNextStep.verifyOtp:
+          context.nav.pushNamed(
+            Routes.signUpOtpScreen,
+            arguments: {'contact': contact, 'mode': 'register'},
+          );
+          break;
+        case AuthNextStep.awaitApproval:
+        case AuthNextStep.rejected:
+          context.nav.pushNamedAndRemoveUntil(
+            Routes.joinRequestWaitingScreen,
+            (route) => false,
+            arguments: JoinRequestWaitingArgs(
+              contact: contact,
+              trackingToken: flow.trackingToken ?? '',
+            ),
+          );
+          break;
+        case AuthNextStep.retryLater:
+        case AuthNextStep.unknown:
+          break;
+      }
+    });
   }
 
   void _showTos(BuildContext context, bool isTos) {

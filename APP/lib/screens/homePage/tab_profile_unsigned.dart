@@ -9,6 +9,7 @@ import 'package:laundry_customer/providers/address_provider.dart';
 import 'package:laundry_customer/providers/auth_provider.dart';
 import 'package:laundry_customer/providers/profile_update_provider.dart';
 import 'package:laundry_customer/screens/message/logic/socket.dart';
+import 'package:laundry_customer/utils/cart_helper.dart';
 import 'package:laundry_customer/utils/context_less_nav.dart';
 import 'package:laundry_customer/utils/routes.dart';
 import 'package:laundry_customer/widgets/app_network_image.dart';
@@ -273,6 +274,11 @@ class UsignedUserTab extends ConsumerWidget {
                   loaded: (_) {
                     Future.delayed(const Duration(milliseconds: 700), () {
                       Navigator.pop(context);
+                      if (isDelete) {
+                        // The account is gone — drop this device's cart for it
+                        // before the user id is wiped.
+                        CartHelper.clearAll();
+                      }
                       Hive.box(AppHSC.userBox).clear();
                       Hive.box(AppHSC.authBox).clear();
                       ref2.refresh(profileInfoProvider);

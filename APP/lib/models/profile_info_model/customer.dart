@@ -6,9 +6,8 @@ import 'package:laundry_customer/models/profile_info_model/user.dart';
 class Customer {
   User? user;
   List<Address>? addresses;
-  String? stripeId;
 
-  Customer({this.user, this.addresses, this.stripeId});
+  Customer({this.user, this.addresses});
 
   factory Customer.fromMap(Map<String, dynamic> data) => Customer(
         user: data['user'] == null
@@ -17,13 +16,11 @@ class Customer {
         addresses: (data['addresses'] as List<dynamic>?)
             ?.map((e) => Address.fromMap(e as Map<String, dynamic>))
             .toList(),
-        stripeId: data['stripe_id'] as String?,
       );
 
   Map<String, dynamic> toMap() => {
         'user': user?.toMap(),
         'addresses': addresses?.map((e) => e.toMap()).toList(),
-        'stripe_id': stripeId,
       };
 
   /// `dart:convert`

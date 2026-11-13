@@ -39,7 +39,6 @@ dependencies:
   pin_code_fields: ^8.0.1
   animated_bottom_navigation_bar: ^1.0.0
   expandable: ^5.0.1
-  flutter_stripe: ^11.0.0
   flutter_rating_bar: ^4.0.1
   collection: ^1.16.0
   image_picker: ^1.0.4
@@ -56,10 +55,11 @@ dependencies:
   socket_io_client: ^3.0.0
   permission_handler: ^11.0.0
   app_settings: ^5.0.0
-  flutter_inappwebview: ^6.1.5
   gap: ^3.0.1
   geolocator: ^14.0.2
   geocoding: ^5.0.0
+  flutter_map: ^8.3.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:

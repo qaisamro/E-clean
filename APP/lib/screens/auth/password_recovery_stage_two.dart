@@ -137,10 +137,13 @@ class RecoverPasswordStageTwo extends StatelessWidget {
                                               .forgotPassword(forEmailorPhone);
                                           ref.read(forgotPassProvider).maybeWhen(
                                               orElse: () {},
-                                              loaded: (_) => ref
-                                                  .read(forgotPassTimerProvider
-                                                      .notifier)
-                                                  .startTimer());
+                                              loaded: (result) {
+                                                if (!result.requiresOtp) {
+                                                  if (context.mounted) context.nav.pop();
+                                                  return;
+                                                }
+                                                ref.read(forgotPassTimerProvider.notifier).startTimer();
+                                              });
                                         },
                                         child: Container(
                                           padding: EdgeInsets.symmetric(

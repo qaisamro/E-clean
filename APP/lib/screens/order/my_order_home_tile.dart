@@ -25,7 +25,10 @@ class HomeOrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gotDate = DateTime.parse(data.orderedAt!.split(" ").first);
+    final rawDate = data.orderedAt;
+    final gotDate = rawDate == null || rawDate.isEmpty
+        ? null
+        : DateTime.tryParse(rawDate.split(" ").first);
     return GestureDetector(
       onTap: () {
         context.nav.pushNamed(
@@ -97,13 +100,15 @@ class HomeOrderTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${S.of(context).ordrid} #${data.orderCode}",
+                          "${S.of(context).ordrid} ${data.orderCode ?? ''}",
                           style: AppTextDecor.osSemiBold12black
                               .copyWith(color: AppColors.black),
                         ),
                         AppSpacerH(8.h),
                         Text(
-                          "${DateFormat("EEEE,dd MMM, yyyy").format(gotDate)}\n${data.orderedAt!.split(" ")[1]} ${data.orderedAt!.split(" ")[2]}",
+                          rawDate != null && gotDate != null
+                              ? "${DateFormat("EEEE,dd MMM, yyyy").format(gotDate)}\n${rawDate.split(" ").length > 2 ? '${rawDate.split(" ")[1]} ${rawDate.split(" ")[2]}' : rawDate.split(" ")[1]}"
+                              : (rawDate ?? '-'),
                           style: AppTextDecor.osSemiBold12black
                               .copyWith(color: AppColors.black),
                         ),
@@ -225,9 +230,10 @@ class HomeOrderTile extends StatelessWidget {
   }
 
   Color getOrderStatusColor() {
-    if (data.orderStatus!.toLowerCase() == 'pending') {
+    final s = (data.orderStatus ?? 'pending').toLowerCase();
+    if (s == 'pending') {
       return const Color.fromARGB(255, 75, 224, 172);
-    } else if (data.orderStatus!.replaceAll(' ', '').toLowerCase() ==
+    } else if (s.replaceAll(' ', '') ==
         'pickedYourOrder'.toLowerCase()) {
       return const Color(0xFF3AD0FF);
     } else {

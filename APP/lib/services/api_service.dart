@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:laundry_customer/constants/config.dart';
 import 'package:laundry_customer/services/interceptor.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 /// Shared [Dio] instance. Reusing a single client enables connection pooling /
 /// keep-alive between requests (a fresh `Dio` per call opens a new connection
@@ -24,11 +23,15 @@ Dio _buildDio() {
   //request/response body to the platform log, which is wasted work on-device.
   if (kDebugMode) {
     dio.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        maxWidth: 120,
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          debugPrint('API ${options.method} ${options.uri.path}');
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          debugPrint('API ${response.statusCode} ${response.requestOptions.uri.path}');
+          handler.next(response);
+        },
       ),
     );
   }

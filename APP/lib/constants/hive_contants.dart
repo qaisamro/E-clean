@@ -11,7 +11,10 @@ class AppHSC {
   //Auth Variable Names
   static const String authTokenType = 'auth_type';
   static const String authToken = 'token';
-  static const String stripeCustomerID = 'stripeCustomerID';
+
+  //Customer join request (admin approval) - never logged, never in a URL.
+  static const String trackingToken = 'join_request_tracking_token';
+  static const String pendingContact = 'join_request_pending_contact';
 
   //Settings Variable Names
   static const String hasSeenSplashScreen = 'hasSeenSplashScreen';

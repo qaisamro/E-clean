@@ -4,6 +4,7 @@ import 'package:laundry_customer/providers/misc_providers.dart';
 import 'package:laundry_customer/repos/address_repo.dart';
 import 'package:laundry_customer/services/api_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_customer/providers/address_session_provider.dart';
 
 final addresRepoProvider = Provider<IAddressRepo>((ref) {
   return ref.watch(isAppLive) ? AddressRepo() : OfflineAddressRepo();
@@ -15,6 +16,7 @@ final addresRepoProvider = Provider<IAddressRepo>((ref) {
 final addresListProvider =
     StateNotifierProvider<AddressListNotifier, ApiState<AddresListModel>>(
         (ref) {
+  ref.watch(addressSessionProvider);
   return AddressListNotifier(ref.watch(addresRepoProvider));
 });
 

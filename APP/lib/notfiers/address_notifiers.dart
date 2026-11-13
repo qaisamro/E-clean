@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:laundry_customer/constants/hive_contants.dart';
 import 'package:laundry_customer/models/addres_list_model/addres_list_model.dart';
 import 'package:laundry_customer/repos/address_repo.dart';
 import 'package:laundry_customer/services/api_state.dart';
@@ -11,10 +13,21 @@ class AddressListNotifier extends StateNotifier<ApiState<AddresListModel>> {
   }
   final IAddressRepo _repo;
   Future<void> getAddress() async {
+    // Guests hold no token — the call would 401 and the interceptor would
+    // wipe a session that never existed. Skip the noise entirely.
+    final String token =
+        Hive.box(AppHSC.authBox).get(AppHSC.authToken)?.toString() ?? '';
+    if (token.isEmpty) {
+      state = const ApiState.initial();
+      return;
+    }
     state = const ApiState.loading();
     try {
-      state = ApiState.loaded(data: await _repo.getAddresses());
+      final data = await _repo.getAddresses();
+      if (!mounted) return;
+      state = ApiState.loaded(data: data);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
@@ -27,6 +40,7 @@ class AddAddressNotifier extends StateNotifier<ApiState<String>> {
     state = const ApiState.loading();
     try {
       final response = await _repo.addAddress(address);
+      if (!mounted) return;
       final Map<String, dynamic>? responseData =
           response?.data as Map<String, dynamic>?;
 
@@ -34,6 +48,7 @@ class AddAddressNotifier extends StateNotifier<ApiState<String>> {
       debugPrint("message: ${responseData?['message']}");
       state = ApiState.loaded(data: message);
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
@@ -49,8 +64,10 @@ class UpdateAddressNotifier extends StateNotifier<ApiState<String>> {
     state = const ApiState.loading();
     try {
       await _repo.updateAddress(address, addressID);
+      if (!mounted) return;
       state = const ApiState.loaded(data: 'Successs');
     } catch (e) {
+      if (!mounted) return;
       state = ApiState.error(error: NetworkExceptions.errorText(e));
     }
   }
