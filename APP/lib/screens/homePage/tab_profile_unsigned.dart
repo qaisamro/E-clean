@@ -283,7 +283,11 @@ class UsignedUserTab extends ConsumerWidget {
                       Hive.box(AppHSC.authBox).clear();
                       ref2.refresh(profileInfoProvider);
                       ref2.refresh(logOutProvider);
-                      context.nav.pushNamed(Routes.loginScreen);
+                      // Replace the whole stack (including the previously visible
+                      // home screen) with the login screen — no overlap, no way
+                      // back to the stale logged-in state.
+                      context.nav.pushNamedAndRemoveUntil(
+                          Routes.loginScreen, (route) => false);
                     });
                     return Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.check_circle_rounded, size: 44.sp, color: const Color(0xFF00A896)), SizedBox(height: 10.h), Text(S.of(context).lgdot, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w800, color: const Color(0xFF028090)))] );
                   },
