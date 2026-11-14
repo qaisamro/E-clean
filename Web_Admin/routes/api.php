@@ -57,7 +57,7 @@ Route::get('/vendors/{id}/products', [ProductController::class, 'byVendor']);
 Route::get('/master', [masterController::class, 'index']);
 Route::get('/banners/wide', [BannerController::class, 'getWideBanners']);
 Route::get('/post-code', [PostCodeController::class, 'index']);
-Route::get('/legal-pages/{page}', [SettingController::class, 'show']);
+Route::get('/legal-pages/{page:slug}', [SettingController::class, 'show']);
 Route::post('/contact', [ContactController::class, 'store']);
 
 // Maps: public configuration (no secrets) and rate-limited reverse geocoding.
