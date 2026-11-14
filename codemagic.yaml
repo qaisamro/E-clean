@@ -97,9 +97,33 @@ workflows:
             --export-method app-store \
             --build-name 1.0.7 \
             --build-number 13
+
+      - name: Verify IPA artifact exists
+        script: |
+          set -e
+          echo "== Verifying exported IPA =="
+          IPA_PATH=$(find "$CM_BUILD_DIR" -name "*.ipa" -type f -print 2>/dev/null | head -n1 || true)
+          if [ -z "$IPA_PATH" ]; then
+            echo "ERROR: No .ipa found after flutter build ipa."
+            echo "Contents of APP/build/ios/ipa:"
+            ls -la APP/build/ios/ipa 2>&1 || true
+            echo "Contents of APP/build/ios/archive:"
+            ls -la APP/build/ios/archive 2>&1 || true
+            exit 1
+          fi
+          echo "IPA OK at: $IPA_PATH"
+          echo "IPA size: $(du -h "$IPA_PATH" | cut -f1)"
     artifacts:
+      # Primary (relative to clone dir): matches IPA under the Flutter project root
       - APP/build/ios/ipa/*.ipa
+      # Fallback (relative to working directory APP)
+      - build/ios/ipa/*.ipa
+      # Absolute fallback
+      - $CM_BUILD_DIR/APP/build/ios/ipa/*.ipa
+      # Universal recursive fallback (should not be needed once the above match)
+      - "**/*.ipa"
       - APP/build/ios/archive/*.xcarchive
+      - build/ios/archive/*.xcarchive
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
